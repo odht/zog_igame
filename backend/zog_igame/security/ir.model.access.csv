@@ -1,0 +1,18 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_og_game_group_user","og_game group_user","model_og_game","base.group_user",1,1,1,1
+"access_og_game_group_group_user","og_game_group group_user","model_og_game_group","base.group_user",1,1,1,1
+"access_og_game_round_group_user","og_game_round group_user","model_og_game_round","base.group_user",1,1,1,1
+"access_og_game_team_group_user","og_game_team group_user","model_og_game_team","base.group_user",1,1,1,1
+"access_og_game_team_player_group_user","og_game_team_player group_user","model_og_game_team_player","base.group_user",1,1,1,1
+"access_og_game_team_round_info_group_user","og_game_team_round_info group_user","model_og_game_team_round_info","base.group_user",1,1,1,1
+"access_og_deal_group_user","og_deal group_user","model_og_deal","base.group_user",1,1,1,1
+"access_og_deal_card_group_user","og_deal_card group_user","model_og_deal_card","base.group_user",1,1,1,1
+"access_og_match_group_user","og_match group_user","model_og_match","base.group_user",1,1,1,1
+"access_og_match_team_group_user","og_match_team group_user","model_og_match_team","base.group_user",1,1,1,1
+"access_og_match_line_group_user","og_match_line group_user","model_og_match_line","base.group_user",1,1,1,1
+"access_og_table_group_user","og_table group_user","model_og_table","base.group_user",1,1,1,1
+"access_og_table_player_group_user","og_table_player group_user","model_og_table_player","base.group_user",1,1,1,1
+"access_og_board_group_user","og_board group_user","model_og_board","base.group_user",1,1,1,1
+"access_og_board_call_group_user","og_board_call group_user","model_og_board_call","base.group_user",1,1,1,1
+"access_og_board_card_group_user","og_board_card group_user","model_og_board_card","base.group_user",1,1,1,1
+"access_og_channel_group_user","og_channel group_user","model_og_channel","base.group_user",1,1,1,1

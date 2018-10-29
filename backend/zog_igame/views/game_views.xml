@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record model="ir.actions.act_window" id="action_game_list">
+            <field name="name">Game</field>
+            <field name="res_model">og.game</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a game
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="game"
+            id="menu_game"
+            parent="menu_main_igame"
+            sequence="2" />
+
+        <menuitem id="menu_game_list"
+            name="games"
+            parent="menu_game"
+            action="action_game_list"
+            sequence="25"/>
+
+        <record model="ir.actions.act_window" id="action_game_round_list">
+            <field name="name">Game Round</field>
+            <field name="res_model">og.game.round</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a game round
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_game_round_list"
+            name="game rounds"
+            parent="menu_game"
+            action="action_game_round_list"
+            sequence="27"/>
+
+
+
+        <record id="view_og_game_tree" model="ir.ui.view">
+            <field name="name">game.tree</field>
+            <field name="model">og.game</field>
+            <field name="arch" type="xml">
+                <tree string="Game">
+                    <field name="sequence"/>
+                    <field name="state"/>
+                    <field name="parent_id"/>
+                    <field name="name"/>
+                    <field name="game_type"/>
+                    <field name="match_type"/>
+                    <field name="org_type"/>
+                    <field name="score_uom"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_og_game_round_tree" model="ir.ui.view">
+            <field name="name">game.round.tree</field>
+            <field name="model">og.game.round</field>
+            <field name="arch" type="xml">
+                <tree string="Game">
+                    <field name="game_id"/>
+                    <field name="name"/>
+                    <field name="number"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_og_game_team_tree" model="ir.ui.view">
+            <field name="name">game.team.tree</field>
+            <field name="model">og.game.team</field>
+            <field name="arch" type="xml">
+                <tree string="Game Team">
+                    <field name="game_id"/>
+                    <field name="group_id"/>
+                    <field name="name"/>
+                    <field name="number"/>
+                    <field name="score"/>
+                    <field name="score_uom"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_og_game_team_form" model="ir.ui.view">
+            <field name="name">game.team.form</field>
+            <field name="model">og.game.team</field>
+            <field name="arch" type="xml">
+                <form string="Game Team">
+                    <group col="4">
+                        <field name="name"/>
+                        <field name="game_id"/>
+                        <field name="group_id"/>
+                        <field name="number"/>
+                    </group>
+                    <group col="2">
+                        <field name="player_ids"/>
+                        <field name="roundinfo_ids"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_og_game_team_player_tree" model="ir.ui.view">
+            <field name="name">game.team.player.tree</field>
+            <field name="model">og.game.team.player</field>
+            <field name="arch" type="xml">
+                <tree string="Game Team Player">
+                    <field name="team_id"/>
+                    <field name="partner_id"/>
+                    <field name="role"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_og_game_team_player_form" model="ir.ui.view">
+            <field name="name">game.team.player.form</field>
+            <field name="model">og.game.team.player</field>
+            <field name="arch" type="xml">
+                <form string="Game Team Player">
+                    <group col="4">
+                        <field name="team_id"/>
+                        <field name="partner_id"/>
+                        <field name="role"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="view_og_game_team_line_tree" model="ir.ui.view">
+            <field name="name">game.team.line.tree</field>
+            <field name="model">og.game.team.round.info</field>
+            <field name="arch" type="xml">
+                <tree string="Game Team Line">
+                    <field name="game_id"/>
+                    <field name="group_id"/>
+                    <field name="team_id"/>
+                    <field name="round_id"/>
+                    <field name="score"/>
+                    <field name="score_uom"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_game_team_list">
+            <field name="name">Game Team</field>
+            <field name="res_model">og.game.team</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Join a game
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_game_team_list"
+            name="game Teams"
+            parent="menu_game"
+            action="action_game_team_list"
+            sequence="30"/>
+
+</odoo>
+
