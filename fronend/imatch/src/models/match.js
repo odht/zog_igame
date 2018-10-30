@@ -1,4 +1,4 @@
 
-import dvaOdoo from '@/odoo/dvaOdoo';
+import dvaModel from '@/odoo/dvaModel';
 
-export default dvaOdoo({ model: 'og.match' })
+export default dvaModel({ model: 'og.match' })

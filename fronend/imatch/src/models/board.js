@@ -1,5 +1,5 @@
 
-import dvaOdoo from '@/odoo/dvaOdoo';
+import dvaModel from '@/odoo/dvaModel';
 
-export default dvaOdoo({ model: 'og.board'  })
+export default dvaModel({ model: 'og.board'  })
 

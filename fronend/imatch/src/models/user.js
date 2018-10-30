@@ -1,5 +1,5 @@
 
-import dvaOdoo from '@/odoo/dvaOdoo';
+import dvaModel from '@/odoo/dvaModel';
 
-export default dvaOdoo({ model: 'res.users' })
+export default dvaModel({ model: 'res.users' })
 

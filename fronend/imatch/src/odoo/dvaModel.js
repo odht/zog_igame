@@ -1,5 +1,5 @@
 import service from '@/services/odooService';
-import dvaOdoo from './dva-odoo';
+import dvaOdoo from 'dva-odoo';
 import dvaOdooGame from './igame'
 
 const models = {
@@ -87,8 +87,19 @@ const models = {
 }
 
 export default (options) => {
-
   const { model } = options
+
+  if(model == 'odooData'){
+    return dvaOdoo({ inherit: 'odooData' });
+  }
+
+  if(model == 'login'){
+    return dvaOdoo({
+      inherit: 'login',
+      service,
+    });
+  }
+
 
   const namespace0 = model.split('.').map(
     item => item.substring(0,1).toUpperCase() + item.substring(1)

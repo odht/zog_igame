@@ -1,6 +1,6 @@
 
-import dvaOdoo from '@/odoo/dvaOdoo';
+import dvaModel from '@/odoo/dvaModel';
 
-export default dvaOdoo({ model: 'og.game.round' })
+export default dvaModel({ model: 'og.game.round' })
 
 

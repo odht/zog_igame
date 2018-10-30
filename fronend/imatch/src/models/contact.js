@@ -1,10 +1,6 @@
 import service from '@/services/odooService';
 
-//import dvaOdoo from '@/models/../../odoo/dva-odoo';
-//import dvaOdooCrm from '@/models/../../odoo/dva-odoo-crm';
-
 import dvaOdoo from 'dva-odoo';
-import dvaOdooCrm from 'dva-odoo-crm';
 
 const dvaModel = ({ namespace, model, api }) => {
   return {
@@ -73,4 +69,4 @@ const contact = {
   dvaModel,
 };
 
-export default dvaOdoo(dvaOdooCrm(contact));
+export default dvaOdoo(contact);

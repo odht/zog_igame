@@ -1,6 +1,5 @@
-import dvaOdoo from 'dva-odoo';
+import dvaModel from '@/odoo/dvaModel';
+export default dvaModel({ model: 'odooData'  })
 
-export default  dvaOdoo({
-  inherit: 'odooData',
-});
+
 

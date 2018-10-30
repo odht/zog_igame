@@ -15,8 +15,8 @@
 
 import { delay } from 'roadhog-api-doc';
 
-import dvaOdooMock from './dva-odoo-mock';
-import dvaOdooMockCrm from './dva-odoo-mock-crm';
+import dvaOdooMock from 'dva-odoo-mock';
+//import dvaOdooMockCrm from './dva-odoo-mock-crm';
 
 //TBD: dynamic import all file in mock path
 import contact from './contact';
@@ -26,7 +26,7 @@ import login from './login';
 const mockData = {
   contact: contact(),
   login: login(),
-  inherits: { ...dvaOdooMockCrm },
+//  inherits: { ...dvaOdooMockCrm },
 };
 
 const proxy = {
