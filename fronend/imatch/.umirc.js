@@ -1,4 +1,3 @@
-
 // ref: https://umijs.org/config/
 export default {
   plugins: [
@@ -19,7 +18,7 @@ export default {
 
   proxy: {
     '/api': {
-      target: 'http://192.168.56.105:8069/',
+      target: 'http://192.168.0.110:8069/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
