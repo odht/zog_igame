@@ -6,7 +6,7 @@ import GradeList from '../../../component/GradeList';
 import * as detail from '../../../../mock/detail';
 
 const { gradeData } = detail;
-export default function () {
+export default function (props) {
     return (
         <div className={styles.normal}>
             <GradeList
