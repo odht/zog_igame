@@ -1,0 +1,26 @@
+
+.normal {
+ 
+}
+.spanc{
+  font-size: 20px;
+}
+.avaterUpload {
+  width: 128px;
+  height: 128px;
+}
+
+.login{
+  width:140px;
+  height: 43px;
+  
+  margin-top: 15px;
+}
+.upload-list-inline  {
+  float: left;
+  width: 200px;
+  margin-right: 8px;
+}
+.uploadc{
+  margin-top:20px;
+}
