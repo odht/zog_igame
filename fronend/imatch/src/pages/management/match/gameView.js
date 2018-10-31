@@ -4,11 +4,10 @@ import { connect } from 'dva';
 
 class gameView extends React.Component {
     componentWillMount() {
-        // const { search } = location
-        // console.log(search)
-        // this.setState({
-        //     key: search.split('=')[1]
-        // })
+        const { location: { search } } = this.props;
+        this.setState({
+            key: search.split('=')[1]
+        })
     }
     state = {
         key: ''
