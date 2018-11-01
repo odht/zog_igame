@@ -9,7 +9,19 @@ const columns = [
     title: '赛事名称',
     dataIndex: 'name',
     width: 150,
-    render: text => <Link to='/details/dhome' target="_black">{text}</Link>
+    render:(text,record)=>{
+      return (
+        <Link
+        to={{
+          pathname:'/details/dhome',
+          search: `?id=${record.id}`
+        }}
+         target="_black"
+        >
+          {text}
+        </Link>
+      )
+    }
   },
   {
     title: '举办方',
@@ -48,6 +60,7 @@ class TeamList extends Component {
     return (
       <div className={styles.normal}>
         <h1><Table
+        rowKey={row=>row.id}
           columns={columns}
           dataSource={dataSource}
           pagination={{ pageSize: 5 }}

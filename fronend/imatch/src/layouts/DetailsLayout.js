@@ -99,7 +99,8 @@ class DetailsLayout extends Component {
         // 识别
         const { history: { location: { pathname } } } = this.props;
         const { visible, confirmLoading } = this.state;
-
+        // 获取赛事页面传来的id
+        const {location:{search:{id}}} =this.props;
         return (
             <Layout style={{ minWidth: 780 }}>
                 <div style={{ border: 'none' ,textAlign:"center",lineHeight:'80px'}}>
@@ -108,6 +109,7 @@ class DetailsLayout extends Component {
                 </div>
                 <Header >
                     <DetailsHeader
+                        id={id}
                         headerRoutes={headerRoutes}
                         pathname={pathname}
                     />
@@ -117,7 +119,7 @@ class DetailsLayout extends Component {
                 <Breadcrumbs/>
                     <Layout style={{ padding: '12px 0', background: '#fff' }}>
 
-                        <Content style={{ padding: '0 24px', minHeight: 280 }}>
+                        <Content style={{ padding: '0 24px', minHeight: '69.5vh' }}>
                             {this.props.children}
                         </Content>
                     </Layout>
