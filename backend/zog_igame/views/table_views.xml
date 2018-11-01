@@ -29,7 +29,6 @@
             <field name="arch" type="xml">
                 <tree string="Table">
                     <field name="game_id"/>
-                    <field name="schedule_id"/>
                     <field name="phase_id"/>
                     <field name="round_id"/>
                     <field name="match_id"/>

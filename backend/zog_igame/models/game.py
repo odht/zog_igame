@@ -80,6 +80,8 @@ class Game(models.Model):
         index=True, copy=False, default='draft')
 
     notes = fields.Text('Notes')
+    
+    """
 
     parent_id = fields.Many2one('og.game', string='Parent Game', index=True, 
         domain=['org_type','not in', ['swiss','circle']], ondelete='restrict')
@@ -87,6 +89,8 @@ class Game(models.Model):
     parent_right = fields.Integer(string='Right parent', index=True)
     sequence = fields.Integer(default=10, help="Sequence of Children")
     child_ids = fields.One2many('og.game', 'parent_id', string='Child Game')
+    
+    """
 
     phase_ids = fields.One2many('og.phase','game_id',string='Phases')
     
@@ -106,9 +110,13 @@ class GamePhase(models.Model):
     _order = 'sequence, name'
 
     name = fields.Char('Name', required=True )
+    number = fields.Integer() 
     sequence = fields.Integer()
     game_id = fields.Many2one('og.game','Game', required=True, ondelete='cascade',
         domain=[('org_type','in', ['swiss','circle'])] )
+
+    round_ids = fields.One2many('og.round','phase_id',string='Rounds')
+
 
 class Schedule(models.Model):
     _name = "og.schedule"
@@ -130,6 +138,9 @@ class Schedule(models.Model):
     number = fields.Integer('Number', default=1, required=True)
 
     deal_ids = fields.Many2many('og.deal',string='Deals', required=True, ondelete='restrict')
+
+    round_ids = fields.One2many('og.round','phase_id',string='Rounds')
+
 
 class GameRound(models.Model):
     _name = "og.round"

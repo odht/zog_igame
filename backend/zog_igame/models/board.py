@@ -78,7 +78,7 @@ class Board(models.Model):
 
     table_id = fields.Many2one('og.table', required=True, ondelete='restrict')
     round_id = fields.Many2one('og.round', related='table_id.round_id')
-    phase_id = fields.Many2one('og.phase', related='phase_id.phase_id')
+    phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
     game_id = fields.Many2one('og.game', related='phase_id.game_id')
 
     deal_id = fields.Many2one('og.deal', required=True, ondelete='restrict')

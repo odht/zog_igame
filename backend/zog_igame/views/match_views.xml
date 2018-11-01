@@ -31,7 +31,6 @@
                     <field name="name"/>
                     <field name="number"/>
                     <field name="game_id"/>
-                    <field name="schedule_id"/>
                     <field name="phase_id"/>
                     <field name="round_id"/>
                     <field name="host_id"/>

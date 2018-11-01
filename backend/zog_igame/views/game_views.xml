@@ -83,7 +83,6 @@
                 <tree string="Game Team">
                     <field name="game_id"/>
                     <field name="name"/>
-                    <field name="number"/>
                     <field name="score"/>
                     <field name="score_uom"/>
                 </tree>

@@ -17,7 +17,8 @@ class Match(models.Model):
     number = fields.Integer(default=1, help="if a stage of parent." )
 
     round_id = fields.Many2one('og.round', string='Round',required=True, ondelete='restrict')
-    phase_id = fields.Many2one('og.phase', related='phase_id.phase_id')
+    
+    phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
     game_id = fields.Many2one('og.game', related='phase_id.game_id')
     deal_ids = fields.Many2many('og.deal',string='Deals', 
                                 related='round_id.deal_ids')
@@ -69,8 +70,6 @@ class Match(models.Model):
 
     line_ids = fields.One2many('og.match.line','match_id')
 
-
-"""
     @api.model
     def create(self,vals):
         #should be set deal_ids in round before create match in round
@@ -84,21 +83,8 @@ class Match(models.Model):
             name = round.game_id.name + ',' + str(round.number)
             name = name + ',' + match.host_id.name + ' vs ' + match.guest_id.name
             match.name = name
-
-        def set_tri(pos):
-            tri_obj = self.env['og.game.team.round.info']
-            tri_obj.create({'round_id': match.round_id.id, 
-                            'team_id' : {'host': match.host_id,
-                                         'guest': match.guest_id
-                                        }[pos].id,
-                            'match_id': match.id,
-                            'position': pos  })
-
-        set_tri('host')
-        set_tri('guest')
         
         return match
-"""
 
 
 class MatchTeam(models.Model):

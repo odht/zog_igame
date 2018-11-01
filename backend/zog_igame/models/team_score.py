@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
+from odoo import api, fields, models
+
+from .tools import point2imp
+
+
 class GameTeam(models.Model):
     _inherit = "og.team"
 

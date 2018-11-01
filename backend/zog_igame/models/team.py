@@ -3,8 +3,6 @@
 
 from odoo import api, fields, models
 
-from .tools import point2imp
-
 POSITIONS = [
         ('-',  'Neednot'),
         ('NS', 'NS'),
@@ -14,6 +12,19 @@ POSITIONS = [
         ('S', 'South'),
         ('W', 'West'),
     ]
+
+class Game(models.Model):
+    _inherit = "og.game"
+    team_ids = fields.One2many('og.team', 'game_id', string='Teams')
+    
+class GamePhase(models.Model):
+    _inherit = "og.phase"
+    team_ids = fields.Many2many('og.team')
+
+class GameRound(models.Model):
+    _inherit = "og.round"
+    team_info_ids = fields.One2many('og.team.round.info','round_id', string='Teams Info')
+
 
 class GameTeam(models.Model):
     _name = "og.team"
@@ -72,17 +83,6 @@ class GameTeamRoundInfo(models.Model):
     game_id = fields.Many2one('og.game', related='team_id.game_id')
     phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
 
+    number = fields.Integer('Number', default=1)
     sequence = fields.Integer('Sequence', default=1)
-
-class Game(models.Model):
-    _inherit = "og.game"
-    team_ids = fields.One2many('og.team', 'game_id', string='Teams')
-    
-class GamePhase(models.Model):
-    _inherit = "og.phase"
-    team_ids = fields.Many2many('og.team')
-
-class GameRound(models.Model):
-    _inherit = "og.round"
-    team_info_ids = fields.One2many('og.team.round.info','round_id', string='Teams Info')
 
