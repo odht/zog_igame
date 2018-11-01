@@ -36,8 +36,8 @@ class Deal(models.Model):
     _description = "Deal"
     _order = 'number'
 
-    round_id = fields.Many2one('og.game.round', string='Round')
-    game_id = fields.Many2one('og.game', related='round_id.game_id')
+    schedule_id = fields.Many2one('og.schedule', string='Schedule')
+    game_id = fields.Many2one('og.game', related='schedule_id.game_id')
 
     number = fields.Integer(default=1 ,required=True )
     dealer = fields.Selection(POSITIONS, compute='_compute_name')

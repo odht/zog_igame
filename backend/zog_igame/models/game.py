@@ -10,11 +10,6 @@ _logger = logging.getLogger(__name__)
 
 class Game(models.Model):
     """
-    Game
-    
-    required
-
-
     """
     _name = "og.game"
     _description = "Ientelligent Game"
@@ -88,48 +83,35 @@ class Game(models.Model):
     sequence = fields.Integer(default=10, help="Sequence of Children")
     child_ids = fields.One2many('og.game', 'parent_id', string='Child Game')
 
-    group_ids = fields.One2many('og.game.group','game_id',string='Groups')
-    round_ids = fields.One2many('og.game.round','game_id',string='Rounds')
-    team_ids = fields.One2many('og.game.team', 'game_id', string='Teams')
+    phase_ids = fields.One2many('og.phase','game_id',string='Phases')
+    
+    sechedule_ids = fields.One2many('og.sechedule','game_id',string='Sechedules')
+
+    team_ids = fields.One2many('og.team', 'game_id', string='Teams')
+    
     deal_ids = fields.Many2many('og.deal',string='Deals', compute = '_compute_deal')
 
     @api.multi
     def _compute_deal(self):
         for rec in self:
-            rec.deal_ids = rec.round_ids.mapped('deal_ids')
+            rec.deal_ids = rec.sechedule_ids.mapped('deal_ids')
 
-    # for Pair Match
-    #table_ids = fields.Many2many('og.table')
-    #partner_ids = fields.Many2many('res.partner', string='Teams',
-    #    compute='_compute_partner')
-    #@api.multi
-    #def _compute_partner(self):
-    #    for record in self:
-    #        record.partner_ids = record.teams_ids.mapped('partner_id')
+class GamePhase(models.Model):
 
-
-class GameGroup(models.Model):
-    """
-    # Only for Team Match
-    """
-
-    _name = "og.game.group"
-    _description = "Game Group"
+    _name = "og.phase"
+    _description = "Game Phase"
     _order = 'sequence, name'
 
     name = fields.Char('Name', required=True )
     sequence = fields.Integer()
     game_id = fields.Many2one('og.game','Game', required=True, ondelete='cascade',
         domain=[('org_type','in', ['swiss','circle'])] )
-    team_ids = fields.One2many('og.game.team','group_id',string='Teams')
+    team_ids = fields.Mnay2many('og.team')
 
-class GameRound(models.Model):
-    """
-    # Only for Team Match
-    """
+class Schedule(models.Model):
 
-    _name = "og.game.round"
-    _description = "Game Round"
+    _name = "og.schedule"
+    _description = "Schedule"
     _order = 'number'
 
     date_from = fields.Datetime('Date From', required=True, 
@@ -142,21 +124,34 @@ class GameRound(models.Model):
         ('check_date', "CHECK( date_thru > date_from )",  'date_thru > date_from.'),
     ]
 
-
     game_id = fields.Many2one('og.game','Game', required=True, ondelete='cascade')
-    name = fields.Char(compute='_get_name')
+    name = fields.Char()
     number = fields.Integer('Number', default=1, required=True)
 
-    @api.multi
-    def _get_name(self):
-        for rec in self:
-            rec.name = rec.game_id.name + ' ' + str(rec.number)
-
     deal_ids = fields.Many2many('og.deal',string='Deals', required=True, ondelete='restrict')
-    match_ids = fields.One2many('og.match','round_id')
 
+class GameRound(models.Model):
+    _name = "og.round"
+    _description = "Round"
+    _order = 'sequence, name'
+
+    phase_id = fields.Many2one('og.phase', string='Phase', required=True, ondelete='restrict')
+    schedule_id = fields.Many2one('og.schedule', string='Schedule', required=True, ondelete='restrict')
+    game_id = fields.Many2one('og.game', related='phase_id.game_id')
+
+    date_from = fields.Datetime(related='schedule_id.date_from' )
+    date_thru = fields.Datetime(related='schedule_id.date_thru' )
+
+    name = fields.Char()
+    sequence = fields.Integer()
+    number = fields.Integer()
+
+    deal_ids = fields.Many2many('og.deal',string='Deals', 
+                                related='schedule_id.deal_ids')
+
+    match_ids = fields.One2many('og.match','round_id')
     #  for  game room
-    teaminfo_ids = fields.One2many('og.game.team.round.info','round_id', string='Teams Info')
+    team_info_ids = fields.One2many('og.team.round.info','round_id', string='Teams Info')
 
     table_ids = fields.Many2many('og.table', compute='_compute_table')
 
@@ -193,8 +188,4 @@ class GameRound(models.Model):
         
         tts = ts.filtered(lambda t: t.state in ['doing'])
         return tts and 'doing' or 'todo'
-
-
-
-
 

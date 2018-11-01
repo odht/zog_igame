@@ -27,20 +27,13 @@ class Table(models.Model):
         ('close','Close')], string='Room Type', default='open')
 
     match_id = fields.Many2one('og.match', string='Match', ondelete='restrict')
-    pair_round_id = fields.Many2one('og.game.round', string='Pair Round')
-    round_id = fields.Many2one('og.game.round', string='Round',
-                                compute='_get_round')
-    game_id = fields.Many2one('og.game', related='round_id.game_id')
+    round_id = fields.Many2one('og.round', related='match_id.round_id')
+    phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
+    game_id = fields.Many2one('og.game', related='phase_id.game_id')
 
     date_from = fields.Datetime(related='round_id.date_from')
     date_thru = fields.Datetime(related='round_id.date_thru')
     state = fields.Selection(related='round_id.state')
-
-    @api.multi
-    def _get_round(self):
-        for rec in self:
-            rec.round_id = rec.match_id and rec.match_id.round_id or (
-                           rec.pair_round_id and rec.pair_round_id or None)
 
     deal_ids  = fields.Many2many('og.deal', string='Deals', related='round_id.deal_ids' )
     board_ids = fields.One2many('og.board', 'table_id', string='Boards')
@@ -104,8 +97,8 @@ class Table(models.Model):
 
             
 
-    ns_team_id = fields.Many2one('og.game.team', compute='_compute_team')
-    ew_team_id = fields.Many2one('og.game.team', compute='_compute_team')
+    ns_team_id = fields.Many2one('og.team', compute='_compute_team')
+    ew_team_id = fields.Many2one('og.team', compute='_compute_team')
 
     @api.multi
     def _compute_team(self):
@@ -120,23 +113,23 @@ class Table(models.Model):
             rec.ew_team_id = teams[rec.room_type + '.EW' ]
 
     # pair game
-    ns_pair_id = fields.Many2one('og.game.team')
-    ew_pair_id = fields.Many2one('og.game.team')
+    ns_pair_id = fields.Many2one('og.team')
+    ew_pair_id = fields.Many2one('og.team')
 
     #table_partner_ids = fields.Many2many('res.partner','table_id')
     #player_user_ids = fields.Many2many('res.users','table_id')
 
     # 4 player in table
-    east_id = fields.Many2one('og.game.team.player', 
+    east_id = fields.Many2one('og.team.player', 
                 compute='_compute_player', inverse='_inverse_player_east')
-    west_id = fields.Many2one('og.game.team.player',
+    west_id = fields.Many2one('og.team.player',
                 compute='_compute_player', inverse='_inverse_player_west')
-    north_id = fields.Many2one('og.game.team.player',
+    north_id = fields.Many2one('og.team.player',
                 compute='_compute_player', inverse='_inverse_player_north')
-    south_id = fields.Many2one('og.game.team.player',
+    south_id = fields.Many2one('og.team.player',
                 compute='_compute_player', inverse='_inverse_player_south')
     table_player_ids = fields.One2many('og.table.player','table_id')
-    player_ids = fields.Many2many('og.game.team.player', compute='_compute_player')
+    player_ids = fields.Many2many('og.team.player', compute='_compute_player')
 
 
     @api.multi
@@ -193,19 +186,19 @@ class TablePlayer(models.Model):
     name = fields.Char('Name', related = 'player_id.name' )
 
     table_id = fields.Many2one('og.table', required=True, ondelete='cascade')
-    player_id = fields.Many2one('og.game.team.player', required=True, ondelete='restrict')
+    player_id = fields.Many2one('og.team.player', required=True, ondelete='restrict')
     partner_id = fields.Many2one('res.partner', related='player_id.partner_id')
-    team_id = fields.Many2one('og.game.team', related = 'player_id.team_id')
+    team_id = fields.Many2one('og.team', related = 'player_id.team_id')
     position = fields.Selection(POSITIONS, string='Position', default='-')
 
 class GameTeamPlayer(models.Model):
-    _inherit = "og.game.team.player"
+    _inherit = "og.team.player"
     table_player_ids = fields.One2many('og.table.player','player_id')
 
 class Partner(models.Model):
     _inherit = "res.partner"
     
-    team_player_ids = fields.One2many('og.game.team.player','partner_id' )
+    team_player_ids = fields.One2many('og.team.player','partner_id' )
 
     todo_table_ids = fields.One2many('og.table', compute='_get_table')
     done_table_ids = fields.One2many('og.table', compute='_get_table')

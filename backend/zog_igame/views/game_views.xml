@@ -24,11 +24,11 @@
 
         <record model="ir.actions.act_window" id="action_game_round_list">
             <field name="name">Game Round</field>
-            <field name="res_model">og.game.round</field>
+            <field name="res_model">og.round</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Create a game round
+                <p class="oe_view_nocontent_create">Create a round
                 </p>
             </field>
         </record>
@@ -49,7 +49,6 @@
                 <tree string="Game">
                     <field name="sequence"/>
                     <field name="state"/>
-                    <field name="parent_id"/>
                     <field name="name"/>
                     <field name="game_type"/>
                     <field name="match_type"/>
@@ -61,25 +60,28 @@
         </record>
 
         <record id="view_og_game_round_tree" model="ir.ui.view">
-            <field name="name">game.round.tree</field>
-            <field name="model">og.game.round</field>
+            <field name="name">round.tree</field>
+            <field name="model">og.round</field>
             <field name="arch" type="xml">
                 <tree string="Game">
-                    <field name="game_id"/>
                     <field name="name"/>
                     <field name="number"/>
+                    <field name="game_id"/>
+                    <field name="schedule_id"/>
+                    <field name="phase_id"/>
+                    <field name="date_from"/>
+                    <field name="date_thru"/>
                 </tree>
             </field>
         </record>
 
 
         <record id="view_og_game_team_tree" model="ir.ui.view">
-            <field name="name">game.team.tree</field>
-            <field name="model">og.game.team</field>
+            <field name="name">team.tree</field>
+            <field name="model">og.team</field>
             <field name="arch" type="xml">
                 <tree string="Game Team">
                     <field name="game_id"/>
-                    <field name="group_id"/>
                     <field name="name"/>
                     <field name="number"/>
                     <field name="score"/>
@@ -89,27 +91,26 @@
         </record>
 
         <record id="view_og_game_team_form" model="ir.ui.view">
-            <field name="name">game.team.form</field>
-            <field name="model">og.game.team</field>
+            <field name="name">team.form</field>
+            <field name="model">og.team</field>
             <field name="arch" type="xml">
                 <form string="Game Team">
                     <group col="4">
                         <field name="name"/>
                         <field name="game_id"/>
-                        <field name="group_id"/>
-                        <field name="number"/>
                     </group>
                     <group col="2">
                         <field name="player_ids"/>
-                        <field name="roundinfo_ids"/>
+                        <field name="phase_ids"/>
+                        <field name="round_info_ids"/>
                     </group>
                 </form>
             </field>
         </record>
 
         <record id="view_og_game_team_player_tree" model="ir.ui.view">
-            <field name="name">game.team.player.tree</field>
-            <field name="model">og.game.team.player</field>
+            <field name="name">team.player.tree</field>
+            <field name="model">og.team.player</field>
             <field name="arch" type="xml">
                 <tree string="Game Team Player">
                     <field name="team_id"/>
@@ -120,8 +121,8 @@
         </record>
 
         <record id="view_og_game_team_player_form" model="ir.ui.view">
-            <field name="name">game.team.player.form</field>
-            <field name="model">og.game.team.player</field>
+            <field name="name">team.player.form</field>
+            <field name="model">og.team.player</field>
             <field name="arch" type="xml">
                 <form string="Game Team Player">
                     <group col="4">
@@ -136,14 +137,15 @@
 
 
         <record id="view_og_game_team_line_tree" model="ir.ui.view">
-            <field name="name">game.team.line.tree</field>
-            <field name="model">og.game.team.round.info</field>
+            <field name="name">team.round.info.tree</field>
+            <field name="model">og.team.round.info</field>
             <field name="arch" type="xml">
                 <tree string="Game Team Line">
-                    <field name="game_id"/>
-                    <field name="group_id"/>
                     <field name="team_id"/>
+                    <field name="game_id"/>
+                    <field name="phase_id"/>
                     <field name="round_id"/>
+                    <field name="match_id"/>
                     <field name="score"/>
                     <field name="score_uom"/>
 
@@ -154,7 +156,7 @@
 
         <record model="ir.actions.act_window" id="action_game_team_list">
             <field name="name">Game Team</field>
-            <field name="res_model">og.game.team</field>
+            <field name="res_model">og.team</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">

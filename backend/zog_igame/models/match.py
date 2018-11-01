@@ -13,21 +13,19 @@ class Match(models.Model):
     name = fields.Char('Name' )
     number = fields.Integer(default=1, help="if a stage of parent." )
 
-    round_id = fields.Many2one('og.game.round', string='Round',required=True, ondelete='restrict')
-    
-    
-    game_id = fields.Many2one('og.game', related='round_id.game_id')
+    round_id = fields.Many2one('og.round', string='Round',required=True, ondelete='restrict')
+    phase_id = fields.Many2one('og.phase', related='phase_id.phase_id')
+    game_id = fields.Many2one('og.game', related='phase_id.game_id')
     deal_ids = fields.Many2many('og.deal',string='Deals', 
                                 related='round_id.deal_ids')
 
     date_from = fields.Datetime(related='round_id.date_from')
     date_thru = fields.Datetime(related='round_id.date_thru')
 
-    group_id = fields.Many2one('og.game.group', required=True, ondelete='restrict')
 
-    host_id  = fields.Many2one('og.game.team',required=True, 
+    host_id  = fields.Many2one('og.team',required=True, 
         compute='_compute_team', inverse='_inverse_team_host')
-    guest_id = fields.Many2one('og.game.team',required=True,
+    guest_id = fields.Many2one('og.team',required=True,
         compute='_compute_team', inverse='_inverse_team_guest')
 
     match_team_ids = fields.One2many('og.match.team','match_id')
@@ -127,6 +125,7 @@ class Match(models.Model):
             rec.host_vp  = vp
             rec.guest_vp  = 20 - vp
 
+"""
     @api.model
     def create(self,vals):
         """ should be set deal_ids in round before create match in round """
@@ -154,7 +153,7 @@ class Match(models.Model):
         set_tri('guest')
         
         return match
-
+"""
 
 
 class MatchTeam(models.Model):
