@@ -54,6 +54,11 @@ from .bridge_tools import SUITS,RANKS,CARDS
 from .bridge_tools import partner, lho
 from .bridge_tools import get_point
 
+class Deal(models.Model):
+    _inherit = "og.deal"
+    board_ids = fields.One2many('og.board', 'deal_id', string='Boards')
+
+
 class Board(models.Model):
     _name = "og.board"
     _description = "Board"

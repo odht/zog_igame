@@ -7,6 +7,11 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+class Deal(models.Model):
+    _inherit = "og.deal"
+    schedule_id = fields.Many2one('og.schedule', string='Schedule')
+    game_id = fields.Many2one('og.game', related='schedule_id.game_id')
+
 
 class Game(models.Model):
     """
@@ -85,19 +90,17 @@ class Game(models.Model):
 
     phase_ids = fields.One2many('og.phase','game_id',string='Phases')
     
-    sechedule_ids = fields.One2many('og.sechedule','game_id',string='Sechedules')
+    schedule_ids = fields.One2many('og.schedule','game_id',string='Schedules')
 
-    team_ids = fields.One2many('og.team', 'game_id', string='Teams')
-    
     deal_ids = fields.Many2many('og.deal',string='Deals', compute = '_compute_deal')
 
     @api.multi
     def _compute_deal(self):
         for rec in self:
-            rec.deal_ids = rec.sechedule_ids.mapped('deal_ids')
+            rec.deal_ids = rec.schedule_ids.mapped('deal_ids')
+
 
 class GamePhase(models.Model):
-
     _name = "og.phase"
     _description = "Game Phase"
     _order = 'sequence, name'
@@ -106,10 +109,8 @@ class GamePhase(models.Model):
     sequence = fields.Integer()
     game_id = fields.Many2one('og.game','Game', required=True, ondelete='cascade',
         domain=[('org_type','in', ['swiss','circle'])] )
-    team_ids = fields.Mnay2many('og.team')
 
 class Schedule(models.Model):
-
     _name = "og.schedule"
     _description = "Schedule"
     _order = 'number'
@@ -148,44 +149,4 @@ class GameRound(models.Model):
 
     deal_ids = fields.Many2many('og.deal',string='Deals', 
                                 related='schedule_id.deal_ids')
-
-    match_ids = fields.One2many('og.match','round_id')
-    #  for  game room
-    team_info_ids = fields.One2many('og.team.round.info','round_id', string='Teams Info')
-
-    table_ids = fields.Many2many('og.table', compute='_compute_table')
-
-    @api.multi
-    def _compute_table(self):
-        for rec in self:
-            matchs = rec.match_ids
-            open  = matchs.mapped('open_table_id')
-            close = matchs.mapped('close_table_id')
-            rec.table_ids = open | close
-
-    state = fields.Selection([
-        ('draft',  'Draft'),
-        ('todo',  'Todo'),
-        ('doing', 'Doing'),
-        ('done',  'Done'),
-        ('cancel', 'Cancelled')
-    ], string='Status', compute='_compute_state')
-
-    @api.multi
-    @api.depends('table_ids','deal_ids')
-    def _compute_state(self):
-        for rec in self:
-            rec.state = rec._get_state()
-
-    def _get_state(self):
-        ts = self.table_ids
-        if not ts:
-            return 'draft'
-        
-        tts = ts.filtered(lambda t: t.state not in ['done','cancel'])
-        if not tts:
-            return 'done'
-        
-        tts = ts.filtered(lambda t: t.state in ['doing'])
-        return tts and 'doing' or 'todo'
 

@@ -200,17 +200,17 @@ class Deal( BaseModel ):
            'card_ids','board_ids']
 
 class GameTeam( BaseModel ):
-    model = "og.game.team"
+    model = "og.team"
     fields = ['name','number','game_id','group_id','player_ids',
         'roundinfo_ids',
         'score','score_manual','score_uom']
 
 class GameTeamPlayer( BaseModel ):
-    model = "og.game.team.player"
+    model = "og.team.player"
     fields = ['name','team_id','role']
 
 class GameTeamRoundInfo( BaseModel ):
-    model = "og.game.team.round.info"
+    model = "og.team.round.info"
     fields = ['name','team_id','game_id','group_id','round_id','match_id',
         'score','score_manual','score_uom']
 
