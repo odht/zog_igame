@@ -47,7 +47,6 @@
             <field name="model">og.game</field>
             <field name="arch" type="xml">
                 <tree string="Game">
-                    <field name="sequence"/>
                     <field name="state"/>
                     <field name="name"/>
                     <field name="game_type"/>
@@ -145,6 +144,8 @@
                     <field name="phase_id"/>
                     <field name="round_id"/>
                     <field name="match_id"/>
+                    <field name="number"/>
+                    <field name="sequence"/>
                     <field name="score"/>
                     <field name="score_uom"/>
 

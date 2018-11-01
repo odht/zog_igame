@@ -84,6 +84,15 @@ class Match(models.Model):
             name = name + ',' + match.host_id.name + ' vs ' + match.guest_id.name
             match.name = name
         
+        def fn( tid, rid ): 
+            tri = self.env['og.team.round.info'].search(
+                [('team_id', '=', tid), ('round_id', '=' , rid )  ])
+            if tri:
+                tri.match_id = match.id
+        
+        fn(match.host_id, match.round_id )
+        fn(match.guest_id, match.round_id )
+        
         return match
 
 

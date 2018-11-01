@@ -18,8 +18,8 @@ class Game(models.Model):
     """
     _name = "og.game"
     _description = "Ientelligent Game"
-    _parent_store = True
-    _order = 'parent_left'
+    #_parent_store = True
+    #_order = 'parent_left'
 
     name = fields.Char('Name', required=True, index=True, copy=False, default='Game')
     date_game = fields.Datetime('Game Date', required=True, 
