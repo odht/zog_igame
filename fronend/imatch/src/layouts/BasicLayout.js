@@ -2,7 +2,7 @@
 //lsy
 //2018-9-4
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Layout,Row,Col, Button ,Dropdown,Menu} from 'antd';
 import { connect } from 'dva';
 import GlobalHeader from '../component/GlobalHeader';

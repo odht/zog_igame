@@ -30,25 +30,24 @@ class NormalLoginForm extends React.Component {
 
     e.preventDefault();
     const activeKey = this.state.activeKey;
-    const fieldNames = this.state.active[activeKey]; console.log(fieldNames)
+    const fieldNames = this.state.active[activeKey];
     this.props.form.validateFields(fieldNames, (err, values) => {
-      console.log(values)
       if (!err) {
         let { userName, password } = values;
         this.props.dispatch({
           type: 'login/login',
           payload: { login: userName, password, type: 'account' }
+        }).then(()=>{
+          this.setState({
+            warn: true
+          })
+          router.push('/home')
         })
-        this.setState({
-          warn: true
-        })
-        message.success('登录成功，2秒后跳转');
-        console.log(this.props)
-        this.props.dispatch({ type: 'user/login', payload: { userName } })
-        setTimeout(() => {
+     
+        // setTimeout(() => {
 
-          router.push('/')
-        }, 2000)
+        //   router.push('/')
+        // }, 2000)
       }
     });
   }

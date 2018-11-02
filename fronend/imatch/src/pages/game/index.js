@@ -16,7 +16,7 @@ const columns = [
 						pathname: '/details/dhome',
 						search: `?id=${record.id}`
 					}}
-					target="_black"
+				// target="_black"
 				>
 					{text}
 				</Link>
@@ -43,33 +43,31 @@ const columns = [
 	},]
 class TeamList extends Component {
 
-  componentWillMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'ogGame/search',
-      payload: {}
-    })
-  }
-  getdata = (model) => {//获取数据
-    const { ids } = this.props[model];
-    const data = this.props.odooData[model];
-    const dataSource = lookup(ids, data);
-    return dataSource
-  }
-  render() {
-    const dataSource = this.getdata('ogGame')
-
-    console.log(dataSource,'____')
-    return (
-      <div className={styles.normal}>
-        <h1><Table
-        rowKey={row=>row.id}
-          columns={columns}
-          dataSource={dataSource}
-          pagination={{ pageSize: 5 }}
-          scroll={{ y: 300 }} /></h1>
-      </div>)
-  }
+	componentWillMount() {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'ogGame/search',
+			payload: {}
+		})
+	}
+	getdata = (model) => {//获取数据
+		const { ids } = this.props[model];
+		const data = this.props.odooData[model];
+		const dataSource = lookup(ids, data);
+		return dataSource
+	}
+	render() {
+		const dataSource = this.getdata('ogGame') || []
+		return (
+			<div >
+				<Table
+					rowKey={row => row.id}
+					columns={columns}
+					dataSource={dataSource}
+					pagination={{ pageSize: 5 }}
+					scroll={{ y: 300 }} />
+			</div>)
+	}
 }
 
 

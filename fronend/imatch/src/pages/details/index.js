@@ -1,3 +1,3 @@
 import { Redirect } from "dva/router";
 
-export default ()=>(<Redirect to='/details/dhome'/>)
+export default ()=>(<div><Redirect to='/details/dhome'/></div>)

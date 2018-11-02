@@ -1,8 +1,6 @@
 
 import React, { Component } from 'react';
-// import React from 'react';
 import ListDecorator from '../../component/ListDecorator';
-import * as detaData from '../../../mock/detail';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { lookup } from '@/utils/tools';
@@ -18,19 +16,15 @@ class TeamList extends Component {
   getdata = (model) => {//获取数据
     const { ids } = this.props[model];
     const data = this.props.odooData[model];
-    console.log(data);
     const dataSource = lookup(ids, data);
     return dataSource
   }
   render() {
-    const dataSource = this.getdata('ogGame')
-    console.log(this.props.odooData,'===')
-    const { detailData, announcement } = detaData;
+    const dataSource = this.getdata('ogGame') || []
     return (
       <div>
         <ListDecorator
-          detailData={[]}
-          announcement={announcement}
+          detailData={dataSource}
         />
         <Link to='/details/join'><Button type='primary'>点击报名</Button></Link>
       </div>

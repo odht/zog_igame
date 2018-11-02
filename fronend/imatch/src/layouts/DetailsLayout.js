@@ -99,7 +99,7 @@ class DetailsLayout extends Component {
 		const { history: { location: { pathname } } } = this.props;
 		const { visible, confirmLoading } = this.state;
 		// 获取赛事页面传来的id
-		const { location: { search: { id } } } = this.props;
+		const { location: { query: { id } } } = this.props;
 		return (
 			<Layout style={{ minWidth: 780 }}>
 				<div style={{ border: 'none', textAlign: "center", lineHeight: '80px' }}>
@@ -148,7 +148,7 @@ class DetailsLayout extends Component {
 						copyright={
 							<Fragment>
 								Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
-                </Fragment>
+               				</Fragment>
 						}
 					/>
 				</Footer>

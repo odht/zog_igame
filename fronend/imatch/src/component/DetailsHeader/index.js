@@ -10,7 +10,6 @@ import styles from './index.less';
 const DetailsHeader = props => {
 
     const { headerRoutes, pathname,id } = props;
-    
     const headerRouter = '/' + pathname.split('/')[2];
     // 传递id
     const HeaderMenu = headerRoutes.map(child => {

@@ -1,1 +1,0 @@
-export default ()=>(<div>社区</div>)
