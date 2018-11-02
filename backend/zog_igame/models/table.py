@@ -63,9 +63,9 @@ class Table(models.Model):
     @api.model
     def create(self,vals):
         table = super(Table,self).create(vals)
-
         if not vals.get('name'):
             table.name = table.room_type + ',' + table.match_id.name
+
         return table
 
     name = fields.Char('Name' )
