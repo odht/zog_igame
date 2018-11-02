@@ -60,6 +60,14 @@ class Table(models.Model):
     _description = "Table"
     _order = 'number'
 
+    @api.model
+    def create(self,vals):
+        table = super(Table,self).create(vals)
+
+        if not vals.get('name'):
+            table.name = table.room_type + ',' + table.match_id.name
+        return table
+
     name = fields.Char('Name' )
     number = fields.Integer(default=1 )
     room_type = fields.Selection([
@@ -149,7 +157,7 @@ class Table(models.Model):
 
             if table_player:
                 table_player.player_id = ptns[pos]
-            else:
+            elif ptns[pos]:
                 vals = {'table_id':rec.id,
                         'position':pos,
                         'player_id': ptns[pos].id }

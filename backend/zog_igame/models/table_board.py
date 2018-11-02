@@ -7,6 +7,8 @@ class Table(models.Model):
     _inherit = "og.table"
 
     board_ids = fields.One2many('og.board', 'table_id', string='Boards')
+    
+    """ 
     board_id = fields.Many2one('og.board', compute='_compute_board',
         help="The board played now")
     
@@ -28,6 +30,8 @@ class Table(models.Model):
             return self.env['og.board']
         deal = deals[0]
         return self.env['og.board'].create({'deal_id': deal.id, 'table_id':self.id})
+
+    """
 
     state = fields.Selection([
         ('draft',  'Draft'),

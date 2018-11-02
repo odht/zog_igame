@@ -9,6 +9,8 @@ from .tools import point2imp
 class GameTeam(models.Model):
     _inherit = "og.team"
 
+    match_team_ids = fields.One2many('og.match.team','team_id')
+
     score = fields.Float(compute='_compute_score' )
     score_manual = fields.Float(default=0 )
     score_uom = fields.Selection(related='game_id.score_uom')
@@ -26,8 +28,6 @@ class GameTeam(models.Model):
 class GameTeamRoundInfo(models.Model):
     _inherit = "og.team.round.info"
 
-    match_team_ids = fields.One2many('og.match.team','team_id')
-
     match_team_id = fields.Many2one('og.match.team',
                   string='Match Team', compute='_compute_match' )
                                       
@@ -42,7 +42,7 @@ class GameTeamRoundInfo(models.Model):
     @api.multi
     def _compute_match(self):
         for rec in self:
-            rec.match_team_id = rec.match_team_ids.filtered(
+            rec.match_team_id = rec.team_id.match_team_ids.filtered(
                      lambda mt: mt.match_id.round_id == rec.round_id )
 
     @api.multi
