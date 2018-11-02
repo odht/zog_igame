@@ -7,6 +7,7 @@ from . import team
 from . import match
 from . import table
 from . import board
+from . import board0
 from . import board_call
 from . import board_card
 

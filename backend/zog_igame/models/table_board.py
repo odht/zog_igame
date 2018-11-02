@@ -3,6 +3,47 @@
 
 from odoo import api, fields, models
 
+
+class GameRound(models.Model):
+    _inherit = "og.round"
+    table_ids = fields.Many2many('og.table', compute='_compute_table')
+
+    @api.multi
+    def _compute_table(self):
+        for rec in self:
+            matchs = rec.match_ids
+            open  = matchs.mapped('open_table_id')
+            close = matchs.mapped('close_table_id')
+            rec.table_ids = open | close
+
+    state = fields.Selection([
+        ('draft',  'Draft'),
+        ('todo',  'Todo'),
+        ('doing', 'Doing'),
+        ('done',  'Done'),
+        ('cancel', 'Cancelled')
+    ], string='Status', compute='_compute_state')
+
+    @api.multi
+    @api.depends('table_ids','deal_ids')
+    def _compute_state(self):
+        for rec in self:
+            rec.state = rec._get_state()
+
+    def _get_state(self):
+        ts = self.table_ids
+        if not ts:
+            return 'draft'
+        
+        tts = ts.filtered(lambda t: t.state not in ['done','cancel'])
+        if not tts:
+            return 'done'
+        
+        tts = ts.filtered(lambda t: t.state in ['doing'])
+        return tts and 'doing' or 'todo'
+
+
+
 class Table(models.Model):
     _inherit = "og.table"
 
