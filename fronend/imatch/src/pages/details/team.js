@@ -83,6 +83,7 @@ class DetailsTeam extends Component {
   return (
     <div style={{width:"900px"}}>
       <Table 
+      
       bordered={true} 
       dataSource={dataSource}
       columns={columns} 
