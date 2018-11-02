@@ -24,11 +24,12 @@ class TeamList extends Component {
   }
   render() {
     const dataSource = this.getdata('ogGame')
+    console.log(this.props.odooData,'===')
     const { detailData, announcement } = detaData;
     return (
       <div>
         <ListDecorator
-          detailData={detailData}
+          detailData={[]}
           announcement={announcement}
         />
         <Link to='/details/join'><Button type='primary'>点击报名</Button></Link>

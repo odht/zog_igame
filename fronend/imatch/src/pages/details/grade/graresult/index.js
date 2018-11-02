@@ -22,12 +22,10 @@ const columnRank=[{
 const dataRank=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(item){
     return {number:item,team:'衢州方正',vps:20,punish:''}
 });
-console.log(dataRank)
 class result extends Component{
     id=this.props.location.query.id
     componentWillMount() {
         const {dispatch}=this.props;
-        const domain=[]
         dispatch({
             type:'ogBoard/search',
             payload:{}
@@ -41,9 +39,7 @@ class result extends Component{
 	}
     render(){
         const data=this.getdata("ogBoard");
-        console.log('====================================');
-        console.log(data);
-        console.log('====================================');
+        console.log(data)
         return (
             <div>
                 <div style={{ textAlign: 'center' }} >

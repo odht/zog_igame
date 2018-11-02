@@ -4,11 +4,9 @@ import React from 'react';
 import { Table } from 'antd';
 import { Link } from 'dva/router';
 const GradeList = ({ dataSource }) => {
-    console.log(dataSource);
-    
     const dataSource1=[...dataSource];
     dataSource1.map((item)=>{
-        const dateBegin=item.date_from.split(" ");
+        const dateBegin=item.date_from.split(" ");  
         const dataEnd=item.date_thru.split(" ")
         item.date=dateBegin[0];
         item.time=dateBegin[1]+'~'+dataEnd[1]
