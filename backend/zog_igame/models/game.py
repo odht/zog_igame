@@ -93,8 +93,8 @@ class Game(models.Model):
     """
 
     phase_ids = fields.One2many('og.phase','game_id',string='Phases')
-    
     schedule_ids = fields.One2many('og.schedule','game_id',string='Schedules')
+    round_ids = fields.One2many('og.round','game_id',string='Rounds')
 
     deal_ids = fields.Many2many('og.deal',string='Deals', compute = '_compute_deal')
 

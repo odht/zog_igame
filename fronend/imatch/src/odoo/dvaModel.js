@@ -8,7 +8,7 @@ const models = {
   ]},
 
   ogGame: { default: [
-    'name','phase_ids','schedule_ids','team_ids','deal_ids'
+    'name','phase_ids','schedule_ids','round_ids','team_ids','deal_ids'
   ]},
 
   ogPhase:{ default: [
