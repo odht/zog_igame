@@ -6,7 +6,6 @@ export function lookup(ids = [], data = {}) {
       ? data[ids]
       : {};
 }
-
 export function toArray(field, operator, value) {
   /*
      domain = [['field_name','operator', value], [..., ..., ... ], ... ]

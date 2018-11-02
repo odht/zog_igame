@@ -25,7 +25,6 @@ class TeamList extends Component {
   render() {
     const dataSource = this.getdata('ogGame')
     const { detailData, announcement } = detaData;
-
     return (
       <div>
         <ListDecorator
@@ -36,6 +35,7 @@ class TeamList extends Component {
       </div>
     );
   }
+
 }
 
 export default connect(({ login, odooData, ogGame }) => ({ login, odooData, ogGame }))(TeamList)

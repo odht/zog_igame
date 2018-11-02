@@ -1,6 +1,6 @@
 import React from 'react'
 import router from 'umi/router';
-import Listgameinfo from '@/component/Listgameinfo'
+import Listgameinfo from '../../../component/ListgameInfo'
 import { connect } from 'dva';
 
 

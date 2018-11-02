@@ -4,8 +4,8 @@ import TeamList from'./index';
 import * as index from './index';
 import {connect} from 'dva';
 const {TeamData}= index;
-export default @connect(({  odooData,ogGame }) => ({  odooData,ogGame }))
-  class Trailnotice extends  Component{
+@connect(({  odooData,ogGame }) => ({  odooData,ogGame }))
+class Trailnotice extends  Component{
   componentDidMount(){
     const {dispatch} =this.props;
     dispatch({
@@ -24,3 +24,5 @@ export default @connect(({  odooData,ogGame }) => ({  odooData,ogGame }))
     )
   }
 }
+
+export default  Trailnotice;

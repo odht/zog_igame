@@ -18,11 +18,6 @@ const { headerRoutes } = routes;
 
 //面包屑
 
-
-
-
-
-
 class BasicLayout extends Component {
   componentWillMount() {
     const { history: { location: { pathname } } } = this.props;
