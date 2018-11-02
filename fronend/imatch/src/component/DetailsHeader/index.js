@@ -10,11 +10,12 @@ import styles from './index.less';
 const DetailsHeader = props => {
 
     const { headerRoutes, pathname,id } = props;
+    
     const headerRouter = '/' + pathname.split('/')[2];
     // 传递id
     const HeaderMenu = headerRoutes.map(child => {
         return <Menu.Item key={child.path}> <Link to={{pathname:`/details${child.path}`,search:`?id=${id||1}`}}>{child.name}</Link> </Menu.Item>
-    })
+    }) 
     return (
         <div className={styles.header}>
             <Menu

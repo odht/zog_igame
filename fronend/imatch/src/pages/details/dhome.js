@@ -11,6 +11,7 @@ import { Button } from 'antd';
 
 const { detailData, announcement } = detaData;
 export default function (props) {
+  
   return (
     <div>
       <ListDecorator
