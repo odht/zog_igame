@@ -57,6 +57,7 @@ class TeamList extends Component {
   }
   render() {
     const dataSource = this.getdata('ogGame')
+    console.log(dataSource);
     return (
       <div className={styles.normal}>
         <h1><Table
