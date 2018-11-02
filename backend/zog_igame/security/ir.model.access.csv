@@ -1,10 +1,11 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
 "access_og_game_group_user","og_game group_user","model_og_game","base.group_user",1,1,1,1
-"access_og_game_group_group_user","og_game_group group_user","model_og_game_group","base.group_user",1,1,1,1
-"access_og_game_round_group_user","og_game_round group_user","model_og_game_round","base.group_user",1,1,1,1
-"access_og_game_team_group_user","og_game_team group_user","model_og_game_team","base.group_user",1,1,1,1
-"access_og_game_team_player_group_user","og_game_team_player group_user","model_og_game_team_player","base.group_user",1,1,1,1
-"access_og_game_team_round_info_group_user","og_game_team_round_info group_user","model_og_game_team_round_info","base.group_user",1,1,1,1
+"access_og_team_group_user","og_team group_user","model_og_team","base.group_user",1,1,1,1
+"access_og_team_player_group_user","og_team_player group_user","model_og_team_player","base.group_user",1,1,1,1
+"access_og_schedule_group_user","og_schedule group_user","model_og_schedule","base.group_user",1,1,1,1
+"access_og_phase_group_user","og_phase group_user","model_og_phase","base.group_user",1,1,1,1
+"access_og_round_group_user","og_round group_user","model_og_round","base.group_user",1,1,1,1
+"access_og_team_round_info_group_user","og_team_round_info group_user","model_og_team_round_info","base.group_user",1,1,1,1
 "access_og_deal_group_user","og_deal group_user","model_og_deal","base.group_user",1,1,1,1
 "access_og_deal_card_group_user","og_deal_card group_user","model_og_deal_card","base.group_user",1,1,1,1
 "access_og_match_group_user","og_match group_user","model_og_match","base.group_user",1,1,1,1

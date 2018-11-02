@@ -147,7 +147,7 @@ class BaseModel(object):
     def read(self):
         rec = execute(self.sid,self.model,"read",self.id,self.fields)
         for field in self.fields:
-            setattr(self, field, rec[0][field])
+            setattr(self, field, rec[0].get(field))
         return rec
 
     def search(self,domain=[]):
@@ -157,11 +157,13 @@ class BaseModel(object):
     def search_read(self,domain=[]):
         rec = execute(self.sid,self.model,"search_read",domain, self.fields)
         for field in self.fields:
-            setattr(self, field, rec[0][field])
+            setattr(self, field, rec[0].get(field))
         return rec
         
     def name_search(self,name):
         rec = execute(self.sid,self.model,"name_search",name )
+        print rec
+        self.id = rec[0][0]
         self.read()
         return rec
         
@@ -182,51 +184,79 @@ class User( BaseModel ):
     model = "res.users"
     fields = ['name','todo_table_ids','done_table_ids']
 
-class Game( BaseModel ):
-    model = "og.game"
-    fields = ['name','group_ids','round_ids','team_ids','deal_ids']
-    
-class GameGroup( BaseModel ):
-    model = "og.game.group"
-    fields = ['name','game_id','team_ids']
-
-class GameRound( BaseModel ):
-    model = "og.game.round"
-    fields = ['name','number','game_id','date_from','date_thru','deal_ids','match_ids']
-
 class Deal( BaseModel ):
     model = "og.deal"
-    fields = ['name','number','card_str','game_id','round_id','dealer','vulnerable',
-           'card_ids','board_ids']
+    fields = ['name','number','card_str','game_id','round_id',
+              'dealer','vulnerable',
+              'card_ids',
+              'board_ids'
+           ]
 
-class GameTeam( BaseModel ):
-    model = "og.game.team"
-    fields = ['name','number','game_id','group_id','player_ids',
-        'roundinfo_ids',
-        'score','score_manual','score_uom']
+class Game( BaseModel ):
+    model = "og.game"
+    fields = ['name',
+          'phase_ids','schedule_ids',
+          'deal_ids',
+          'team_ids',
+    
+    ]
+    
+class Phase( BaseModel ):
+    model = "og.phase"
+    fields = ['name','game_id', 
+      'number', 'round_ids',
+      'team_ids'
+      ]
 
-class GameTeamPlayer( BaseModel ):
-    model = "og.game.team.player"
+class Schedule( BaseModel ):
+    model = "og.schedule"
+    fields = ['name','number','game_id','date_from','date_thru',
+              'deal_ids', 'round_ids',
+              ]
+
+class Round( BaseModel ):
+    model = "og.round"
+    fields = ['name','number',
+      'game_id','schedule_id','phase_id',
+      'date_from','date_thru','deal_ids',
+      'team_info_ids',
+      'match_ids'
+      ]
+
+class Team( BaseModel ):
+    model = "og.team"
+    fields = ['name','number','game_id','phase_ids','player_ids',
+        'round_info_ids',
+        'score','score_manual','score_uom'
+        ]
+
+class TeamPlayer( BaseModel ):
+    model = "og.team.player"
     fields = ['name','team_id','role']
 
-class GameTeamRoundInfo( BaseModel ):
-    model = "og.game.team.round.info"
-    fields = ['name','team_id','game_id','group_id','round_id','match_id',
-        'score','score_manual','score_uom']
+class TeamRoundInfo( BaseModel ):
+    model = "og.team.round.info"
+    fields = ['name','team_id','game_id','phase_id','round_id',
+         #'number',
+         'match_id',
+         'score','score_manual','score_uom'
+        ]
 
 class Match( BaseModel ):
     model = "og.match"
-    fields = ['name','number','game_id','round_id','group_id',
+    fields = ['name','number','game_id','round_id','phase_id',
         'host_id','guest_id','match_team_ids',
-        'table_ids','open_table_id','close_table_id',
+        'deal_ids',
+        'date_from', 'date_thru',
         'line_ids',
+        'table_ids','open_table_id','close_table_id',
         'host_imp','guest_imp','imp_manual',
         'host_vp','guest_vp','vp_manual',
         ]
 
-class MatchTeam( BaseModel ):
-    model = "og.match.team"
-    fields = ['name','match_id','team_id','position','vp']
+#class MatchTeam( BaseModel ):
+#    model = "og.match.team"
+#    fields = ['name','match_id','team_id','position','vp']
 
 class MatchLine( BaseModel ):
     model = "og.match.line"
@@ -239,10 +269,14 @@ class MatchLine( BaseModel ):
 
 class Table( BaseModel ):
     model = "og.table"
-    fields = ['name','number','room_type','match_id','game_id','round_id',
-        'date_from','date_thru','deal_ids', 'board_ids','board_id',
-        'ns_team_id','ew_team_id','table_player_ids','player_ids',
+    fields = ['name','number','room_type','match_id',
+        'game_id','round_id','phase_id',
+        'date_from','date_thru',
+        'deal_ids', 
+        'ns_team_id','ew_team_id',
+        'table_player_ids','player_ids',
         'east_id','west_id','north_id','south_id',
+        'board_ids','board_id',
         ]
 
 
@@ -250,12 +284,16 @@ class Table( BaseModel ):
 class TablePlayer( BaseModel ):
     model = "og.table.player"
     fields = ['name','table_id','player_id','position',
-        'match_id','partner_id','team_id', ]
+        'partner_id','team_id', 
+        #'match_id',
+        ]
 
 
 class Board( BaseModel ):
     model = "og.board"
-    fields = ['number','vulnerable','dealer','hands',
+    fields = [
+         'game_id','phase_id','round_id','table_id',
+         'number','vulnerable','dealer','hands',
             'auction',
             'declarer',
             'contract',
@@ -317,9 +355,10 @@ def test_user():
     
     print self.search_read( [] )
     
-    ret = UserSudo().login('A24','123')
+    #create('T123')
+    ret = UserSudo().login('T123','123')
     print(ret)
-    
+
 def test_game():
     
     self = Game(usid)
@@ -336,82 +375,93 @@ def test_game():
     print self.read()
     print self.name
     
-    GroupObj = GameGroup(usid)
-    RoundObj = GameRound(usid)
+    def create_schedule(game_id,name,number, date_from,date_thru):
+        Schedule(usid).create({
+            'name': name,
+            'number': number,
+            'game_id': game_id,
+            'date_from': date_from,
+            'date_thru': date_thru,
+        })
     
-    def create_group(game_id,name):
-        GroupObj.create({
+    def create_phase(game_id,name):
+        Phase(usid).create({
             'name': name,
             'game_id': game_id
         })
     
-    def create_round(game_id,name,number,date_from,date_thru):
-        RoundObj.create({
+    def create_round(game_id, name,number, phase_id, schedule_id ):
+        Round(usid).create({
             'game_id': game_id,
+            'phase_id': phase_id,
+            'schedule_id': schedule_id,
             'name': name,
             'number': number,
-            'date_from': date_from,
-            'date_thru': date_thru,
         })
 
-    #create_group(self.id, 'A')
-    #create_round(self.id, '1', 1, '2018-10-26 8:00:00','2018-10-26 11:00:00')
+    #create_phase(self.id, '排位赛',)
+    #create_schedule(self.id, '周6第1轮',1,'2018-10-26 8:00:00','2018-10-26 11:00:00')
     
     print self.read()
-    GroupObj.id = self.group_ids
-    RoundObj.id = self.round_ids
-    print GroupObj.read()
-    print RoundObj.read()
+    
+    schedule = Schedule(usid, self.schedule_ids)
+    phase = Phase(usid, self.phase_ids)
 
+    print schedule.id
+    print phase.id
+
+    #create_round(self.id, '排位赛第1轮', 1, phase.id[0], schedule.id[0] )
+    print phase.read()
+    print phase.round_ids
+    round = Round(usid, self.phase_ids)
+    #print round.read()
+    
+    pass
+    
 def test_deal():
     game = Game(usid)
     def search_game(name):
         game.id = game.search_read([['name','=',name]] )[0]['id']
     search_game('中国赛')
     
-    round = GameRound(usid)
-    round.id = game.round_ids[0]
+    schedule = Schedule(usid, game.schedule_ids[0])
     
     deal = Deal(usid)
     
-    def create(round_id, number, cards = None):
-        vals = {'round_id': round_id, 'number': number}
+    def create(schedule_id, number, cards = None):
+        vals = {'schedule_id': schedule_id, 'number': number}
         if cards:
             vals['card_str'] = cards
         deal.id = deal.create(vals)
     
-    #create(round.id,1)
-    #create(round.id,2,'AKQJT98765432... .AKQJT98765432.. ..AKQJT98765432. ...AKQJT98765432')
-    #print deal.read()
-    #print deal.read()
-    
-    print deal.search_read()
-    deal.id = deal.search()
+    create(schedule.id,1)
+    create(schedule.id,2,'AKQJT98765432... .AKQJT98765432.. ..AKQJT98765432. ...AKQJT98765432')
     print deal.read()
     
-def test_round_deal():
+    print deal.search_read()
+
+def test_schedule_deal():
     game = Game(usid)
     def search_game(name):
         game.id = game.search_read([['name','=',name]] )[0]['id']
     search_game('中国赛')
     
-    round = GameRound(usid)
-    round.id = game.round_ids[0]
+    schedule = Schedule(usid, game.schedule_ids )
     
     deal = Deal(usid)
     deal.id = deal.search()
     print deal.read()
     
-    round.write({'deal_ids': [(6,0,deal.id)] })
-    print round.read()
+    schedule.write({'deal_ids': [(6,0,deal.id)] })
+    print schedule.read()
 
 def test_team():
     game = Game(usid)
     def search_game(name):
-        game.id = self.search_read([['name','=',name]] )[0]['id']
+        game.id = game.search_read([['name','=',name]] )[0]['id']
     search_game('中国赛')
     
-    team = GameTeam(usid)
+    team = Team(usid)
     
     def create(game_id,name):
         team.id = team.create({'game_id': game_id, 'name': name})
@@ -426,55 +476,63 @@ def test_team():
     #create(game.id, 'A2')
     search( 'A2')
     print team.read()
-    
+
 def test_team_player():
     game = Game(usid)
     def search_game(name):
         game.id = game.search_read([['name','=',name]] )[0]['id']
     search_game('中国赛')
     
-    team = GameTeam(usid)
+    team = Team(usid)
     def search_team(name):
         team.id = team.search_read([['name','=',name]])[0]['id']
     
     search_team( 'A1')
     
     def create(name):
-        player = GameTeamPlayer(usid)
+        player = TeamPlayer(usid)
         
         ptn = Partner(usid)
+        
+        print name, ptn.name_search(name)
         ptn.id = ptn.name_search(name)[0][0]
         
         player.create({
             'team_id': team.id, 'partner_id': ptn.id, 'role':'player'
         })
     
-    for name in ['A11','A12','A13','A14']:
+    for name in ['c1','c2','c3','c4']:
         pass
         #create(name)
     print team.read()
     
     search_team( 'A2')
-    for name in ['A21','A22','A23','A24']:
+    for name in ['d1','d2','d3','d4']:
         pass
         #create(name)
     
     print team.read()
 
-def test_set_group():
+def test_set_phase():
     game = Game(usid)
     def search_game(name):
         game.id = game.search_read([['name','=',name]] )[0]['id']
     search_game('中国赛')
     
 
-    group = GameGroup(usid)
-    group.id = game.group_ids[0]
+    phase = Phase(usid, game.phase_ids[0])
+    phase.read()
+    print game.phase_ids, game.team_ids
     
-    team = GameTeam(usid)
-    team.id = game.team_ids
-    #team.write({'group_id': group.id   })
-    print team.read()
+    
+    for tid in game.team_ids:
+        team = Team(usid,tid)
+        #team.write({'phase_ids': [(4,phase.id)]   })
+        print team.read()
+
+def test_team_round_info():
+    pass
+
 
 def test_match():
     game = Game(usid)
@@ -664,7 +722,4 @@ def test_board(bdid=None):
     
     return self.state
 
-    
-bdid = test_user_play()
-
-state = test_board(bdid)
+   
