@@ -14,7 +14,6 @@ import { connect} from 'dva';
 //                   <Row>
 //                     <Col span={4}>56%</Col><Col span={4}>56%</Col><Col span={4}>56%</Col><Col span={4}>56%</Col><Col span={4}>56%</Col><Col span={4}>56%</Col>
 //                   </Row>
-// 11?
 //                 </div> )
 const columns = [{
   title: '队伍编号',
