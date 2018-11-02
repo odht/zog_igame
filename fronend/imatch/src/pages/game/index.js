@@ -68,6 +68,7 @@ class TeamList extends Component {
 					scroll={{ y: 300 }} /></h1>
 			</div>)
 	}
+
 }
 
 
