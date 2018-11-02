@@ -26,18 +26,32 @@ class GameTeam(models.Model):
 class GameTeamRoundInfo(models.Model):
     _inherit = "og.team.round.info"
 
-    match_id = fields.Many2one('og.match', string='Match', ondelete='cascade')
+    match_team_ids = fields.One2many('og.match.team','team_id')
+
+    match_team_id = fields.Many2one('og.match.team',
+                  string='Match Team', compute='_compute_match' )
+                                      
+    match_id = fields.Many2one('og.match', 
+                  string='Match', related='match_team_id.match_id' )
 
     score = fields.Float(compute='_compute_score')
     score_manual = fields.Float(default=0)
     score_uom = fields.Selection(related='team_id.score_uom')
     #rank = fields.Integer()
+    
+    @api.multi
+    def _compute_match(self):
+        for rec in self:
+            rec.match_team_id = rec.match_team_ids.filtered(
+                     lambda mt: mt.match_id.round_id == rec.round_id )
 
     @api.multi
     def _compute_score(self):
         def fn_team(rec):
-            p = rec.match_id.match_team_ids.filtered(
-                    lambda s: s.team_id == rec.team_id )
+            #p = rec.match_id.match_team_ids.filtered(
+            #        lambda s: s.team_id == rec.team_id )
+            p = rec.match_team_id
+                    
             rec.score = rec.score_manual + {'IMP':p.vp,'MP':p.bam
                                         }[rec.game_id.score_type]
 
