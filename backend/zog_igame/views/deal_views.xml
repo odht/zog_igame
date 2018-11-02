@@ -29,7 +29,7 @@
             <field name="arch" type="xml">
                 <tree string="Deal">
                     <field name="game_id"/>
-                    <field name="round_id"/>
+                    <field name="schedule_id"/>
                     <field name="number"/>
                     <field name="dealer"/>
                     <field name="vulnerable"/>

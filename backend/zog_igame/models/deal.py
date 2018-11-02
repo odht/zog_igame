@@ -36,9 +36,6 @@ class Deal(models.Model):
     _description = "Deal"
     _order = 'number'
 
-    round_id = fields.Many2one('og.game.round', string='Round')
-    game_id = fields.Many2one('og.game', related='round_id.game_id')
-
     number = fields.Integer(default=1 ,required=True )
     dealer = fields.Selection(POSITIONS, compute='_compute_name')
     vulnerable = fields.Selection(VULNERABLES,
@@ -55,7 +52,6 @@ class Deal(models.Model):
 
     notes = fields.Text('Notes')
     card_ids = fields.One2many('og.deal.card', 'deal_id', string='Cards')
-    board_ids = fields.One2many('og.board', 'deal_id', string='Boards')
 
     @api.multi
     def _compute_name(self):
@@ -115,5 +111,4 @@ class DealCard(models.Model):
         for rec in self:
             rec.suit = rec.name[0]
             rec.rank = rec.name[1]
-
 
