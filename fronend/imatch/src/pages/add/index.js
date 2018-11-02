@@ -55,4 +55,4 @@ import { connect } from 'dva';
             </div>
         )
     }
-} 
+} export default AddTeam;
