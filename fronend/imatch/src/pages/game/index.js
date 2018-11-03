@@ -43,7 +43,7 @@ const columns = [
 	},]
 class TeamList extends Component {
 
-	componentWillMount() {
+	componentDidMount() {
 		const { dispatch } = this.props;
 		dispatch({
 			type: 'ogGame/search',
@@ -71,4 +71,4 @@ class TeamList extends Component {
 }
 
 
-export default connect(({ login, odooData, ogGame }) => ({ login, odooData, ogGame }))(TeamList)
+export default connect(({  odooData, ogGame }) => ({  odooData, ogGame }))(TeamList)

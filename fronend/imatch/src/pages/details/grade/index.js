@@ -6,31 +6,30 @@ import { connect } from 'dva'
 import { lookup } from '@/utils/tools'
 import styles from './index.css';
 import GradeList from '../../../component/GradeList';
-import * as detail from '../../../../mock/detail';
-import Search from 'antd/lib/input/Search';
 
-const { gradeData } = detail;
+
 class grade extends Component {
-    componentWillMount() {
-        const {location:{query:{id}},odooData,dispatch} =this.props;
-      
-        // const {Game:{schedule_ids}} = lookup(id,odooData.ogGame);
-        // dispatch({
-        //     type: "ogRound/search",
-        //     payload: {id}
-        // })
+    componentDidMount() {
+        const { location: { query: { id } }, dispatch } = this.props;
+        //请求ogGame
+        dispatch({
+            type: 'ogGame/read',
+            payload: { id: parseInt(id) }
+        }).then(() => {
+            const { odooData: { ogGame } } = this.props;
+            const { round_ids } = lookup(id, ogGame);
+            dispatch({
+                type: "ogRound/read",
+                payload: { id: round_ids }
+            })
+        })
     }
-    // getdata = (model) => {//获取数据
-    // 	const { ids } = this.props[model];
-    // 	const data = this.props.odooData[model];
-    // 	const dataSource = lookup(ids, data);
-    // 	return dataSource
-    // }
     render() {
+        const { odooData: { ogRound } } = this.props;
         return (
             <div className={styles.normal}>
                 <GradeList
-                    dataSource={[]}
+                    dataSource={ogRound}
                 />
             </div>
         )

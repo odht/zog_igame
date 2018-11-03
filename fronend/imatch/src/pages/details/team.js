@@ -23,20 +23,26 @@ const columns = [{
 class Team extends Component {
   componentWillMount() {
     const { location: { query: { id } }, dispatch } = this.props;
-    const { odooData: { ogGame } } = this.props;
-    const Game = lookup(id, ogGame)
-    const dataSource = Game.team_ids;
     dispatch({
-      type: 'ogTeam/read',
-      payload: { id: dataSource }
+      type: 'ogGame/read',
+      payload: { id: parseInt(id) }
+    }).then(() => {
+      const Game = lookup(id, this.props.odooData.ogGame)
+      const dataSource = Game.team_ids;
+      dispatch({
+        type: 'ogTeam/read',
+        payload: { id: dataSource }
+      })
     })
   }
   render() {
-    const {odooData:{ogTeam}} =this.props;
-    const { location: { query: { id } }, dispatch } = this.props;
-    const { odooData: { ogGame } } = this.props;
+    const {
+      odooData: {
+        ogTeam, ogGame },
+      location: { query: { id } }
+    } = this.props;
     const Game = lookup(id, ogGame)
-    const dataSource = lookup(Game.team_ids,ogTeam)
+    const dataSource = lookup(Game.team_ids, ogTeam)
     return (
       <div style={{ width: "900px" }}>
         <Table
@@ -45,11 +51,11 @@ class Team extends Component {
           columns={columns}
           dataSource={dataSource}
           pagination={{ pageSize: 5 }}
-        scroll={{ y: 300 }} 
+          scroll={{ y: 300 }}
         />
       </div>)
   }
 }
 
 
-export default connect(({ odooData, ogTeam }) => ({ odooData, ogTeam }))(Team)
+export default connect(({ odooData, ogTeam, ogGame }) => ({ odooData, ogTeam, ogGame }))(Team)
