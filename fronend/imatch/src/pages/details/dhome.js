@@ -7,24 +7,16 @@ import { lookup } from '@/utils/tools';
 import { connect } from 'dva';
 class TeamList extends Component {
   componentWillMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'ogGame/search',
-      payload: {}
-    })
+    
   }
-  getdata = (model) => {//获取数据
-    const { ids } = this.props[model];
-    const data = this.props.odooData[model];
-    const dataSource = lookup(ids, data);
-    return dataSource
-  }
+
+ 
   render() {
-    const dataSource = this.getdata('ogGame') || []
+    const { location: { state:{gameData} } } = this.props;
     return (
       <div>
         <ListDecorator
-          detailData={dataSource}
+          detailData={gameData}
         />
         <Link to='/details/join'><Button type='primary'>点击报名</Button></Link>
       </div>

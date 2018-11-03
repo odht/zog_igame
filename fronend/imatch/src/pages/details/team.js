@@ -22,27 +22,17 @@ const columns = [{
 
 class Team extends Component {
   componentWillMount() {
-    const { location: { query: { id } }, dispatch } = this.props;
-    dispatch({
-      type: 'ogGame/read',
-      payload: { id: parseInt(id) }
-    }).then(() => {
-      const Game = lookup(id, this.props.odooData.ogGame)
-      const dataSource = Game.team_ids;
+    const { location: { state:{gameData:{team_ids} } }, dispatch } = this.props;
+      // const Game = lookup(id, this.props.odooData.ogGame)
+      // const dataSource = Game.team_ids;
       dispatch({
         type: 'ogTeam/read',
-        payload: { id: dataSource }
+        payload: { id: team_ids }
       })
-    })
   }
   render() {
-    const {
-      odooData: {
-        ogTeam, ogGame },
-      location: { query: { id } }
-    } = this.props;
-    const Game = lookup(id, ogGame)
-    const dataSource = lookup(Game.team_ids, ogTeam)
+    const { location: { state:{gameData:{team_ids} } },odooData:{ogTeam} } = this.props;
+    const dataSource = lookup(team_ids, ogTeam)
     return (
       <div style={{ width: "900px" }}>
         <Table
@@ -58,4 +48,4 @@ class Team extends Component {
 }
 
 
-export default connect(({ odooData, ogTeam, ogGame }) => ({ odooData, ogTeam, ogGame }))(Team)
+export default connect(({ odooData }) => ({ odooData }))(Team)

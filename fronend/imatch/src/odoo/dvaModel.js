@@ -1,5 +1,5 @@
 import service from '@/services/odooService';
-import dvaOdoo from 'dva-odoo';
+import dvaOdoo from './dva-odoo';
 import dvaOdooGame from './igame'
 
 const models = {

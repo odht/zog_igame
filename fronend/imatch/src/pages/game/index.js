@@ -14,7 +14,8 @@ const columns = [
 				<Link
 					to={{
 						pathname: '/details/dhome',
-						search: `?id=${record.id}`
+						// search: `?id=${record.id}`,
+						state:{gameData:record}
 					}}
 				// target="_black"
 				>
@@ -71,4 +72,4 @@ class TeamList extends Component {
 }
 
 
-export default connect(({  odooData, ogGame }) => ({  odooData, ogGame }))(TeamList)
+export default connect(({ odooData, ogGame }) => ({ odooData, ogGame }))(TeamList)

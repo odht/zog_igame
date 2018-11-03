@@ -4,11 +4,11 @@
 
 import React, { Component, Fragment } from 'react';
 import { Layout, Breadcrumb, Icon, Input, Button, Modal, Form, Checkbox } from 'antd';
-import DetailsHeader from '../component/DetailsHeader';
-import GlobalFooter from '../component/GlobalFooter';
-import logo from '../assets/57130611.jpg';
-import * as routes from '../common/detailsroutes';
-import Breadcrumbs from '../component/Breakcrumbs'
+import DetailsHeader from '@/component/DetailsHeader';
+import GlobalFooter from '@/component/GlobalFooter';
+import logo from '@/assets/57130611.jpg';
+import * as routes from '@/common/detailsroutes';
+import Breadcrumbs from '@/component/Breakcrumbs'
 const { Header, Content, Footer } = Layout;
 const { details: headerRoutes } = routes;
 
@@ -96,12 +96,10 @@ class DetailsLayout extends Component {
 
 	render() {
 		// 识别
-		// const { history: { location: { pathname } } } = this.props;
+		const { history: { location: { pathname } } } = this.props;
 		const { visible, confirmLoading } = this.state;
 		// 获取赛事页面传来的id
-
-
-		const { location: { pathname, state: { gameData } } } = this.props;
+		const { location: { query: { id } } } = this.props;
 		return (
 			<Layout style={{ minWidth: 780 }}>
 				<div style={{ border: 'none', textAlign: "center", lineHeight: '80px' }}>
@@ -110,7 +108,7 @@ class DetailsLayout extends Component {
 				</div>
 				<Header >
 					<DetailsHeader
-						gameData={gameData}
+						id={id}
 						headerRoutes={headerRoutes}
 						pathname={pathname}
 					/>

@@ -1,3 +1,4 @@
+
 // ref: https://umijs.org/config/
 export default {
   plugins: [
@@ -6,17 +7,16 @@ export default {
       antd: true,
       dva: true,
       dynamicImport: false,
-      title: 'imatch',
+      title: 'myqpp',
       dll: false,
       routes: {
         exclude: [],
       },
       hardSource: false,
     }],
-  ],
-
-
-  proxy: {
+  ], 
+  
+   proxy: {
     '/api': {
       target: 'http://192.168.0.110:8069/',
       changeOrigin: true,
