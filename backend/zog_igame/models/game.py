@@ -9,10 +9,12 @@ _logger = logging.getLogger(__name__)
 
 class Deal(models.Model):
     _inherit = "og.deal"
-    schedule_id = fields.Many2one('og.schedule', string='Schedule Created by', 
+    schedule_id = fields.Many2one('og.schedule', string='Schedule', 
         help='the deal is created by this schedule')
 
-    schedule_ids = fields.Many2many('og.schedule', string='Schedules played in', 
+    game_id = fields.Many2one('og.game', related='schedule_id.game_id')
+
+    schedule_ids = fields.Many2many('og.schedule', string='Schedules', 
         help='the deal is played in these schedules')
         
     game_ids = fields.Many2many('og.game', compute='_compute_game')
