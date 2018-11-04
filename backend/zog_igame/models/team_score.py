@@ -9,53 +9,56 @@ from .tools import point2imp
 class GameTeam(models.Model):
     _inherit = "og.team"
 
-    match_team_ids = fields.One2many('og.match.team','team_id')
+    match_team_ids = fields.One2many('og.match.team','team_id', help='Technical field')
+    rank = fields.Integer(help='Game rank')
 
-    score = fields.Float(compute='_compute_score' )
-    score_manual = fields.Float(default=0 )
-    score_uom = fields.Selection(related='game_id.score_uom')
+    #score = fields.Float(compute='_compute_score' )
+    #score_manual = fields.Float(default=0 )
+    #score_uom = fields.Selection(related='game_id.score_uom')
     
-    #TBD rank 2018-10-23
-    #rank = fields.Integer()
-
-
-    @api.multi
-    def _compute_score(self):
-        for rec in self:
-            rec.score = rec.score_manual + sum( rec.round_info_ids.mapped('score') )
+    #@api.multi
+    #def _compute_score(self):
+    #    for rec in self:
+    #        rec.score = rec.score_manual + sum( rec.round_info_ids.mapped('score') )
 
 
 class GameTeamRoundInfo(models.Model):
+    """
+    team score in a phase == team score in the last round of the phase
+    """
+    
     _inherit = "og.team.round.info"
 
-    match_team_id = fields.Many2one('og.match.team',
-                  string='Match Team', compute='_compute_match' )
+    match_team_id = fields.Many2one('og.match.team', string='Match Team',
+        compute='_compute_match', help='Technical field for score')
                                       
-    match_id = fields.Many2one('og.match', 
-                  string='Match', related='match_team_id.match_id' )
+    match_id = fields.Many2one('og.match', string='Match',
+        related='match_team_id.match_id', help='No used' )
 
-    score = fields.Float(compute='_compute_score')
-    score_manual = fields.Float(default=0)
-    score_uom = fields.Selection(related='team_id.score_uom')
-    #rank = fields.Integer()
-    
     @api.multi
     def _compute_match(self):
         for rec in self:
             rec.match_team_id = rec.team_id.match_team_ids.filtered(
                      lambda mt: mt.match_id.round_id == rec.round_id )
 
+    score = fields.Float(compute='_compute_score')
+    score_manual = fields.Float(default=0)
+    score_uom = fields.Selection(related='team_id.score_uom')
+    
+    score_open =  fields.Float( compute='_compute_balance')
+    score_close = fields.Float( compute='_compute_balance')
+    rank_open  = fields.Integer(compute='_compute_rank')
+    rank_close = fields.Integer(compute='_compute_rank')
+    
     @api.multi
     def _compute_score(self):
         def fn_team(rec):
-            #p = rec.match_id.match_team_ids.filtered(
-            #        lambda s: s.team_id == rec.team_id )
             p = rec.match_team_id
-                    
             rec.score = rec.score_manual + {'IMP':p.vp,'MP':p.bam
                                         }[rec.game_id.score_type]
 
         def fn_pair(rec):
+            """ 
             board_ids = rec.game_id.table_ids.mapped('board_ids').filtered(
                 lambda b: b.deal_id == rec.deal_id and b != rec.board_id )
 
@@ -76,6 +79,8 @@ class GameTeamRoundInfo(models.Model):
             if board_ids:
                 st = rec.game_id.score_type
                 rec.score = {'IMP':fn_imp,'MP':fn_mp}[st](board_ids)
+            """
+            pass
 
 
         for rec in self:
@@ -89,4 +94,19 @@ class GameTeamRoundInfo(models.Model):
                 elif g.match_type == 'pair':
                     fn_pair(rec)
 
+    @api.multi
+    def _compute_balance(self):
+        
+        for rec in self:
+            tris = rec.team_id.round_info_ids.filtered(
+                lambda tri: (tri.phase_id == rec.phase_id) and (
+                             tri.round_id.number < rec.round_id.number ) )
+            
+            rec.score_open  = tris and sum( tris.mapped('score') ) or 0
+            rec.score_close = score_open + score
+
+    @api.multi
+    def _compute_rank(self):
+        for rec in self:
+            pass
 

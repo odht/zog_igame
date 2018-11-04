@@ -64,6 +64,7 @@ class Board(models.Model):
     _description = "Board"
     _order = 'number'
 
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('bidding', 'Bidding'),
@@ -84,9 +85,12 @@ class Board(models.Model):
     deal_id = fields.Many2one('og.deal', required=True, ondelete='restrict')
     card_str = fields.Char(related='deal_id.card_str')
 
+    _sql_constraints = [
+        ('table_deal_uniq', 'unique (deal_id,table_id)', 'a deal play one time in a table!')
+    ]
 
-    name   = fields.Char('Name', related='deal_id.name' )
     # compute name = 2 NS S 1Hx -3
+    name   = fields.Char('Name', related='deal_id.name' )
     
     number = fields.Integer(related='deal_id.number' )
     dealer = fields.Selection(related='deal_id.dealer' )
@@ -96,10 +100,8 @@ class Board(models.Model):
     @api.multi
     def _compute_hands(self):
         def fn(cards, pos):
-            cs = cards.filtered(lambda card: card.pos == pos and card.number == 0
-                               ).sorted('id')
-            
-            # filtered , only  on hand
+            cs = cards.filtered(
+                    lambda card: card.pos == pos and card.number == 0).sorted('id')
             
             return [card.name for card in cs ]
             
@@ -202,6 +204,7 @@ class Board(models.Model):
         return point, ns, ew
 
     card_ids  = fields.One2many('og.board.card','board_id')
+    
     @api.model
     def create(self, vals):
         deal = vals.get('deal_id')

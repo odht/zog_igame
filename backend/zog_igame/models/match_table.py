@@ -7,17 +7,21 @@ from .tools import point2imp, imp2vp
 
 
 class Match(models.Model):
+    """ 
+    a match have 2 tables, open and close
+    """
+    
     _inherit = "og.match"
 
     open_table_id  = fields.Many2one('og.table', compute='_compute_table' )
     close_table_id = fields.Many2one('og.table', compute='_compute_table' )
-
-    table_ids = fields.One2many('og.table','match_id')
+    table_ids = fields.One2many('og.table','match_id', help='Technical field')
 
     @api.multi
     def _compute_table(self):
         def fn(room):
-            return rec.table_ids.filtered(lambda s: s.room_type == room)
+            ts = rec.table_ids.filtered(lambda s: s.room_type == room)
+            return len(ts) == 1 and ts or None
 
         for rec in self:
             rec.open_table_id  = fn('open')

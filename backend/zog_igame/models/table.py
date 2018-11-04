@@ -28,11 +28,13 @@ class Table(models.Model):
 
         return table
 
+    _sql_constraints = [
+        ('match_open_close_uniq', 'unique (room_type,match_id)', 'The match have one open table and one close table !')
+    ]
+    
     name = fields.Char('Name' )
     number = fields.Integer(default=1 )
-    room_type = fields.Selection([
-        ('open', 'Open' ),
-        ('close','Close')], string='Room Type', default='open')
+    room_type = fields.Selection([('open','Open' ), ('close','Close')], default='open')
 
     match_id = fields.Many2one('og.match', string='Match', ondelete='restrict')
     round_id = fields.Many2one('og.round', related='match_id.round_id')
@@ -74,9 +76,9 @@ class Table(models.Model):
                 compute='_compute_player', inverse='_inverse_player_north')
     south_id = fields.Many2one('og.team.player',
                 compute='_compute_player', inverse='_inverse_player_south')
-    table_player_ids = fields.One2many('og.table.player','table_id')
+                
+    table_player_ids = fields.One2many('og.table.player','table_id',help='Technical field')
     player_ids = fields.Many2many('og.team.player', compute='_compute_player')
-
 
     @api.multi
     def _compute_player(self):
@@ -126,16 +128,24 @@ class Table(models.Model):
 
 
 class TablePlayer(models.Model):
+    """
+    Technical model
+    """
     _name = "og.table.player"
     _description = "Table Player"
 
     name = fields.Char('Name', related = 'player_id.name' )
 
-    table_id = fields.Many2one('og.table', required=True, ondelete='cascade')
-    player_id = fields.Many2one('og.team.player', required=True, ondelete='restrict')
+    table_id = fields.Many2one('og.table', ondelete='cascade')
+    player_id = fields.Many2one('og.team.player', ondelete='restrict')
     partner_id = fields.Many2one('res.partner', related='player_id.partner_id')
     team_id = fields.Many2one('og.team', related = 'player_id.team_id')
-    position = fields.Selection(POSITIONS, string='Position', default='-')
+    position = fields.Selection(POSITIONS, string='Position', default='S')
+
+    _sql_constraints = [
+        ('table_position_uniq', 'unique (position,table_id)', 'The table have NESW 4 position !')
+    ]
+
 
 class GameTeamPlayer(models.Model):
     _inherit = "og.team.player"

@@ -13,6 +13,10 @@ from .bridge_tools import SUITS,RANKS,CARDS
 from .bridge_tools import partner, lho
 
 class BoardCall(models.Model):
+    """
+    Technical model
+    """
+
     _name = "og.board.call"
     _description = "Board Call"
     _order = 'number'
