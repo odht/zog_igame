@@ -106,6 +106,9 @@ class GamePhase(models.Model):
     number = fields.Integer(help="The sorted number for the phase in a game.") 
     sequence = fields.Integer(help="no used")
     game_id = fields.Many2one('og.game','Game', required=True, ondelete='cascade')
+
+    match_type = fields.Selection(related='game_id.match_type')
+    org_type = fields.Selection([('circle','Circle'), ('swiss','Swiss')],default='swiss')
     
     score_type = fields.Selection([('IMP','IMP'),('MP', 'MP')], default='IMP',
         help='For Team match, IMP:VP, MP:BAM')

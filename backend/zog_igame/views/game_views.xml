@@ -17,7 +17,7 @@
         </record>
 
         <menuitem id="menu_game_list"
-            name="games"
+            name="Game"
             parent="menu_game"
             action="action_game_list"
             sequence="25"/>
@@ -26,7 +26,7 @@
             <field name="name">game.tree</field>
             <field name="model">og.game</field>
             <field name="arch" type="xml">
-                <tree string="Game">
+                <tree string="Games">
                     <field name="state"/>
                     <field name="name"/>
                     <field name="game_type"/>
@@ -59,12 +59,44 @@
             <field name="name">schedule.tree</field>
             <field name="model">og.schedule</field>
             <field name="arch" type="xml">
-                <tree string="Game">
+                <tree string="Schedules">
                     <field name="game_id"/>
                     <field name="number"/>
                     <field name="name"/>
                     <field name="date_from"/>
                     <field name="date_thru"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_phase_list">
+            <field name="name">Schedule</field>
+            <field name="res_model">og.schedule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a schedule
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_phase_list"
+            name="Phase"
+            parent="menu_game"
+            action="action_phase_list"
+            sequence="27"/>
+
+        <record id="view_phase_tree" model="ir.ui.view">
+            <field name="name">phase.tree</field>
+            <field name="model">og.phase</field>
+            <field name="arch" type="xml">
+                <tree string="Phases">
+                    <field name="game_id"/>
+                    <field name="name"/>
+                    <field name="number"/>
+                    <field name="match_type"/>
+                    <field name="org_type"/>
+                    <field name="score_uom"/>
                 </tree>
             </field>
         </record>
@@ -81,7 +113,7 @@
         </record>
 
         <menuitem id="menu_round_list"
-            name="Rounds"
+            name="Round"
             parent="menu_game"
             action="action_round_list"
             sequence="29"/>
@@ -90,7 +122,7 @@
             <field name="name">round.tree</field>
             <field name="model">og.round</field>
             <field name="arch" type="xml">
-                <tree string="Game">
+                <tree string="Rounds">
                     <field name="name"/>
                     <field name="number"/>
                     <field name="game_id"/>
@@ -114,7 +146,7 @@
         </record>
 
         <menuitem id="menu_team_list"
-            name="Teams"
+            name="Team"
             parent="menu_game"
             action="action_team_list"
             sequence="30"/>
@@ -123,7 +155,7 @@
             <field name="name">team.tree</field>
             <field name="model">og.team</field>
             <field name="arch" type="xml">
-                <tree string="Game Team">
+                <tree string="Teams">
                     <field name="game_id"/>
                     <field name="name"/>
                     <field name="rank"/>
@@ -135,7 +167,7 @@
             <field name="name">team.form</field>
             <field name="model">og.team</field>
             <field name="arch" type="xml">
-                <form string="Game Team">
+                <form string="Team">
                     <group col="4">
                         <field name="name"/>
                         <field name="game_id"/>
@@ -153,7 +185,7 @@
             <field name="name">team.player.tree</field>
             <field name="model">og.team.player</field>
             <field name="arch" type="xml">
-                <tree string="Game Team Player">
+                <tree string="Team Players">
                     <field name="team_id"/>
                     <field name="partner_id"/>
                     <field name="role"/>
@@ -165,7 +197,7 @@
             <field name="name">team.player.form</field>
             <field name="model">og.team.player</field>
             <field name="arch" type="xml">
-                <form string="Game Team Player">
+                <form string="Team Player">
                     <group col="4">
                         <field name="team_id"/>
                         <field name="partner_id"/>
@@ -179,7 +211,7 @@
             <field name="name">team.round.info.tree</field>
             <field name="model">og.team.round.info</field>
             <field name="arch" type="xml">
-                <tree string="Game Team Line">
+                <tree string="Team Round Info">
                     <field name="team_id"/>
                     <field name="game_id"/>
                     <field name="phase_id"/>
