@@ -93,7 +93,7 @@ class GameTeamRoundInfo(models.Model):
                              tri.round_id.number < rec.round_id.number ) )
             
             rec.score_open  = tris and sum( tris.mapped('score') ) or 0
-            rec.score_close = score_open + score
+            rec.score_close = rec.score_open + rec.score
 
     @api.multi
     def _compute_rank(self):
