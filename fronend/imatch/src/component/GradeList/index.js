@@ -4,14 +4,12 @@ import React from 'react';
 import { Table } from 'antd';
 import { Link } from 'dva/router';
 import { lookup } from '@/utils/tools'
-const GradeList = ({ dataSource }) => {
-    console.log(dataSource)
+const GradeList = ({ dataSource, gameData }) => {
     var datas
     if (dataSource) {        // dataSource.map((item, key) => {
         const ids = Object.keys(dataSource);
         const data = lookup(ids, dataSource)
-        console.log(data)
-        datas=data.map((item) => {
+        datas = data.map((item) => {
             const dateBegin = item.date_from.split(" ");
             const dataEnd = item.date_thru.split(" ")
             item.date = dateBegin[0];
@@ -19,7 +17,7 @@ const GradeList = ({ dataSource }) => {
             return item
         })
 
-    } 
+    }
     const columns = [{
         title: "日期",
         dataIndex: "date",
@@ -48,10 +46,10 @@ const GradeList = ({ dataSource }) => {
         title: "公开团体赛",
         dataIndex: 'name',
         align: "center",
-        render: (text, row) => {
+        render: (text, record) => {
             return (
                 <Link
-                    to={{ pathname: '/details/grade/graresult', search: `id=${row.id}` }}
+                    to={{ pathname: '/details/grade/graresult', state: { gameData, roundData: record } }}
                 >{text}</Link>
             )
         }

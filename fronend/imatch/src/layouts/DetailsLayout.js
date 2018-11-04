@@ -96,11 +96,7 @@ class DetailsLayout extends Component {
 
 	render() {
 		// 识别
-		// const { history: { location: { pathname } } } = this.props;
 		const { visible, confirmLoading } = this.state;
-		// 获取赛事页面传来的id
-
-
 		const { location: { pathname, state: { gameData } } } = this.props;
 		return (
 			<Layout style={{ minWidth: 780 }}>

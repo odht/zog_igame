@@ -14,7 +14,6 @@ const columns = [
 				<Link
 					to={{
 						pathname: '/details/dhome',
-						// search: `?id=${record.id}`,
 						state:{gameData:record}
 					}}
 				// target="_black"
