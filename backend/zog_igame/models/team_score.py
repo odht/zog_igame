@@ -12,16 +12,6 @@ class GameTeam(models.Model):
     match_team_ids = fields.One2many('og.match.team','team_id', help='Technical field')
     rank = fields.Integer(help='Game rank')
 
-    score = fields.Float(compute='_compute_score' )
-    score_manual = fields.Float(default=0 )
-    score_uom = fields.Selection(related='game_id.score_uom')
-    
-    @api.multi
-    def _compute_score(self):
-        for rec in self:
-            rec.score = rec.score_manual + sum( rec.round_info_ids.mapped('score') )
-
-
 class GameTeamRoundInfo(models.Model):
     """
     team score in a phase == team score in the last round of the phase
@@ -43,7 +33,7 @@ class GameTeamRoundInfo(models.Model):
 
     score = fields.Float(compute='_compute_score')
     score_manual = fields.Float(default=0)
-    score_uom = fields.Selection(related='team_id.score_uom')
+    score_uom = fields.Selection(related='phase_id.score_uom')
     
     score_open =  fields.Float( compute='_compute_balance')
     score_close = fields.Float( compute='_compute_balance')
@@ -55,7 +45,7 @@ class GameTeamRoundInfo(models.Model):
         def fn_team(rec):
             p = rec.match_team_id
             rec.score = rec.score_manual + {'IMP':p.vp,'MP':p.bam
-                                        }[rec.game_id.score_type]
+                                        }[rec.phase_id.score_type]
 
         def fn_pair(rec):
             """ 

@@ -106,7 +106,34 @@ class GamePhase(models.Model):
     number = fields.Integer(help="The sorted number for the phase in a game.") 
     sequence = fields.Integer(help="no used")
     game_id = fields.Many2one('og.game','Game', required=True, ondelete='cascade')
+    
+    score_type = fields.Selection([('IMP','IMP'),('MP', 'MP')], default='IMP',
+        help='For Team match, IMP:VP, MP:BAM')
+
+    score_uom = fields.Selection([('IMP','IMP'), ('MP', 'MP'), 
+                                  ('VP', 'VP'),  ('BAM','BAM')], 
+                compute='_compute_score_uom', 
+                inverse='_inverse_score_uom', default='IMP',
+                help='( VP,BAM) for team match, IMP,MP for pair match')
+
     round_ids = fields.One2many('og.round','phase_id',string='Rounds' )
+
+    @api.multi
+    def _inverse_score_uom(self):
+        ds = {'IMP':'IMP','MP': 'MP', 'VP': 'IMP','BAM':'MP'}
+        for rec in self:
+            rec.score_type = ds[rec.score_uom]
+
+    @api.multi
+    def _compute_score_uom(self):
+        fns = {
+            'team': lambda t: {'IMP': 'VP','MP':'BAM'}[t],
+            'pair': lambda t: t
+        }
+
+        for record in self:
+            record.score_uom = fns[record.match_type](record.score_type)
+
 
 
 class Schedule(models.Model):
