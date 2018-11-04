@@ -12,14 +12,14 @@ class GameTeam(models.Model):
     match_team_ids = fields.One2many('og.match.team','team_id', help='Technical field')
     rank = fields.Integer(help='Game rank')
 
-    #score = fields.Float(compute='_compute_score' )
-    #score_manual = fields.Float(default=0 )
-    #score_uom = fields.Selection(related='game_id.score_uom')
+    score = fields.Float(compute='_compute_score' )
+    score_manual = fields.Float(default=0 )
+    score_uom = fields.Selection(related='game_id.score_uom')
     
-    #@api.multi
-    #def _compute_score(self):
-    #    for rec in self:
-    #        rec.score = rec.score_manual + sum( rec.round_info_ids.mapped('score') )
+    @api.multi
+    def _compute_score(self):
+        for rec in self:
+            rec.score = rec.score_manual + sum( rec.round_info_ids.mapped('score') )
 
 
 class GameTeamRoundInfo(models.Model):
