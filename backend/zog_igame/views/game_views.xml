@@ -207,11 +207,28 @@
             </field>
         </record>
 
+        <record model="ir.actions.act_window" id="action_team_round_info_list">
+            <field name="name">Score</field>
+            <field name="res_model">og.team.round.info</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Score
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_team_round_info_list"
+            name="Score"
+            parent="menu_game"
+            action="action_team_round_info_list"
+            sequence="32"/>
+
         <record id="view_team_round_info_tree" model="ir.ui.view">
             <field name="name">team.round.info.tree</field>
             <field name="model">og.team.round.info</field>
             <field name="arch" type="xml">
-                <tree string="Team Round Info">
+                <tree string="Score">
                     <field name="team_id"/>
                     <field name="game_id"/>
                     <field name="phase_id"/>
