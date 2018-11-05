@@ -109,6 +109,7 @@ class GamePhase(models.Model):
     sequence = fields.Integer(help="no used")
     game_id = fields.Many2one('og.game','Game', required=True, ondelete='cascade')
 
+    game_type = fields.Selection(related='game_id.game_type')
     match_type = fields.Selection(related='game_id.match_type')
     org_type = fields.Selection([('circle','Circle'), ('swiss','Swiss')],default='swiss')
     

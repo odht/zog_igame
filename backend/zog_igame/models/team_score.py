@@ -41,6 +41,7 @@ class GameTeamRoundInfo(models.Model):
     rank_close = fields.Integer(compute='_compute_rank',store=True, readonly=True)
     
     @api.multi
+    @api.depends('match_team_id','score_manual')
     def _compute_score(self):
         def fn_team(rec):
             p = rec.match_team_id
@@ -74,7 +75,7 @@ class GameTeamRoundInfo(models.Model):
 
 
         for rec in self:
-            g = rec.game_id
+            g = rec.phase_id
             if g.game_type == 'bridge':
                 if g.match_type == 'team' :
                     if g.org_type in ['swiss','circle']:
