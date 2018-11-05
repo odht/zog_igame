@@ -165,9 +165,9 @@ class Board(models.Model):
         for rec in self:
             rec.result2 = fn(rec)
 
-    point = fields.Integer(compute='_compute_point')
-    ns_point = fields.Integer(compute='_compute_point')
-    ew_point = fields.Integer(compute='_compute_point')
+    point = fields.Integer(compute='_compute_point',store=True, readonly=True)
+    ns_point = fields.Integer(compute='_compute_point',store=True, readonly=True)
+    ew_point = fields.Integer(compute='_compute_point',store=True, readonly=True)
 
     @api.multi
     @api.depends('contract','declarer', 'result')
