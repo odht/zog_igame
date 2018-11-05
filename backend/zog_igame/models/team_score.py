@@ -31,14 +31,14 @@ class GameTeamRoundInfo(models.Model):
             rec.match_team_id = rec.team_id.match_team_ids.filtered(
                      lambda mt: mt.match_id.round_id == rec.round_id )
 
-    score = fields.Float(compute='_compute_score')
+    score = fields.Float(compute='_compute_score',store=True, readonly=True)
     score_manual = fields.Float(default=0)
     score_uom = fields.Selection(related='phase_id.score_uom')
     
-    score_open =  fields.Float( compute='_compute_balance')
-    score_close = fields.Float( compute='_compute_balance')
-    rank_open  = fields.Integer(compute='_compute_rank')
-    rank_close = fields.Integer(compute='_compute_rank')
+    score_open =  fields.Float( compute='_compute_balance',store=True, readonly=True)
+    score_close = fields.Float( compute='_compute_balance',store=True, readonly=True)
+    rank_open  = fields.Integer(compute='_compute_rank',store=True, readonly=True)
+    rank_close = fields.Integer(compute='_compute_rank',store=True, readonly=True)
     
     @api.multi
     def _compute_score(self):

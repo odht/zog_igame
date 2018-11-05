@@ -136,10 +136,9 @@ class GameTeamRoundInfo(models.Model):
     round_id = fields.Many2one('og.round', string='Round', required=True, ondelete='cascade')
     team_id = fields.Many2one('og.team', string='Team', required=True, ondelete='restrict')
 
-    game_id = fields.Many2one('og.game', related='team_id.game_id')
-    phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
-
-    last_in_phase = fields.Boolean(related='round_id.last_in_phase')
+    game_id = fields.Many2one('og.game', related='team_id.game_id',store=True, readonly=True)
+    phase_id = fields.Many2one('og.phase', related='round_id.phase_id',store=True, readonly=True)
+    last_in_phase = fields.Boolean(related='round_id.last_in_phase',store=True, readonly=True)
 
     number = fields.Integer('Number', default=1)
     sequence = fields.Integer('Sequence', default=1)
