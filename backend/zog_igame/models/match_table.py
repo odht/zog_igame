@@ -18,6 +18,7 @@ class Match(models.Model):
     table_ids = fields.One2many('og.table','match_id', help='Technical field')
 
     @api.multi
+    @api.depends('table_ids')
     def _compute_table(self):
         def fn(room):
             ts = rec.table_ids.filtered(lambda s: s.room_type == room)
@@ -100,6 +101,7 @@ class MatchLine(models.Model):
     close_board_id = fields.Many2one('og.board',compute='_compute_board')
 
     @api.multi
+    @api.depends('open_table_id','close_table_id')
     def _compute_board(self):
         def _fn(tbl,deal):
             return tbl.board_ids.filtered(lambda b: b.deal_id == deal)
