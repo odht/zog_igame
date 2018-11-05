@@ -21,6 +21,14 @@ class GameTeamRoundInfo(models.Model):
 
     match_team_id = fields.Many2one('og.match.team', string='Match Team',
         compute='_compute_match', help='Technical field for score')
+
+    imp     = fields.Integer(related='match_team_id.imp')
+    imp_opp = fields.Integer(related='match_team_id.imp_opp')
+    vp      = fields.Float(related='match_team_id.vp')
+    vp_opp  = fields.Float(related='match_team_id.vp_opp')
+    bam     = fields.Float(related='match_team_id.bam')
+    bam_opp = fields.Float(related='match_team_id.bam_opp')
+
                                       
     match_id = fields.Many2one('og.match', string='Match',
         related='match_team_id.match_id', help='No used' )
@@ -55,9 +63,8 @@ class GameTeamRoundInfo(models.Model):
     @api.depends('match_team_id.vp','match_team_id.bam','score_manual')
     def _compute_score(self):
         def fn_team(rec):
-            p = rec.match_team_id
-            rec.score = rec.score_manual + {'IMP':p.vp,'MP':p.bam
-                                        }[rec.phase_id.score_type]
+            rec.score = rec.score_manual + {
+                    'IMP':rec.vp,'MP':rec.bam}[rec.phase_id.score_type]
 
         def fn_pair(rec):
             """ 

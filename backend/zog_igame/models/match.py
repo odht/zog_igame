@@ -101,11 +101,19 @@ class MatchTeam(models.Model):
     name = fields.Char(related='team_id.name')
     match_id = fields.Many2one('og.match', string='Match', ondelete='cascade')
     team_id = fields.Many2one('og.team', string='Team', ondelete='restrict')
+    opp_team_id = fields.Many2one('og.team', compute='_compute_opp')
     position = fields.Selection([('host','Host'), ('guest','Guest')], default='host')
 
     _sql_constraints = [
         ('match_position_uniq', 'unique (position,match_id)', 'The match have host and guest team!')
     ]
+    
+    @api.multi
+    def _compute_opp(self):
+        for rec in self:
+            rec.opp_team_id  = {'host': rec.match_id.guest_id,
+                                'guest':rec.match_id.host_id }.get(rec.position)
+    
 
 class MatchLine(models.Model):
     """ 

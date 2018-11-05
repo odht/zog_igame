@@ -78,18 +78,29 @@ class Match(models.Model):
 class MatchTeam(models.Model):
     _inherit = "og.match.team"
 
+    imp  = fields.Integer(compute='_compute_score')
+    imp_opp = fields.Integer(compute='_compute_score')
     vp = fields.Float(compute='_compute_score')
+    vp_opp = fields.Float(compute='_compute_score')
     bam = fields.Float(compute='_compute_score')
+    bam_opp = fields.Float(compute='_compute_score')
 
     @api.multi
-    @api.depends('match_id.host_vp','match_id.guest_vp','match_id.host_bam','match_id.guest_bam',)
+    @api.depends('match_id')
     def _compute_score(self):
-        def _fn(pos,match):
-            return {'host': lambda m: (m.host_vp, m.host_bam),
-                    'guest':lambda m: (m.guest_vp,m.guest_bam) }[pos](match)
-
+        def fn_host(match):
+            return match.host_imp, match.host_vp, match.host_bam
+            
+        def fn_guest():
+            return match.guest_imp, match.guest_vp, match.guest_bam
+        
         for rec in self:
-            rec.vp,rec.bam =  _fn(rec.position,rec.match_id)
+            fn_me  = {'host': fn_host,'guest': fn_guest}.get(rec.position)
+            fn_opp = {'host': fn_guest,'guest': fn_host}.get(rec.position)
+            
+            rec.imp, rec.vp, rec.bam =  fn_me(rec.match_id)
+            rec.imp, rec.vp, rec.bam = fn_opp(rec.match_id)
+            
 
 class MatchLine(models.Model):
     _inherit = "og.match.line"
