@@ -45,6 +45,7 @@ class Match(models.Model):
     guest_vp = fields.Float(compute='_compute_imp')
 
     @api.multi
+    @api.depends('line_ids.imp','line_ids.host_imp','line_ids.guest_imp')
     def _compute_imp(self):
         for rec in self:
             bam = sum(rec.line_ids.mapped('bam') )
@@ -80,6 +81,7 @@ class MatchTeam(models.Model):
     bam = fields.Float(compute='_compute_score')
 
     @api.multi
+    @api.depends('match_id.host_vp','match_id.guest_vp','match_id.host_bam','match_id.guest_bam',)
     def _compute_score(self):
         def _fn(pos,match):
             return {'host': lambda m: (m.host_vp, m.host_bam),
@@ -135,6 +137,7 @@ class MatchLine(models.Model):
     guest_imp = fields.Integer(compute='_compute_point')
 
     @api.multi
+    @api.depends('open_board_id.point','close_board_id.point')
     def _compute_point(self):
         for rec in self:
             point = rec.open_board_id.point - rec.close_board_id.point

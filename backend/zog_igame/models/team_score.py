@@ -26,6 +26,7 @@ class GameTeamRoundInfo(models.Model):
         related='match_team_id.match_id', help='No used' )
 
     @api.multi
+    @api.depends('team_id')
     def _compute_match(self):
         for rec in self:
             rec.match_team_id = rec.team_id.match_team_ids.filtered(
