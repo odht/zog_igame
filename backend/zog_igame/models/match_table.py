@@ -99,7 +99,7 @@ class MatchTeam(models.Model):
             fn_opp = {'host': fn_guest,'guest': fn_host}.get(rec.position)
             
             rec.imp, rec.vp, rec.bam =  fn_me(rec.match_id)
-            rec.imp, rec.vp, rec.bam = fn_opp(rec.match_id)
+            rec.imp_opp, rec.vp_opp, rec.bam_opp = fn_opp(rec.match_id)
             
 
 class MatchLine(models.Model):
