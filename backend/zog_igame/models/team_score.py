@@ -41,7 +41,7 @@ class GameTeamRoundInfo(models.Model):
     rank_close = fields.Integer(compute='_compute_rank',store=True, readonly=True)
     
     @api.multi
-    @api.depends('match_team_id','score_manual')
+    @api.depends('match_team_id.vp','match_team_id.bam','score_manual')
     def _compute_score(self):
         def fn_team(rec):
             p = rec.match_team_id
