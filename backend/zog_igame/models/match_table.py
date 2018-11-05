@@ -91,7 +91,7 @@ class MatchTeam(models.Model):
         def fn_host(match):
             return match.host_imp, match.host_vp, match.host_bam
             
-        def fn_guest():
+        def fn_guest(match):
             return match.guest_imp, match.guest_vp, match.guest_bam
         
         for rec in self:
