@@ -13,35 +13,65 @@ import { lookup } from '@/utils/tools'
 const columnRank = [{
     title: '赛队排名',
     children: [
-        { title: '名词', dataIndex: 'number', key: 'number' },
-        { title: '参赛队', dataIndex: 'team', key: 'team' },
-        { title: 'VPs', dataIndex: 'vps', key: 'vps', className: styles.red },
-        { title: '罚分', dataIndex: 'punish', key: 'punish' },
+        { title: '名次', dataIndex: 'number' },
+        {
+            title: '参赛队',
+            dataIndex: 'rankTeam',
+            key: 'team',
+            render: (text, record) => { return `${record.team_id[1]}` }
+        },
+        {
+            title: 'VPs',
+            dataIndex: 'rankTeam',
+            className: styles.red,
+            render: (text, record) => { return `${record.score}` }
+        },
+        { title: '罚分', dataIndex: 'punish' },
     ]
 }];
-const dataRank = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map(function (item) {
-    return { number: item, team: '衢州方正', vps: 20, punish: '' }
-});
+
 
 class Graresult extends Component {
     componentDidMount() {
         const {
             dispatch,
-            location: { state: { roundData: { match_ids } } }
+            location: { state: { roundData: { match_ids, team_info_ids } } }
         } = this.props;
         dispatch({
             type: "ogMatch/read",
             payload: { id: match_ids }
         })
+        dispatch({
+            type: 'ogTeamRoundInfo/read',
+            payload: { id: team_info_ids }
+        })
     }
     render() {
         // 比赛对战数据
         const {
-            odooData: { ogMatch },
-            location: { state: { roundData: { match_ids } } }
+            odooData: { ogMatch, ogTeamRoundInfo },
+            location: { state: { roundData: { match_ids, team_info_ids } } },
+            location: { state },
         } = this.props;
+        // 牌组 
+        let deal = [1];
+
         const matchData = lookup(match_ids, ogMatch)
-        console.log(matchData)
+        const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo);
+        if (matchData && matchData.length > 0) {
+            matchData.map(matchItem => {
+                deal = matchItem.deal_ids;
+            })
+        }
+        const dealData = deal.sort().map(item => {
+            return <Link
+                key={item}
+                to={{
+                    pathname: '/details/grade/deal',
+                    query: { deal_id: item },
+                    state,
+                }}>{item}    </Link>
+        })
         return (
             <div>
                 <div style={{ textAlign: 'center' }} >
@@ -51,7 +81,10 @@ class Graresult extends Component {
                 <div>
                     <Row type='flex' justify='center'>
                         <Col span={9}>
-                            <ResultDataTable matchData={matchData} />
+                            <ResultDataTable
+                                matchData={matchData}
+                                state={state}
+                            />
                             <div style={{ width: "600px" }}>
                                 <Row>
                                     <Col span={12}>点击桌号 查看计分表</Col>
@@ -63,18 +96,21 @@ class Graresult extends Component {
                                 </Row>
                                 <Row>
                                     <Col span={12}><Link to='/details/grade/datumn'>Datumn</Link>   </Col>
-                                    <Col span={12}>牌：<Link to='/details/grade/1'>1</Link> 2 3 4 5 6 7 8</Col>
+                                    <Col span={12}>牌：{dealData}</Col>
                                 </Row>
                             </div>
                         </Col>
                         <Col span={6}>
-                            <Table
-                                size='xs'
-                                columns={columnRank}
-                                dataSource={dataRank}
-                                pagination={false}
-                                bordered
-                            />
+                            {teamRoundInfoData ?
+                                <Table
+                                    rowKey={record => record.id}
+                                    size='xs'
+                                    columns={columnRank}
+                                    dataSource={teamRoundInfoData}
+                                    pagination={false}
+                                    bordered
+                                /> : '暂无数据'
+                            }
                         </Col>
                     </Row>
                 </div>
