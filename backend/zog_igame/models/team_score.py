@@ -22,6 +22,8 @@ class GameTeamRoundInfo(models.Model):
     match_team_id = fields.Many2one('og.match.team', string='Match Team',
         compute='_compute_match', help='Technical field for score')
 
+    opp_team_id = fields.Many2one('og.team', related='match_team_id.opp_team_id')
+
     imp     = fields.Integer(related='match_team_id.imp')
     imp_opp = fields.Integer(related='match_team_id.imp_opp')
     vp      = fields.Float(related='match_team_id.vp')

@@ -84,6 +84,11 @@ class Board(models.Model):
 
     deal_id = fields.Many2one('og.deal', required=True, ondelete='restrict')
     card_str = fields.Char(related='deal_id.card_str')
+    
+    match_id = fields.Many2one('og.match', related='table_id.match_id')
+    host_id  = fields.Many2one('og.team', related='match_id.host_id')
+    guest_id = fields.Many2one('og.team', related='match_id.guest_id')
+
 
     _sql_constraints = [
         ('table_deal_uniq', 'unique (deal_id,table_id)', 'a deal play one time in a table!')

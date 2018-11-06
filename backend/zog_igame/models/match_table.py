@@ -168,3 +168,19 @@ class MatchLine(models.Model):
             rec.host_imp  = imp>0 and imp or 0
             rec.guest_imp = imp<0 and -imp or 0
 
+class Board(models.Model):
+    _inherit = "og.board"
+
+    host_imp  = fields.Integer(compute='_compute_point')
+    guest_imp = fields.Integer(compute='_compute_point')
+    
+    @api.multi
+    def _compute_point(self):
+        for rec in self:
+            deal_id = rec.deal_id.id
+            match_id = rec.match_id.id
+            domain = [('deal_id','=',deal_id),('match_id','=',match_id)]
+            match_line = rec.env['og.match.line'].search(domain,limit=1)
+            
+            rec.host_imp = match_line.host_imp
+            rec.guest_imp = match_line.guest_imp
