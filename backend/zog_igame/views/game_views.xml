@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+        <menuitem name="Game"
+            id="menu_game"
+            parent="menu_main_igame"
+            sequence="2" />
+
         <record model="ir.actions.act_window" id="action_game_list">
             <field name="name">Game</field>
             <field name="res_model">og.game</field>
@@ -11,42 +16,17 @@
             </field>
         </record>
 
-        <menuitem name="game"
-            id="menu_game"
-            parent="menu_main_igame"
-            sequence="2" />
-
         <menuitem id="menu_game_list"
-            name="games"
+            name="Game"
             parent="menu_game"
             action="action_game_list"
             sequence="25"/>
 
-        <record model="ir.actions.act_window" id="action_game_round_list">
-            <field name="name">Game Round</field>
-            <field name="res_model">og.round</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Create a round
-                </p>
-            </field>
-        </record>
-
-
-        <menuitem id="menu_game_round_list"
-            name="game rounds"
-            parent="menu_game"
-            action="action_game_round_list"
-            sequence="27"/>
-
-
-
-        <record id="view_og_game_tree" model="ir.ui.view">
+        <record id="view_game_tree" model="ir.ui.view">
             <field name="name">game.tree</field>
             <field name="model">og.game</field>
             <field name="arch" type="xml">
-                <tree string="Game">
+                <tree string="Games">
                     <field name="state"/>
                     <field name="name"/>
                     <field name="game_type"/>
@@ -58,11 +38,91 @@
             </field>
         </record>
 
-        <record id="view_og_game_round_tree" model="ir.ui.view">
+        <record model="ir.actions.act_window" id="action_schedule_list">
+            <field name="name">Schedule</field>
+            <field name="res_model">og.schedule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a schedule
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_schedule_list"
+            name="Schedule"
+            parent="menu_game"
+            action="action_schedule_list"
+            sequence="27"/>
+
+        <record id="view_schedule_tree" model="ir.ui.view">
+            <field name="name">schedule.tree</field>
+            <field name="model">og.schedule</field>
+            <field name="arch" type="xml">
+                <tree string="Schedules">
+                    <field name="game_id"/>
+                    <field name="number"/>
+                    <field name="name"/>
+                    <field name="date_from"/>
+                    <field name="date_thru"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_phase_list">
+            <field name="name">Phase</field>
+            <field name="res_model">og.phase</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a phase
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_phase_list"
+            name="Phase"
+            parent="menu_game"
+            action="action_phase_list"
+            sequence="27"/>
+
+        <record id="view_phase_tree" model="ir.ui.view">
+            <field name="name">phase.tree</field>
+            <field name="model">og.phase</field>
+            <field name="arch" type="xml">
+                <tree string="Phases">
+                    <field name="game_id"/>
+                    <field name="name"/>
+                    <field name="number"/>
+                    <field name="match_type"/>
+                    <field name="org_type"/>
+                    <field name="score_uom"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_round_list">
+            <field name="name">Game Round</field>
+            <field name="res_model">og.round</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create a round
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_round_list"
+            name="Round"
+            parent="menu_game"
+            action="action_round_list"
+            sequence="29"/>
+
+        <record id="view_round_tree" model="ir.ui.view">
             <field name="name">round.tree</field>
             <field name="model">og.round</field>
             <field name="arch" type="xml">
-                <tree string="Game">
+                <tree string="Rounds">
                     <field name="name"/>
                     <field name="number"/>
                     <field name="game_id"/>
@@ -74,25 +134,40 @@
             </field>
         </record>
 
+        <record model="ir.actions.act_window" id="action_team_list">
+            <field name="name">Game Team</field>
+            <field name="res_model">og.team</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Join a game
+                </p>
+            </field>
+        </record>
 
-        <record id="view_og_game_team_tree" model="ir.ui.view">
+        <menuitem id="menu_team_list"
+            name="Team"
+            parent="menu_game"
+            action="action_team_list"
+            sequence="30"/>
+
+        <record id="view_team_tree" model="ir.ui.view">
             <field name="name">team.tree</field>
             <field name="model">og.team</field>
             <field name="arch" type="xml">
-                <tree string="Game Team">
+                <tree string="Teams">
                     <field name="game_id"/>
                     <field name="name"/>
-                    <field name="score"/>
-                    <field name="score_uom"/>
+                    <field name="rank"/>
                 </tree>
             </field>
         </record>
 
-        <record id="view_og_game_team_form" model="ir.ui.view">
+        <record id="view_team_form" model="ir.ui.view">
             <field name="name">team.form</field>
             <field name="model">og.team</field>
             <field name="arch" type="xml">
-                <form string="Game Team">
+                <form string="Team">
                     <group col="4">
                         <field name="name"/>
                         <field name="game_id"/>
@@ -106,11 +181,11 @@
             </field>
         </record>
 
-        <record id="view_og_game_team_player_tree" model="ir.ui.view">
+        <record id="view_team_player_tree" model="ir.ui.view">
             <field name="name">team.player.tree</field>
             <field name="model">og.team.player</field>
             <field name="arch" type="xml">
-                <tree string="Game Team Player">
+                <tree string="Team Players">
                     <field name="team_id"/>
                     <field name="partner_id"/>
                     <field name="role"/>
@@ -118,11 +193,11 @@
             </field>
         </record>
 
-        <record id="view_og_game_team_player_form" model="ir.ui.view">
+        <record id="view_team_player_form" model="ir.ui.view">
             <field name="name">team.player.form</field>
             <field name="model">og.team.player</field>
             <field name="arch" type="xml">
-                <form string="Game Team Player">
+                <form string="Team Player">
                     <group col="4">
                         <field name="team_id"/>
                         <field name="partner_id"/>
@@ -132,13 +207,28 @@
             </field>
         </record>
 
+        <record model="ir.actions.act_window" id="action_team_round_info_list">
+            <field name="name">Score</field>
+            <field name="res_model">og.team.round.info</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Score
+                </p>
+            </field>
+        </record>
 
+        <menuitem id="menu_team_round_info_list"
+            name="Score"
+            parent="menu_game"
+            action="action_team_round_info_list"
+            sequence="32"/>
 
-        <record id="view_og_game_team_line_tree" model="ir.ui.view">
+        <record id="view_team_round_info_tree" model="ir.ui.view">
             <field name="name">team.round.info.tree</field>
             <field name="model">og.team.round.info</field>
             <field name="arch" type="xml">
-                <tree string="Game Team Line">
+                <tree string="Score">
                     <field name="team_id"/>
                     <field name="game_id"/>
                     <field name="phase_id"/>
@@ -147,29 +237,14 @@
                     <field name="number"/>
                     <field name="sequence"/>
                     <field name="score"/>
+                    <field name="score_close"/>
                     <field name="score_uom"/>
+                    <field name="rank_close"/>
 
                 </tree>
             </field>
         </record>
 
-
-        <record model="ir.actions.act_window" id="action_game_team_list">
-            <field name="name">Game Team</field>
-            <field name="res_model">og.team</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Join a game
-                </p>
-            </field>
-        </record>
-
-        <menuitem id="menu_game_team_list"
-            name="game Teams"
-            parent="menu_game"
-            action="action_game_team_list"
-            sequence="30"/>
 
 </odoo>
 
