@@ -1,7 +1,7 @@
 export const headerRoutes = [
     {
         name: "首页",
-        path: "/home",
+        path: "/",
         child: [],
     },
      {

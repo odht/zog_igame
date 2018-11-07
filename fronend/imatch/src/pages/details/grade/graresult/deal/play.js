@@ -1,9 +1,9 @@
 import { Component } from "react";
 import {Row, Col, Table} from 'antd';
-import club from '../../../../assets/svg/club.svg';
-import diamond from '../../../../assets/svg/diamond.svg';
-import heart from '../../../../assets/svg/heart.svg';
-import spade from '../../../../assets/svg/spade.svg';
+import club from '@/assets/svg/club.svg';
+import diamond from '@/assets/svg/diamond.svg';
+import heart from '@/assets/svg/heart.svg';
+import spade from '@/assets/svg/spade.svg';
 // const suits=[
 //     <img src={spade} style={{width:"12px"}}/>,
 //     <img src={club} style={{width:"12px"}}/>,

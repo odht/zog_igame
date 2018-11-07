@@ -97,7 +97,7 @@ class DetailsLayout extends Component {
 	render() {
 		// 识别
 		const { visible, confirmLoading } = this.state;
-		const { location: { pathname, state: { gameData } } } = this.props;
+		const {  location: { pathname, state: { gameData }, state } } = this.props;
 		return (
 			<Layout style={{ minWidth: 780 }}>
 				<div style={{ border: 'none', textAlign: "center", lineHeight: '80px' }}>
@@ -110,10 +110,11 @@ class DetailsLayout extends Component {
 						headerRoutes={headerRoutes}
 						pathname={pathname}
 					/>
-
 				</Header>
 				<Content style={{ padding: '0 50px' }}>
-					<Breadcrumbs />
+					<Breadcrumbs
+						state={state}
+					>1111</Breadcrumbs>
 					<Layout style={{ padding: '12px 0', background: '#fff' }}>
 
 						<Content style={{ padding: '0 24px', minHeight: '69.5vh' }}>
