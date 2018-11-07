@@ -4,10 +4,9 @@ import club from '@/assets/svg/club.svg';
 import diamond from '@/assets/svg/diamond.svg';
 import heart from '@/assets/svg/heart.svg';
 import spade from '@/assets/svg/spade.svg';
-
 import direction from '@/assets/direction.png';
 import one from '@/assets/one.png';
-import { Table, Row, Col } from "antd";
+import { Table, Row, Col ,Icon} from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "dva";
 import { lookup } from '@/utils/tools'
@@ -56,6 +55,7 @@ class Deal extends Component {
     }
   }
   render() {
+    
     const { card_str, BoardData } = this.state;
     //发牌人 比赛名称 排位　第几轮
     let dealer = '';
@@ -83,11 +83,41 @@ class Deal extends Component {
       e_card_str = card_nwes_strArray[2];
       s_card_str = card_nwes_strArray[3];
     }
+    const cardsvg=(index)=>{
+      let src
+      switch (index) {
+        case 0:
+          src=spade;
+          break;
+        case 1:
+          src=heart;
+          break;
+        case 2:
+          src=diamond;
+          break
+        case 3:
+          src=club ;
+          break       
+        default: 
+          src=spade
+          break;
+      }
+      console.log(index);
+      
+    return <img src={src} alt={index} className={styles.icons}></img>
+    }
     const cardList = (cardArray) => {
       if (cardArray.length > 0) {
-        return cardArray.map(item => {
-          return <p key={item} className={styles.cardText}>{item}</p>
-        })
+        console.log(cardArray);
+        
+        return cardArray.map((item,index) => {
+          return (
+            <div key={item} className={styles.flex}>
+              {cardsvg(index)}
+              <p  className={styles.cardText}>{item}</p>
+            </div>
+          
+        )})
       } else {
         return ''
       }
@@ -174,6 +204,7 @@ class Deal extends Component {
           dataSource={BoardData}
           columns={columns}
         />
+
       </div>
     )
   }
