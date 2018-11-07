@@ -46,6 +46,14 @@ class Graresult extends Component {
             payload: { id: team_info_ids }
         })
     }
+    shouldComponentUpdate(props, state) {
+        const { odooData: { ogTeamRoundInfo } } = props;
+        if (ogTeamRoundInfo) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     render() {
         // 比赛对战数据
         const {
@@ -101,7 +109,7 @@ class Graresult extends Component {
                             </div>
                         </Col>
                         <Col span={6}>
-                            {teamRoundInfoData ?
+                            {
                                 <Table
                                     rowKey={record => record.id}
                                     size='xs'
@@ -109,7 +117,7 @@ class Graresult extends Component {
                                     dataSource={teamRoundInfoData}
                                     pagination={false}
                                     bordered
-                                /> : '暂无数据'
+                                />
                             }
                         </Col>
                     </Row>
