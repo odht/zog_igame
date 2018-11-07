@@ -166,11 +166,11 @@ class MatchLine(models.Model):
 class Board(models.Model):
     _inherit = "og.board"
 
-    host_imp  = fields.Integer(compute='_compute_point')
-    guest_imp = fields.Integer(compute='_compute_point')
+    host_imp  = fields.Integer(compute='_compute_imp')
+    guest_imp = fields.Integer(compute='_compute_imp')
     
     @api.multi
-    def _compute_point(self):
+    def _compute_imp(self):
         for rec in self:
             deal_id = rec.deal_id.id
             match_id = rec.match_id.id
