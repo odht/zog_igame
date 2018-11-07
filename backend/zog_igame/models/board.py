@@ -130,7 +130,6 @@ class Board(models.Model):
     dummy      = fields.Selection(POSITIONS,compute='_compute_contract2')
             
     @api.multi
-    @api.depends('declarer','contract')
     def _compute_contract2(self):
         for rec in self:
             ctrct = rec.contract
@@ -170,12 +169,11 @@ class Board(models.Model):
         for rec in self:
             rec.result2 = fn(rec)
 
-    point = fields.Integer(compute='_compute_point',store=True, readonly=True)
-    ns_point = fields.Integer(compute='_compute_point',store=True, readonly=True)
-    ew_point = fields.Integer(compute='_compute_point',store=True, readonly=True)
+    point = fields.Integer(compute='_compute_point' )
+    ns_point = fields.Integer(compute='_compute_point' )
+    ew_point = fields.Integer(compute='_compute_point' )
 
     @api.multi
-    @api.depends('contract','declarer', 'result')
     def _compute_point(self):
         for rec in self:
             rec.point, rec.ns_point, rec.ew_point = rec._get_point()

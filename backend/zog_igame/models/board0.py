@@ -19,8 +19,8 @@ class Board(models.Model):
     call_ids = fields.One2many('og.board.call','board_id')
     bidder   = fields.Selection(POSITIONS,compute='_compute_call')
     auction  = fields.Char(compute='_compute_call')
+    
     @api.multi
-    @api.depends('call_ids','dealer')
     def _compute_call(self):
         for rec in self:
             cs = rec.call_ids
@@ -50,7 +50,6 @@ class Board(models.Model):
         return self._get_tricks()
 
     @api.multi
-    @api.depends('card_ids' )
     def _compute_trick(self):
         def fn(trick):
             num = trick and 'WNES'.index( trick[0].pos ) or 0
@@ -65,7 +64,6 @@ class Board(models.Model):
             
 
     @api.multi
-    @api.depends('declarer','card_ids','state')
     def _compute_player(self):
         def fn(rec):
             ts = rec._get_tricks()
@@ -96,7 +94,6 @@ class Board(models.Model):
     ew_win = fields.Integer(compute='_compute_win')
 
     @api.multi
-    @api.depends('card_ids')
     def _compute_win(self):
         for rec in self:
             ns, ew = rec._get_win()
@@ -125,7 +122,6 @@ class Board(models.Model):
     ew_claim  = fields.Integer(compute='_compute_claim')
 
     @api.multi
-    @api.depends('claimer','claim_result')
     def _compute_claim(self):
         for rec in self:
             ns, ew = rec._get_claim()
@@ -148,7 +144,6 @@ class Board(models.Model):
     trick_count = fields.Integer(compute='_compute_trick_cnt')
 
     @api.multi
-    @api.depends('ns_win','ew_win', 'ns_claim', 'ew_claim')
     def _compute_trick_cnt(self):
         for rec in self:
             cnt = rec.ns_win + rec.ew_win
