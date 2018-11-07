@@ -1,0 +1,82 @@
+.header{
+    width: 350px;
+    height: 300px;
+    margin: 0 auto;
+}
+.table{
+    padding: 50px;
+    float: left;
+    width: 230px;
+    height: 300px;
+    position: relative;
+}
+.datum{
+    float: right;
+    font-size: 20px;
+}
+.tableNWES{
+    font-size: 20px;
+    color: white;
+    background: black;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    top:50%;
+    transform: translateY(-50%);
+    position: relative;
+}
+.tableN{
+  position: absolute;
+  top:2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tableW{
+    left: 2px;
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+}
+.tableE{
+    position: absolute;
+    top:50%;
+    right:2px;
+    transform: translateY(-50%);
+}
+.tableS{
+    position: absolute;
+    bottom:2px;
+    left:50%;
+    transform:translateX(-50%);
+}
+.cardText{
+    margin: 0;
+}
+.matchText{
+    background:#ccc;
+    width: 100%;
+    height: 60px;
+    border: 2px solid black;
+}
+.matchTextGame{
+    background: #ccc;
+    line-height: 56px;
+    display:inline-block;
+    border: 2px;
+    width: 40%;
+    text-align: center;
+}
+.matchTextPhase{
+    line-height: 56px;
+    display:inline-block;
+    background: green;
+    width: 25%;
+    text-align: center;
+}
+.matchTextRound{
+    background: #ccc;
+    line-height: 56px;
+    display:inline-block;
+    width: 35%;
+    text-align: center;
+}

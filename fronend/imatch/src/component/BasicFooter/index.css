@@ -1,0 +1,27 @@
+.footer{
+    margin: 0px auto;
+    width:1200px;
+
+}
+.link{
+	padding-top: 20px;
+}
+
+.footer ul{
+	list-style: none;
+}
+.footer ul li a{
+	color: #888;
+	font-size: 14px;
+}
+.copyright{
+	text-align: center;
+	height: 116px;
+	font-size: 11px;
+	color: #888;
+}
+.owner{
+	margin-top: 60px;
+	margin-bottom: 2px;
+}
+

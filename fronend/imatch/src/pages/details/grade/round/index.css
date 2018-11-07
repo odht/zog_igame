@@ -1,0 +1,47 @@
+.header{
+    width: 200px;
+    margin: 0 auto;
+}
+.table{
+    padding: 50px;
+    float: left;
+    width: 200px;
+    /* height: 300px; */
+    position: relative;
+}
+.datum{
+    float: right;
+}
+.tableNWES{
+    font-size: 20px;
+    color: white;
+    background: black;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    position: relative;
+}
+.tableN{
+  position: absolute;
+  top:2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tableW{
+    left: 2px;
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+}
+.tableE{
+    position: absolute;
+    top:50%;
+    right:2px;
+    transform: translateY(-50%);
+}
+.tableS{
+    position: absolute;
+    bottom:2px;
+    left:50%;
+    transform:translateX(-50%);
+}

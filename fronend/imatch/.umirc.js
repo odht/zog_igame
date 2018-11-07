@@ -7,19 +7,18 @@ export default {
       antd: true,
       dva: true,
       dynamicImport: false,
-      title: 'imatch',
+      title: 'myqpp',
       dll: false,
       routes: {
         exclude: [],
       },
       hardSource: false,
     }],
-  ],
-
-
-  proxy: {
+  ], 
+  
+   proxy: {
     '/api': {
-      target: 'http://192.168.56.105:8069/',
+      target: 'http://192.168.0.110:8069/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

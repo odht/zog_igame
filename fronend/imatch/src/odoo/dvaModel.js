@@ -1,5 +1,5 @@
 import service from '@/services/odooService';
-import dvaOdoo from 'dva-odoo';
+import dvaOdoo from './dva-odoo';
 import dvaOdooGame from './igame'
 
 const models = {
@@ -44,9 +44,9 @@ const models = {
   ]},
 
   ogTeamRoundInfo:{ default: [
-    'name','number', 'team_id','round_id','game_id','phase_id',
+    'name','number', 'team_id','opp_team_id','round_id','game_id','phase_id','last_in_phase',
     'match_id',
-    'score','score_manual','score_uom'
+    'imp','imp_opp','vp','vp_opp','score','score_manual','score_uom','score_close'
   ]},
 
   ogMatch:{ default: [
@@ -77,9 +77,9 @@ const models = {
   ]},
 
   ogBoard:{ default: [
-    'name','deal_id', 'table_id','round_id','phase_id','game_id',
+    'name','deal_id', 'table_id','round_id','phase_id','game_id','match_id', 'host_id','guest_id',
     'number','vulnerable','dealer','hands',
-    'declarer', 'contract', 'openlead','result','ns_point','ew_point',
+    'declarer', 'contract', 'openlead','result','ns_point','ew_point','host_imp','guest_imp',
     'auction', 'tricks', 'last_trick', 'current_trick',
     'ns_win','ew_win',
     'claimer','claim_result',
