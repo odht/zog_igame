@@ -19,12 +19,12 @@ const { headerRoutes } = routes;
 //面包屑
 
 class BasicLayout extends Component {
-  componentWillMount() {
-    const { history: { location: { pathname } } } = this.props;
-    if (pathname === '/') {
-      router.push('/home');
-    }
-  }
+  // componentDidMount() {
+  //   const { history: { location: { pathname } } } = this.props;
+  //   if (pathname === '/') {
+  //     router.push('/home');
+  //   }
+  // }
   logout = ()=> {console.log(123)
     this.props.dispatch({type:'user/logout'})
     router.push('/user/login')
@@ -41,7 +41,6 @@ class BasicLayout extends Component {
     }
     const siderRoute = siderData();
     const loginButton =<div><Link to='/user/login'><Button type='normal'>立即登录</Button></Link><Link to='/user/register'><Button type='primary'>免费注册</Button></Link></div> 
-    // 0000000000000000000
     const {currentUser} = 10;
     const menu = (
       <Menu>

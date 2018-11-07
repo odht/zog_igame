@@ -75,7 +75,7 @@ class Graresult extends Component {
             return <Link
                 key={item}
                 to={{
-                    pathname: '/details/grade/deal',
+                    pathname: '/details/grade/graresult/deal',
                     query: { deal_id: item },
                     state,
                 }}>{item}    </Link>

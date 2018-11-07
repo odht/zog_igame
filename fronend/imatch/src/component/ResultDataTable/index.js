@@ -10,7 +10,7 @@ const ResultDataTable = ({ matchData, state }) => {
             dataIndex: "number",
             render: (text, record) => {
                 return <Link to={{
-                    pathname: '/details/grade/round',
+                    pathname: '/details/grade/graresult/round',
                     state: { ...state, matchData: record },
                 }}>
                     {text}
@@ -26,7 +26,7 @@ const ResultDataTable = ({ matchData, state }) => {
             title: "主队",
             dataIndex: "host_id",
             render: (text, record) => {
-                return <Link to={{ pathname: `/details/grade/teamMatch`, state, search: `?team_id=${record.host_id[0]}`, }}>{record.host_id[1]}</Link>;
+                return <Link to={{ pathname: `/details/grade/graresult/teamMatch`, state, search: `?team_id=${record.host_id[0]}`, }}>{record.host_id[1]}</Link>;
             }
         }, {
             title: "客队",

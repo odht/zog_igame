@@ -7,7 +7,6 @@ export default {
       antd: true,
       dva: true,
       dynamicImport: false,
-      title: 'myqpp',
       dll: false,
       routes: {
         exclude: [],

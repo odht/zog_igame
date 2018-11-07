@@ -1,6 +1,6 @@
 export const details = [
     {
-        name: '首页',
+        name: '比赛信息',
         path: '/dhome',
         child: [],
     }, {

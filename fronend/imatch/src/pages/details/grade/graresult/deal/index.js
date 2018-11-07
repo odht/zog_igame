@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import styles from './index.css'
-import club from '../../../../assets/svg/club.svg';
-import diamond from '../../../../assets/svg/diamond.svg';
-import heart from '../../../../assets/svg/heart.svg';
-import spade from '../../../../assets/svg/spade.svg';
+import club from '@/assets/svg/club.svg';
+import diamond from '@/assets/svg/diamond.svg';
+import heart from '@/assets/svg/heart.svg';
+import spade from '@/assets/svg/spade.svg';
 
-import direction from '../../../../assets/direction.png';
-import one from '../../../../assets/one.png';
+import direction from '@/assets/direction.png';
+import one from '@/assets/one.png';
 import { Table, Row, Col } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "dva";

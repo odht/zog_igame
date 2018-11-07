@@ -1,13 +1,21 @@
-import styles from './index.css';
-
+import Carousel_2 from '@/component/Carousel_2'
+import Banner from '@/component/Banner'
 export default function() {
   return (
-    <div className={styles.normal}>
-      <div className={styles.welcome} />
-      <ul className={styles.list}>
-        <li>To get started, edit <code>src/pages/index.js</code> and save to reload.</li>
-        <li><a href="https://umijs.org/guide/getting-started.html">Getting Started</a></li>
-      </ul>
+    <div style={{marginTop:'20px'}}>
+  
+          <div >
+          <div style={{fontSize:'24px',fontWeight:'bold',marginBottom:'20px',backgroundColor:'red'}}>
+          | 新闻 |
+          </div>
+            <Banner/>
+          <div style={{fontSize:'24px',fontWeight:'bold',marginBottom:'20px'}}>
+            | 赛事 |
+          </div>
+            <Carousel_2/>
+          </div>
+
     </div>
   );
 }
+
