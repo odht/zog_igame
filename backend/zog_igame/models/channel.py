@@ -7,6 +7,14 @@ import json
 import logging
 _logger = logging.getLogger(__name__)
 
+class Table(models.Model):
+    _inherit = "og.table"
+    channel_ids = fields.One2many('og.channel','table_id')
+    
+    board_id = fields.Many2one('og.board', help="The board played now")
+    last_bus_id = fields.Integer(help='the last bus id for longpoll,')
+    
+
 class Board(models.Model):
     _inherit = "og.board"
     
@@ -96,11 +104,6 @@ class Board(models.Model):
                 rec.message_post('undo', [], info)
         
         return ret
-
-class Table(models.Model):
-    _inherit = "og.table"
-    channel_ids = fields.One2many('og.channel','table_id')
-    
 
 class GameChannel(models.Model):
     _name = "og.channel"

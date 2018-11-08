@@ -181,9 +181,16 @@ class Board(models.Model):
     def _get_point(self):
         if self.state != 'done':
             return 0, 0, 0
+
+        if not self.declarer:
+            return 0, 0, 0
+            
+        if not self.contract_trump:
+            return 0, 0, 0
         
         if self.contract == PASS:
             return 0, 0, 0
+
 
 
         vs = {  'BO': lambda d: 1,

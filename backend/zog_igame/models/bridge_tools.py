@@ -97,6 +97,9 @@ def get_point(vul,rank,trump,risk,result):
     rank + 6 + result <= 13
     rank + 6 + result >= 0
     """
+    
+    if not trump:
+        return 0
 
     fn = result >=0 and _get_point_make or _get_point_down
     return fn(vul,rank,trump,risk,result)
