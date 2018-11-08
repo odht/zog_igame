@@ -19,6 +19,9 @@ class Board(models.Model):
     _inherit = "og.board"
     
     def _get_info(self):
+        return {}
+
+        
         return {
             'id': self.id,
             'number':self.number,
@@ -44,6 +47,8 @@ class Board(models.Model):
         }
     
     def message_post(self, method, args, info):
+        return None
+        
         message = {
             'id': self.id,
             'method': method, 
