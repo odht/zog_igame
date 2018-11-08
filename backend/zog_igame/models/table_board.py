@@ -48,30 +48,6 @@ class Table(models.Model):
 
     board_ids = fields.One2many('og.board', 'table_id', string='Boards')
     
-    """ 
-    board_id = fields.Many2one('og.board', compute='_compute_board',
-        help="The board played now")
-    
-    @api.multi
-    def _compute_board(self):
-        for rec in self:
-            rec.board_id = rec._get_board()
-    
-    def _get_board(self):
-        bd = self.board_ids.filtered(lambda bd: bd.state not in ['done','cancel'])
-        if bd:
-            return bd[0]
-        
-        numbers = self.board_ids.mapped('number')
-        deal_no = numbers and max(numbers) or 0
-        deals = self.deal_ids.filtered(lambda deal: deal.number > deal_no).sorted('number')
-        if not deals:
-            return self.env['og.board']
-        deal = deals[0]
-        return self.env['og.board'].create({'deal_id': deal.id, 'table_id':self.id})
-
-    """
-
     state = fields.Selection([
         ('draft',  'Draft'),
         ('todo',  'Todo'),
@@ -108,3 +84,25 @@ class Table(models.Model):
         return bd and 'doing' or 'done'
 
             
+    
+    """ 
+    
+    @api.multi
+    def _compute_board(self):
+        for rec in self:
+            rec.board_id = rec._get_board()
+    
+    def _get_board(self):
+        bd = self.board_ids.filtered(lambda bd: bd.state not in ['done','cancel'])
+        if bd:
+            return bd[0]
+        
+        numbers = self.board_ids.mapped('number')
+        deal_no = numbers and max(numbers) or 0
+        deals = self.deal_ids.filtered(lambda deal: deal.number > deal_no).sorted('number')
+        if not deals:
+            return self.env['og.board']
+        deal = deals[0]
+        return self.env['og.board'].create({'deal_id': deal.id, 'table_id':self.id})
+
+    """
