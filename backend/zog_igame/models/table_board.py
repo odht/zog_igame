@@ -25,7 +25,6 @@ class GameRound(models.Model):
     ], string='Status', compute='_compute_state')
 
     @api.multi
-    @api.depends('table_ids','deal_ids')
     def _compute_state(self):
         for rec in self:
             rec.state = rec._get_state()
@@ -54,7 +53,6 @@ class Table(models.Model):
         help="The board played now")
     
     @api.multi
-    @api.depends('board_ids','deal_ids')
     def _compute_board(self):
         for rec in self:
             rec.board_id = rec._get_board()
@@ -83,7 +81,6 @@ class Table(models.Model):
     ], string='Status', compute='_compute_state')
 
     @api.multi
-    @api.depends('board_ids','deal_ids')
     def _compute_state(self):
         for rec in self:
             rec.state = rec._get_state()

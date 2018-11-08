@@ -92,19 +92,19 @@ class Table(models.Model):
             rec.south_id = _get('S')
             rec.player_ids = rec.table_player_ids.mapped('player_id')
 
-    #@api.onchange('east_id', 'west_id', 'north_id', 'south_id')
+    @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_east(self):
         self._inverse_player('E')
 
-    #@api.onchange('east_id', 'west_id', 'north_id', 'south_id')
+    @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_west(self):
         self._inverse_player('W')
 
-    #@api.onchange('east_id', 'west_id', 'north_id', 'south_id')
+    @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_north(self):
         self._inverse_player('N')
 
-    #@api.onchange('east_id', 'west_id', 'north_id', 'south_id')
+    @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_south(self):
         self._inverse_player('S')
 
