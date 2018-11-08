@@ -10,45 +10,36 @@ _logger = logging.getLogger(__name__)
 class Table(models.Model):
     _inherit = "og.table"
     channel_ids = fields.One2many('og.channel','table_id')
-    
     board_id = fields.Many2one('og.board', help="The board played now")
-    last_bus_id = fields.Integer(help='the last bus id for longpoll,')
-    
 
 class Board(models.Model):
     _inherit = "og.board"
     
     def _get_info(self):
-        return {}
-
-        
         return {
             'id': self.id,
             'number':self.number,
             'vulnerable':self.vulnerable,
             'dealer':self.dealer,
             'hands': self.hands,
-            'declarer': rec.declarer,
-            'contract': rec.contract,
-            'openlead': rec.openlead,
-            'result': rec.result,
-            'ns_point': rec.ns_point,
-            'ew_point': rec.ew_point,
+            'declarer': self.declarer,
+            'contract': self.contract,
+            'openlead': self.openlead,
+            'result': self.result,
+            'ns_point': self.ns_point,
+            'ew_point': self.ew_point,
             
-            'auction': rec.auction,
-            'ns_win': rec.ns_win,
-            'ew_win': rec.ew_win,
-            'last_trick': rec.last_trick,
-            'current_trick': rec.current_trick,
-            'tricks': rec.tricks,
-
-            'player': rec.player,
-            'state': rec.state,
+            'auction': self.auction,
+            'ns_win': self.ns_win,
+            'ew_win': self.ew_win,
+            'last_trick': self.last_trick,
+            'current_trick': self.current_trick,
+            'tricks': self.tricks,
+            'player': self.player,
+            'state': self.state,
         }
     
     def message_post(self, method, args, info):
-        return None
-        
         message = {
             'id': self.id,
             'method': method, 
@@ -57,8 +48,8 @@ class Board(models.Model):
         }
     
         for channel in self.table_id.channel_ids:
-            channel.message_post(subject = method,
-                body = json.dumps(body) )
+            channel.message_post(subject = 'board',
+                body = json.dumps(message) )
 
     @api.multi
     def bid(self, pos, call):
@@ -142,19 +133,18 @@ class GameChannel(models.Model):
     @api.multi
     def message_get(self, message_id ):
         msg = self.env['mail.message'].browse(message_id)
-        #subject = msg.subject
+        subject = msg.subject
         body = msg.body
         if body[:3] == '<p>' and body[-4:] == '</p>':
             body = body[3:-4]
 
-        body = json.loads(body)
-        body = self._transposition(body)
+        #body = json.loads(body)
+        #body = self._transposition(body)
+        #uid = self.env.uid
+        #return json.dumps(body)
         
-        uid = self.env.uid
-        
-        body = {'uid':uid, 'board': body}
+        return {'subject':subject, 'body':body}
 
-        return json.dumps(body)
 
     @api.multi
     @api.returns('self', lambda value: value.id)
