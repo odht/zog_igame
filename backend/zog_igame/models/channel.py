@@ -48,7 +48,7 @@ class Board(models.Model):
         }
     
         for channel in self.table_id.channel_ids:
-            channel.message_post(subject = 'board',
+            channel.message_post(subject = 'og.board',
                 body = json.dumps(message) )
 
     @api.multi
