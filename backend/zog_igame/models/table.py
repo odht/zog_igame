@@ -38,8 +38,11 @@ class Table(models.Model):
 
     match_id = fields.Many2one('og.match', string='Match', ondelete='restrict')
     round_id = fields.Many2one('og.round', related='match_id.round_id')
+    schedule_id = fields.Many2one('og.schedule', related='round_id.schedule_id')
     phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
     game_id = fields.Many2one('og.game', related='phase_id.game_id')
+
+    schedule_number = fields.Integer( string='Schedule Number', related='schedule_id.number' )
 
     date_from = fields.Datetime(related='round_id.date_from')
     date_thru = fields.Datetime(related='round_id.date_thru')
@@ -157,6 +160,7 @@ class Partner(models.Model):
     team_player_ids = fields.One2many('og.team.player','partner_id' )
 
     todo_table_ids = fields.One2many('og.table', compute='_get_table')
+    doing_table_id = fields.Many2one('og.table', compute='_get_table')
     done_table_ids = fields.One2many('og.table', compute='_get_table')
     
     @api.multi
@@ -166,7 +170,9 @@ class Partner(models.Model):
             table_ids = rec.team_player_ids.mapped('table_player_ids').mapped('table_id')
             
             rec.todo_table_ids = table_ids.filtered(
-                    lambda tbl: tbl.state in ['todo','doing']).sorted('date_from')
+                    lambda tbl: tbl.state in ['todo','doing']).sorted('schedule_number')
                     
             rec.done_table_ids = table_ids.filtered(
                     lambda tbl: tbl.state == 'done').sorted('date_from')
+                    
+            rec.doing_table_id = rec.todo_table_ids and rec.todo_table_ids[0]

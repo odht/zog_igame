@@ -98,6 +98,8 @@ class Board(models.Model):
     name   = fields.Char('Name', related='deal_id.name' )
     
     number = fields.Integer(related='deal_id.number' )
+    sequence = fields.Integer(help="sort to play")
+
     dealer = fields.Selection(related='deal_id.dealer' )
     vulnerable = fields.Selection(related='deal_id.vulnerable' )
 
@@ -223,8 +225,13 @@ class Board(models.Model):
         nvs = vals.copy()
         if nvs.get('card_ids'):
             del nvs['card_ids']
+        
+        sequence = vals.get('sequence')
 
         board = super(Board,self).create(nvs)
+        
+        if not sequence:
+            board.sequence = board.number
 
         for dc in board.deal_id.card_ids:
             cards = {'board_id': board.id,'deal_card_id':dc.id }
