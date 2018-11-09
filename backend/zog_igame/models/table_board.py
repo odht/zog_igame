@@ -81,9 +81,7 @@ class Table(models.Model):
     
     def _get_board(self):
         bd = self.board_ids.filtered(
-            lambda bd: bd.state not in ['done','cancel']).sorted('')
-        
-        bd = dn
+            lambda bd: bd.state not in ['done','cancel']).sorted('sequence')
         
         if bd:
             return bd[0]

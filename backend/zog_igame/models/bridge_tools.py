@@ -158,6 +158,6 @@ def _get_point_down(vul,rank,trump,risk,result):
 
 if __name__ == '__main__':
     ret = cmp_gt_call('2S','5D')
-    print ret
-    
+    print ( ret )
+     
     
