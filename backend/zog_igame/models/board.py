@@ -77,7 +77,7 @@ class Board(models.Model):
         ('cancel', 'Cancelled')
     ], string='Status', default='bidding')
 
-    table_id = fields.Many2one('og.table', required=True, ondelete='restrict')
+    table_id = fields.Many2one('og.table', required=True, ondelete='cascade')
     round_id = fields.Many2one('og.round', related='table_id.round_id')
     phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
     game_id = fields.Many2one('og.game', related='phase_id.game_id')

@@ -160,8 +160,9 @@ class Partner(models.Model):
     team_player_ids = fields.One2many('og.team.player','partner_id' )
 
     todo_table_ids = fields.One2many('og.table', compute='_get_table')
-    doing_table_id = fields.Many2one('og.table', compute='_get_table')
     done_table_ids = fields.One2many('og.table', compute='_get_table')
+
+    doing_table_ids = fields.One2many('og.table', compute='_get_table')
     
     @api.multi
     def _get_table(self):
@@ -174,5 +175,13 @@ class Partner(models.Model):
                     
             rec.done_table_ids = table_ids.filtered(
                     lambda tbl: tbl.state == 'done').sorted('date_from')
-                    
-            rec.doing_table_id = rec.todo_table_ids and rec.todo_table_ids[0]
+            
+            for game in rec.todo_table_ids.mapped('game_id'):
+                doings = rec.todo_table_ids.filtered(
+                    lambda tbl: tbl.game_id == game).sorted('schedule_number')
+                if doings:
+                    rec.doing_table_ids += doings[0]
+            
+            
+
+
