@@ -10,7 +10,6 @@ _logger = logging.getLogger(__name__)
 class Table(models.Model):
     _inherit = "og.table"
     channel_ids = fields.One2many('og.channel','table_id')
-    board_id = fields.Many2one('og.board', help="The board played now")
 
 class Board(models.Model):
     _inherit = "og.board"
