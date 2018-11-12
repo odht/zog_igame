@@ -1,77 +1,68 @@
-import React, { Component } from 'react';
-import Scoringtable from '../../component/Scoringtable';
-import styles from './index.css';
+// import { Redirect } from "dva/router";
+// export default ()=>(<div><Redirect to='/home/table'/></div>)
+import React, { Component } from 'react'
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import { lookup } from '@/utils/tools';
-
-
+import { Table } from 'antd';
 
 @connect(({ odooData }) => ({ odooData }))
-export default class Home extends Component {
+export default class MyTableList extends Component {
+    state = {
+        tableData: []
+    }
     componentDidMount() {
         const { dispatch } = this.props;
+        const sid = localStorage.getItem('tonken');
+        const uid = parseInt(localStorage.getItem('uid'));
         dispatch({
-            type: 'ogBoard/read',
-            payload: { id: 10 }
-        })
-    }
-    writeSoringData = (vals) => {
-        const { dispatch } = this.props;
-        const valus = {
-            contract: vals.contract.join(""),
-            openlead: vals.openlead.join(""),
-            result: vals.result.join(""),
-            number: vals.number,
-            declarer: vals.declarer,
-            ew_point: vals.ew_point,
-            ns_point: vals.ns_point,
-            id: vals.id
-        }
-        const { id, declarer, contract, openlead, result } = valus;
-        dispatch({
-            type: 'ogBoard/writeResult',
-            payload: { id, declarer, contract, openlead, result }
+            type: 'resUsers/read',
+            payload: { id: uid }
         }).then(() => {
+            const { odooData: { resUsers } } = this.props;
+            const UserData = lookup(uid, resUsers);
+            const doing_table_ids = UserData[0].doing_table_ids;
             dispatch({
-                type: 'ogBoard/read',
-                payload: { id: 10 }
+                type: 'ogTable/read',
+                payload: { id: doing_table_ids }
+            }).then(() => {
+                const { odooData: { ogTable } } = this.props;
+                const tableData = lookup(doing_table_ids, ogTable);
+                this.setState({
+                    tableData: tableData
+                })
             })
         })
     }
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.odooData.ogBoard) {
-            return true;
-        } else {
-            return false;
-        }
-    }
     render() {
-        const { odooData: { ogBoard } } = this.props;
-        let scoringData = [];
-        if (ogBoard) {
-            let result_new = '';
-            scoringData = lookup([10], ogBoard);
-            const { result } = scoringData[0];
-            if (result.toString().split('').length === 1 && result !== '=') {
-                result_new = `\+${scoringData[0].result.toString()}`;
-            } else if (result.toString().split('').length === 1 && result === '=') {
-                result_new = `=${scoringData[0].result.toString()}`;
-            } else {
-                result_new = scoringData[0].result.toString();
-            }
-            scoringData[0].result = result_new
+        const {
+            tableData,
+        } = this.state;
+        let gameName = [];
+        if (tableData && tableData.length > 0) {
+            console.log(tableData)
+            gameName = tableData
         }
+        const tableColumns = [{
+            title: '比赛名称',
+            dataIndex: 'game_id',
+            render: (text, record) => {
+                return <Link
+                    to={{
+                        pathname: 'home/score',
+                        search: `?table_id=${record.id}`
+                    }}
+                >{record.game_id[1]}</Link>
+            }
+        }]
         return (
             <div>
-                <div className={styles.headerTitle}>
-                    <h1 className={styles.headerTitleText}>计分表</h1>
-                </div>
-                <div style={{ background: '#fff' }}>
-                    <Scoringtable
-                        writeSoringData={this.writeSoringData}
-                        scoringData={scoringData}
-                    />
-                </div>
+                <Table
+                    rowKey={row => row.id}
+                    pagination
+                    dataSource={gameName}
+                    columns={tableColumns}
+                />
             </div>
         )
     }

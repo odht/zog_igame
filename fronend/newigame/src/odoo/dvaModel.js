@@ -4,7 +4,7 @@ import dvaOdooGame from './igame'
 
 const models = {
   resUsers: { default: [
-    'name', 'login', 'todo_table_ids','done_table_ids'
+    'name', 'login', 'todo_table_ids','done_table_ids','doing_table_ids',
   ]},
 
   ogGame: { default: [
@@ -70,15 +70,15 @@ const models = {
   ]},
 
   ogTable:{ default: [
-    'name','number','room_type','match_id','game_id','round_id','phase_id',
-    'date_from','date_thru','deal_ids', 'board_ids',
+    'name','number','room_type','match_id','game_id','round_id','phase_id','schedule_id','schedule_number','state',
+    'date_from','date_thru','deal_ids', 'board_ids','doing_board_id',
     'ns_team_id','ew_team_id',
     'player_ids', 'east_id','west_id','north_id','south_id',
   ]},
 
   ogBoard:{ default: [
     'name','deal_id', 'table_id','round_id','phase_id','game_id','match_id', 'host_id','guest_id',
-    'number','vulnerable','dealer','hands',
+    'number','vulnerable','dealer','hands','sequence',
     'declarer', 'contract', 'openlead','result','ns_point','ew_point','host_imp','guest_imp',
     'auction', 'tricks', 'last_trick', 'current_trick',
     'ns_win','ew_win',

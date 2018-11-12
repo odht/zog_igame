@@ -3,11 +3,14 @@ import LoginLayout from './LoginLayout';
 import BasicLayout from './BasicLayout';
 import router from 'umi/router';
 import { connect } from 'dva';
+import { Redirect } from "dva/router";
+
+
 
 @connect(({ login }) => ({ login }))
 export default class IndexLayout extends Component {
     componentDidMount() {
-        const { location: { pathname }, dispatch } = this.props;
+        const { dispatch } = this.props;
         const tonken = localStorage.getItem('tonken');
         const uid = localStorage.getItem('uid');
         if (!tonken) {
@@ -17,17 +20,6 @@ export default class IndexLayout extends Component {
                 type: "login/save",
                 payload: { sid: tonken, uid: uid }
             })
-        }
-        const currentPath = pathname.split('/')[1];
-        switch (currentPath) {
-            case 'User':
-                { router.push('/User/login'); }
-                return null;
-            case 'home' || '/':
-                { router.push('/home'); }
-            default:
-                { router.push('/home'); }
-                return null;
         }
     }
 
@@ -40,7 +32,7 @@ export default class IndexLayout extends Component {
                 case '/home':
                     return <BasicLayout {...this.props} />
                 default:
-                    return null;
+                return <BasicLayout {...this.props} />
             }
         }
     }
