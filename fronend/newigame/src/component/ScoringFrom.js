@@ -556,19 +556,33 @@ class RecordNewForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             let id = null;
             //根据　submitType 判断是创建还是修改
-            const { scoringData, submitType ,scoringDataCraeate} = this.props;
-            if (scoringData && submitType ==='update') {
+            // const { scoringData, submitType, scoringDataCraeate } = this.props;
+            const { scoringData } = this.props;
+            // if (scoringData && submitType === 'update') {
+            //     id = scoringData.id
+            // } else {
+            //     id = scoringDataCraeate[0].round_id[1]
+            // }
+            if (scoringData) {
                 id = scoringData.id
-            }else{
-                id = scoringDataCraeate[0].round_id[1]
             }
             if (!err) {
-                this.props.writeSoringData({ ...values, id });
+                this.props.writeSoringData({ ...values, id, type: "write" });
                 this.props.form.resetFields();
                 this.setState({ modalVisible: false });
             }
         });
-
+    }
+    handleVisible = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            let id = null;
+            //根据　submitType 判断是创建还是修改
+            const { scoringData, submitType, scoringDataCraeate } = this.props;
+            this.props.writeSoringData({ ...values, id, type: "pass" });
+            this.props.form.resetFields();
+            this.setState({ modalVisible: false });
+        });
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -650,7 +664,7 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('contract', {
-                                initialValue: scoringData ? scoringData.contract.split('') : [],
+                                initialValue: scoringData ? scoringData.contract.split('') : null,
                                 rules: [{ type: 'array', required: true, message: '请填写定约!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写定约" options={dealData} />
@@ -663,7 +677,7 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('openlead', {
-                                initialValue: scoringData ? scoringData.openlead.split('') : [],
+                                initialValue: scoringData ? scoringData.openlead.split('') : null,
                                 rules: [{ type: 'array', required: true, message: '请填写首攻!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写首攻" options={leaderData} />
@@ -676,35 +690,10 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('result', {
-                                initialValue: scoringData ? scoringData.result.split('') : [],
+                                initialValue: scoringData ? scoringData.result.split('') : null,
                                 rules: [{ type: 'array', required: true, message: '请填写结果!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写结果" options={resultData} />
-                            )}
-                        </FormItem>
-                        {/* 得分 */}
-                        <FormItem
-                            {...formItemLayout}
-                            label="南北得分:"
-                            hasFeedback
-                        >
-                            {getFieldDecorator('ns_point', {
-                                initialValue: scoringData ? [scoringData.ns_point][0] : '',
-                                rules: [{ required: true, required: true, message: '请填写得分!' }],
-                            })(
-                                <Input type="number" placeholder="请填写得分" />
-                            )}
-                        </FormItem>
-                        <FormItem
-                            {...formItemLayout}
-                            label="东西得分:"
-                            hasFeedback
-                        >
-                            {getFieldDecorator('ew_point', {
-                                initialValue: scoringData ? [scoringData.ew_point][0] : '',
-                                rules: [{ required: true, required: true, message: '请填写得分!' }],
-                            })(
-                                <Input type="number" placeholder="请填写得分" />
                             )}
                         </FormItem>
                         <FormItem style={{ textAlign: 'center' }} >
@@ -717,6 +706,12 @@ class RecordNewForm extends React.Component {
                             >
                                 提交
                         </Button>
+                            <Button
+                                style={{ margin: '0 auto', marginLeft: 20 }}
+                                onClick={this.handleVisible}
+                            >
+                                Pass
+                </Button>
                         </FormItem>
                     </Form>
 

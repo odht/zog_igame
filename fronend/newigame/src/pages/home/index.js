@@ -1,5 +1,3 @@
-// import { Redirect } from "dva/router";
-// export default ()=>(<div><Redirect to='/home/table'/></div>)
 import React, { Component } from 'react'
 import { connect } from 'dva';
 import { Link } from 'dva/router';
@@ -40,7 +38,6 @@ export default class MyTableList extends Component {
         } = this.state;
         let gameName = [];
         if (tableData && tableData.length > 0) {
-            console.log(tableData)
             gameName = tableData
         }
         const tableColumns = [{

@@ -3,9 +3,6 @@ import LoginLayout from './LoginLayout';
 import BasicLayout from './BasicLayout';
 import router from 'umi/router';
 import { connect } from 'dva';
-import { Redirect } from "dva/router";
-
-
 
 @connect(({ login }) => ({ login }))
 export default class IndexLayout extends Component {
@@ -29,10 +26,8 @@ export default class IndexLayout extends Component {
             switch (pathname) {
                 case '/User/login':
                     return <LoginLayout {...this.props} />
-                case '/home':
-                    return <BasicLayout {...this.props} />
                 default:
-                return <BasicLayout {...this.props} />
+                    return <BasicLayout {...this.props} />
             }
         }
     }

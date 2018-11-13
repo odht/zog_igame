@@ -70,7 +70,7 @@ const Scoringtable = (props) => {
     ];
     return (
         <div>
-            <div>
+            {/* <div>
                 <ScoringFrom
                     submitType='create'
                     writeSoringData={writeSoringData}
@@ -80,9 +80,10 @@ const Scoringtable = (props) => {
                         className={styles.submitButton}
                         type="primary">
                         添加记录
-                    </Button>
+                   </Button>
                 </ScoringFrom>
             </div>
+            */}
             <Table
                 rowKey={row => row.id}
                 dataSource={scoringData}

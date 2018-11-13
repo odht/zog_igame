@@ -14,14 +14,14 @@ export default class MyTableList extends Component {
         }).then(() => {
             const { odooData: { resUsers } } = this.props;
             const UserData = lookup(uid, resUsers);
-            const doing_table_id = UserData[0].doing_table_id[0];
+            const doing_table_id = UserData[0].doing_table_ids[0];
             dispatch({
                 type: 'ogTable/read',
                 payload: { id: doing_table_id }
             }).then(() => {
                 const { odooData: { ogTable } } = this.props;
                 const tableData = lookup(doing_table_id, ogTable);
-                
+
             })
         })
     }

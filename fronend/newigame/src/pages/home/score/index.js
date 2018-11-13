@@ -34,27 +34,55 @@ export default class Home extends Component {
 
     }
     writeSoringData = (vals) => {
-        // const { dispatch } = this.props;
-        // const valus = {
-        //     contract: vals.contract.join(""),
-        //     openlead: vals.openlead.join(""),
-        //     result: vals.result.join(""),
-        //     number: vals.number,
-        //     declarer: vals.declarer,
-        //     ew_point: vals.ew_point,
-        //     ns_point: vals.ns_point,
-        //     id: vals.id
-        // }
-        // const { id, declarer, contract, openlead, result } = valus;
-        // dispatch({
-        //     type: 'ogBoard/writeResult',
-        //     payload: { id, declarer, contract, openlead, result }
-        // }).then(() => {
-        //     dispatch({
-        //         type: 'ogBoard/read',
-        //         payload: { id: 10 }
-        //     })
-        // })
+        const { dispatch, location: { query: table_id } } = this.props;
+        const { type } = vals;
+        let valus;
+        if (type === "pass") {
+            valus = {
+                contract: 'Pass',
+                openlead: '',
+                result: 0,
+                number: vals.number,
+                declarer: null,
+                id: vals.id
+            }
+        } else {
+            valus = {
+                contract: vals.contract.join(""),
+                openlead: vals.openlead.join(""),
+                result: vals.result.join("") === "=" ? 0 : parseInt(vals.result.join("")),
+                number: vals.number,
+                declarer: vals.declarer,
+                id: vals.id
+            }
+        }
+        if (vals) {
+            const { id, declarer, contract, openlead, result } = valus;
+            dispatch({
+                type: 'ogBoard/writeResult',
+                payload: { id, declarer, contract, openlead, result }
+            }).then(() => {
+                const { location: { query: { table_id } } } = this.props;
+                dispatch({
+                    type: 'ogTable/read',
+                    payload: { id: parseInt(table_id) }
+                }).then(() => {
+                    const { odooData: { ogTable } } = this.props;
+                    const tableData = lookup(parseInt(table_id), ogTable);
+                    const board_ids = tableData[0].board_ids;
+                    dispatch({
+                        type: 'ogBoard/read',
+                        payload: { id: board_ids }
+                    }).then(() => {
+                        const { odooData: { ogBoard } } = this.props;
+                        const boardData = lookup(board_ids, ogBoard)
+                        this.setState({
+                            boardData: boardData
+                        })
+                    })
+                })
+            })
+        }
     }
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.odooData.ogBoard) {
@@ -64,26 +92,33 @@ export default class Home extends Component {
         }
     }
     render() {
-        // const { odooData: { ogBoard } } = this.props;
         let scoringData = [];
         const { boardData } = this.state;
 
         if (boardData && boardData.length > 0) {
-            console.log(boardData);
-            scoringData = boardData;
+            scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
             boardData.map(item => {
-                
-                // const { result } = item[0];
-                // if (result.toString().split('').length === 1 && result !== '=') {
-                //     result_new = `\+${item[0].result.toString()}`;
-                // } else if (result.toString().split('').length === 1 && result === '=') {
-                //     result_new = `=${item[0].result.toString()}`;
-                // } else {
-                //     result_new = item[0].result.toString();
-                // }
-                item.contract='dfefe'
-                item.openlead='dfedfe'
-                item.result = '++'
+                if (!item.declarer) {
+                    item.declarer = null
+                }
+                if (!item.contract) {
+                    item.contract = '  ';
+                }
+                if (!item.openlead) {
+                    item.openlead = '  ';
+                }
+                if (!item.result) {
+                    item.result = '= '
+                } else {
+                    const { result } = item;
+                    if (result.toString().split('').length === 1 && result !== 0) {
+                        item.result = `\+${item.result.toString()}`;
+                    } else if (result.toString().split('').length === 1 && result === 0) {
+                        item.result = `=${item.result.toString()}`;
+                    } else {
+                        item.result = item.result.toString();
+                    }
+                }
             })
         }
         return (
