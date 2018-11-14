@@ -36,33 +36,21 @@ class GameTeamRoundInfo(models.Model):
         related='match_team_id.match_id', help='No used' )
 
     @api.multi
-    @api.depends('team_id')
     def _compute_match(self):
         for rec in self:
             rec.match_team_id = rec.team_id.match_team_ids.filtered(
                      lambda mt: mt.match_id.round_id == rec.round_id )
 
-    score = fields.Float(compute='_compute_score',
-        #store=True, readonly=True
-    )
+    score = fields.Float(compute='_compute_score' )
     score_manual = fields.Float(default=0)
     score_uom = fields.Selection(related='phase_id.score_uom')
     
-    score_open =  fields.Float( compute='_compute_balance',
-        #store=True, readonly=True
-        )
-    score_close = fields.Float( compute='_compute_balance',
-        #store=True, readonly=True
-        )
-    rank_open  = fields.Integer(compute='_compute_rank',
-        #store=True, readonly=True
-        )
-    rank_close = fields.Integer(compute='_compute_rank',
-        #store=True, readonly=True
-        )
+    score_open =  fields.Float( compute='_compute_balance' )
+    score_close = fields.Float( compute='_compute_balance' )
+    rank_open  = fields.Integer(compute='_compute_rank' )
+    rank_close = fields.Integer(compute='_compute_rank' )
     
     @api.multi
-    @api.depends('match_team_id.vp','match_team_id.bam','score_manual')
     def _compute_score(self):
         def fn_team(rec):
             rec.score = rec.score_manual + {

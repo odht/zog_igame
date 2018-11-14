@@ -18,7 +18,6 @@ class Match(models.Model):
     table_ids = fields.One2many('og.table','match_id', help='Technical field')
 
     @api.multi
-    @api.depends('table_ids')
     def _compute_table(self):
         def fn(room):
             ts = rec.table_ids.filtered(lambda s: s.room_type == room)
@@ -46,7 +45,6 @@ class Match(models.Model):
     guest_vp = fields.Float(compute='_compute_imp')
 
     @api.multi
-    @api.depends('line_ids.imp','line_ids.host_imp','line_ids.guest_imp')
     def _compute_imp(self):
         for rec in self:
             bam = sum(rec.line_ids.mapped('bam') )
@@ -86,7 +84,6 @@ class MatchTeam(models.Model):
     bam_opp = fields.Float(compute='_compute_score')
 
     @api.multi
-    @api.depends('match_id')
     def _compute_score(self):
         def fn_host(match):
             return match.host_imp, match.host_vp, match.host_bam
@@ -112,7 +109,6 @@ class MatchLine(models.Model):
     close_board_id = fields.Many2one('og.board',compute='_compute_board')
 
     @api.multi
-    @api.depends('open_table_id','close_table_id')
     def _compute_board(self):
         def _fn(tbl,deal):
             return tbl.board_ids.filtered(lambda b: b.deal_id == deal)
@@ -150,7 +146,6 @@ class MatchLine(models.Model):
     guest_imp = fields.Integer(compute='_compute_point')
 
     @api.multi
-    @api.depends('open_board_id.point','close_board_id.point')
     def _compute_point(self):
         for rec in self:
             point = rec.open_board_id.point - rec.close_board_id.point
@@ -171,11 +166,11 @@ class MatchLine(models.Model):
 class Board(models.Model):
     _inherit = "og.board"
 
-    host_imp  = fields.Integer(compute='_compute_point')
-    guest_imp = fields.Integer(compute='_compute_point')
+    host_imp  = fields.Integer(compute='_compute_imp')
+    guest_imp = fields.Integer(compute='_compute_imp')
     
     @api.multi
-    def _compute_point(self):
+    def _compute_imp(self):
         for rec in self:
             deal_id = rec.deal_id.id
             match_id = rec.match_id.id
