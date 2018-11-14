@@ -49,7 +49,8 @@ class Deal(models.Model):
     name = fields.Char('Name', compute='_compute_name')
 
     card_str = fields.Char(compute ='_compute_cards', inverse='_inverse_cards',
-        default=_default_cards, required=True, help='Full Deal')
+        default=_default_cards, required=True, 
+        help='Full Deal')
 
     card_ids = fields.One2many('og.deal.card', 'deal_id', string='Cards',
         help=""" Technical field. A deal have 52 card.

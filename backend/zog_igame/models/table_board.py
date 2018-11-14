@@ -52,7 +52,7 @@ class Table(models.Model):
         deals = table.deal_ids
         for deal in deals:
             board_vals = {'table_id': table.id,'deal_id':deal.id }
-            table.board_ids.create(cards)
+            table.board_ids.create(board_vals)
         
         return table
 

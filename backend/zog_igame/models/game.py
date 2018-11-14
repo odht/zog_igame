@@ -44,6 +44,7 @@ class Game(models.Model):
     
     """
 
+    number = fields.Integer(help="The sorted number for all game") 
     name = fields.Char('Name', required=True, index=True, copy=False, default='Game')
     date_from = fields.Date('Date From', required=True, default=fields.Date.today )
     date_thru = fields.Date('Date Thru', required=True, default=fields.Date.today )
