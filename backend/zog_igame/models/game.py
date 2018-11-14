@@ -51,32 +51,19 @@ class Game(models.Model):
 
     game_type = fields.Selection([('bridge','Bridge')], required=True, default='bridge')
     match_type = fields.Selection([('team', 'Team'), ('pair', 'Pair') ],default='team')
-    org_type = fields.Selection([('circle','Circle'), ('swiss','Swiss')],default='swiss')
+    org_type = fields.Selection([
+        ('circle','Circle'), 
+        ('swiss','Swiss'),
+        ('manual','Manual'),
+    ],default='swiss')
 
-    score_type = fields.Selection([('IMP','IMP'),('MP', 'MP')], default='IMP',
-        help='For Team match, IMP:VP, MP:BAM')
+    score_type = fields.Selection([('IMP','IMP'), ('MP', 'MP'), 
+                                  ('VP', 'VP'),  ('BAM','BAM')], 
+                default='VP')
 
     score_uom = fields.Selection([('IMP','IMP'), ('MP', 'MP'), 
                                   ('VP', 'VP'),  ('BAM','BAM')], 
-                compute='_compute_score_uom', 
-                inverse='_inverse_score_uom', default='IMP',
-                help='( VP,BAM) for team match, IMP,MP for pair match')
-
-    @api.multi
-    def _inverse_score_uom(self):
-        ds = {'IMP':'IMP','MP': 'MP', 'VP': 'IMP','BAM':'MP'}
-        for rec in self:
-            rec.score_type = ds[rec.score_uom]
-
-    @api.multi
-    def _compute_score_uom(self):
-        fns = {
-            'team': lambda t: {'IMP': 'VP','MP':'BAM'}[t],
-            'pair': lambda t: t
-        }
-
-        for record in self:
-            record.score_uom = fns[record.match_type](record.score_type)
+                related='score_type')
 
     #TBD, no used now
     state = fields.Selection([ ('draft', 'Draft'), ('conformed', 'Confirmed'),
@@ -112,35 +99,22 @@ class GamePhase(models.Model):
 
     game_type = fields.Selection(related='game_id.game_type')
     match_type = fields.Selection(related='game_id.match_type')
-    org_type = fields.Selection([('circle','Circle'), ('swiss','Swiss')],default='swiss')
+    org_type = fields.Selection([
+        ('circle','Circle'), 
+        ('swiss','Swiss'),
+        ('manual','Manual'),
+    ],default='swiss')
     
-    score_type = fields.Selection([('IMP','IMP'),('MP', 'MP')], default='IMP',
-        help='For Team match, IMP:VP, MP:BAM')
+    score_type = fields.Selection([('IMP','IMP'), ('MP', 'MP'), 
+                                  ('VP', 'VP'),  ('BAM','BAM')], 
+                default='VP')
 
     score_uom = fields.Selection([('IMP','IMP'), ('MP', 'MP'), 
                                   ('VP', 'VP'),  ('BAM','BAM')], 
-                compute='_compute_score_uom', 
-                inverse='_inverse_score_uom', default='IMP',
-                help='( VP,BAM) for team match, IMP,MP for pair match')
+                related='score_type')
+
 
     round_ids = fields.One2many('og.round','phase_id',string='Rounds' )
-
-    @api.multi
-    def _inverse_score_uom(self):
-        ds = {'IMP':'IMP','MP': 'MP', 'VP': 'IMP','BAM':'MP'}
-        for rec in self:
-            rec.score_type = ds[rec.score_uom]
-
-    @api.multi
-    def _compute_score_uom(self):
-        fns = {
-            'team': lambda t: {'IMP': 'VP','MP':'BAM'}[t],
-            'pair': lambda t: t
-        }
-
-        for record in self:
-            record.score_uom = fns[record.match_type](record.score_type)
-
 
 
 class Schedule(models.Model):
@@ -159,7 +133,7 @@ class Schedule(models.Model):
     date_from = fields.Datetime('Date From', required=True, default=fields.Datetime.now )
     date_thru = fields.Datetime('Date Thru', required=True, default=fields.Datetime.now )
 
-    round_ids = fields.One2many('og.round','phase_id',string='Rounds' )
+    round_ids = fields.One2many('og.round','schedule_id',string='Rounds' )
     deal_ids = fields.Many2many('og.deal',string='Deals')
 
     _sql_constraints = [

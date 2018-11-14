@@ -24,6 +24,9 @@ class GamePhase(models.Model):
 
 class GameRound(models.Model):
     _inherit = "og.round"
+    
+    team_ids = fields.Many2many('og.team', related = 'phase_id.team_ids' )
+    
     team_info_ids = fields.One2many('og.team.round.info','round_id',
         string='Teams Info', help='all teams score in this round.')
 

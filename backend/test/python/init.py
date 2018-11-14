@@ -4,8 +4,8 @@
 import requests
 import json
 
-#HOST = 'http://192.168.56.105:8069'
 HOST = 'http://192.168.1.8:8069'
+HOST = 'http://192.168.56.105:8069'
 SERVER = 'TT'
 
 URI_LOGIN = HOST + '/json/user/login'
@@ -121,17 +121,29 @@ def test4(host=HOST):
 
 #print test4()
 
+def search_one(model, domain):
+    ids = execute(usid, model, 'search', domain, limit=1)
+    #print 'find',model, domain, record, no_create, ids
+    return ids and ids[0] or None
+
+
 def find(model, domain, record=None, no_create=None, write=None):
     ids = execute(usid, model, 'search', domain, limit=1)
     #print 'find',model, domain, record, no_create, ids
+
+    if no_create:
+        return ids and ids[0] or None
+
+
     if not ids:
-        if not no_create:
-            id = execute(usid, model, 'create', record )
-            print 'create, id=',model, id
-            return id
-        return None
+        id = execute(usid, model, 'create', record )
+        print 'create, id=',model, id
+        return id
     
     id = ids[0]
+    
+    write = 1
+    
     if write:
         print 'write, id=',model, id
         execute(usid, model, 'write', id, record )
@@ -158,7 +170,7 @@ def schedule_one(rec):
     model = 'og.schedule'
     domain = [('number','=',rec['number']),('game_id','=',game_id) ]
 
-    id = find(model, domain, record=rec, write=1 )
+    id = find(model, domain, record=rec )
     print id
     if id:
         #print execute(usid, model, 'read', id)
@@ -169,7 +181,34 @@ def schedule_multi():
     for rec in records['og.schedule']:
         schedule_one(rec)
 
-schedule_multi()
+#schedule_multi()
+
+def deal_one(rec):
+    schedule_id = rec['schedule_id']
+    domain = [('number','=',schedule_id),('game_id','=',game_id) ]
+    schedule_id = find('og.schedule', domain ,no_create=1)
+
+    rec = rec.copy()
+    
+    rec['schedule_id'] = schedule_id
+    
+    model = 'og.deal'
+    domain = [('number','=',rec['number']),('schedule_id','=',schedule_id) ]
+
+    id = find(model, domain, record=rec )
+    print id
+    if id:
+        print execute(usid, model, 'read', id)
+        execute(usid, 'og.schedule', 'write', schedule_id, { 'deal_ids': [( 4,id)] }  )
+        
+        pass
+    
+
+def deal_multi():
+    for rec in records['og.deal']:
+        deal_one(rec)
+
+#deal_multi()
 
   
 def phase_one(rec):
@@ -189,7 +228,7 @@ def phase_multi():
     for rec in records['og.phase']:
         phase_one(rec)
 
-phase_multi()
+#phase_multi()
 
   
 def round_one(rec):
@@ -198,7 +237,7 @@ def round_one(rec):
     schedule_id = rec['schedule_id']
     
     domain = [('number','=',phase_id),('game_id','=',game_id) ]
-    phase_id = find('og.phase', domain ,no_create=1)
+    phase_id = find('og.phase', domain ,no_create=1, )
     
     domain = [('number','=',schedule_id),('game_id','=',game_id) ]
     schedule_id = find('og.schedule', domain ,no_create=1)
@@ -211,7 +250,7 @@ def round_one(rec):
     model = 'og.round'
     domain = [('phase_id','=',phase_id),('schedule_id','=',schedule_id) ]
 
-    id = find(model, domain, record=rec, no_create=0 )
+    id = find(model, domain, record=rec )
     print id
     if id:
         print execute(usid, model, 'read', id)
@@ -221,4 +260,85 @@ def round_multi():
     for rec in records['og.round']:
         round_one(rec)
 
-round_multi()
+#round_multi()
+
+
+def team_one(rec):
+    phase_id = rec.get('phase_ids')
+    if not phase_id:
+        return 
+    
+    domain = [('number','=',phase_id),('game_id','=',game_id) ]
+    phase_id = find('og.phase', domain ,no_create=1, )
+
+    rec = rec.copy()
+    rec['game_id'] = game_id
+    rec['phase_ids'] = [(4,phase_id)]
+    
+    model = 'og.team'
+    domain = [('number','=',rec['number']),('game_id','=',game_id) ]
+
+    id = find(model, domain, record=rec )
+    print id
+    if id:
+        #print execute(usid, model, 'read', id)
+        pass
+
+def team_multi():
+    for rec in records['og.team']:
+        team_one(rec)
+
+#team_multi()
+
+
+  
+def tri_one(rec):
+    team_id = rec['team_id']
+    round_id = rec['round_id']
+    model = 'og.team.round.info'
+    domain = [('round_id','=',round_id),('team_id','=',team_id) ]
+
+    id = find(model, domain, record=rec )
+    print id
+    if id:
+        print execute(usid, model, 'read', id)
+        pass
+
+def tri_multi():
+    
+    schedule_ids = records['og.team.round.info']['schedule_ids']
+    
+    domain = [('number','in',schedule_ids),('game_id','=',game_id) ]
+    schedules = execute(usid, 'og.schedule', 'search_read', domain, ['round_ids'])
+    
+    for schedule in schedules:
+      round_ids = schedule['round_ids']
+      rounds = execute(usid, 'og.round', 'read', round_ids, ['team_ids'])
+    
+
+      for vals in  [ { 'round_id': rnd['id'], 'team_id': tm_id 
+                   } for rnd in rounds for tm_id in rnd['team_ids'] ]:
+        
+        tri_one(vals)
+        
+
+#tri_multi()
+
+def tri_sort_auto():
+    
+    pass
+
+tri_sort()
+
+
+def match_multi():
+    pass
+
+def table_multi():
+    pass
+
+
+def table_player_multi():
+    pass
+
+
