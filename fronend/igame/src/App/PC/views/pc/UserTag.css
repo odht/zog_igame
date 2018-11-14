@@ -1,0 +1,30 @@
+
+.UserTag{
+    display: inline-block;
+    margin:auto;
+    height:100%;
+    width:auto;
+    text-align: left;
+}
+.UserTag > div{
+    margin-left:0.5vw;
+    /* background-color: aquamarine; */
+    float:left;
+    height:100%;
+}
+.UserTag .uname{
+    color:#FFFF00;
+    font-size:1.4vw;
+    height:60%;
+}
+.UserTag .urank{
+    color:#dddddd;
+    font-size:1.2vw;
+    height:40%;
+}
+.UserTag .face{
+    height:100%;
+}
+.UserTag img{
+    height:100%;
+}
