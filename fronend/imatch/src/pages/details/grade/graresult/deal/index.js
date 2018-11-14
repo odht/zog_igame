@@ -7,10 +7,22 @@ import spade from '@/assets/svg/spade.svg';
 
 import direction from '@/assets/direction.png';
 import one from '@/assets/one.png';
-import { Table, Row, Col } from "antd";
+import { Table, Row, Col, Icon } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "dva";
 import { lookup } from '@/utils/tools'
+
+async function dispatch_read(props, model, id) {
+  props.dispatch({
+    type: `${model}/read`,
+    payload: { id }
+  }).then(() => {
+    console.log(props.odooData[model])
+  })
+}
+
+
+
 
 class Deal extends Component {
   state = {
@@ -22,6 +34,8 @@ class Deal extends Component {
       dispatch,
       location: { query: { deal_id } }
     } = this.props;
+    //　BoardData　组合
+    let BoardTable = [];
     dispatch({
       type: 'ogDeal/read',
       payload: { id: parseInt(deal_id) }
@@ -37,24 +51,50 @@ class Deal extends Component {
           type: 'ogBoard/read',
           payload: { id: board_ids }
         }).then(() => {
+
           const { odooData: { ogBoard } } = this.props;
           const BoardData = lookup(board_ids, ogBoard)
-          this.setState({
-            BoardData: BoardData,
+          const table_ids = BoardData.map(item => item.table_id[0])
+          // const match_ids = Array.from(new Set(BoardData.map(item => item.match_id[0])))
+          const match_ids = BoardData.map(item => item.match_id[0])
+          dispatch({
+            type: 'ogTable/read',
+            payload: { id: table_ids },
+          }).then(() => {
+            const { odooData: { ogTable } } = this.props;
+            const tableData = lookup(table_ids, ogTable);
+            BoardTable = tableData.map(item => {
+              const [ply1, ply2, ply3, ply4] = item.room_type === 'open' ?
+                [[...item.north_id, 'N'], [...item.south_id, 'S'], [...item.east_id, 'E'], [...item.west_id, 'W']]
+                : [[...item.east_id, 'E'], [...item.west_id, 'W'], [...item.north_id, 'N'], [...item.south_id, 'S']]
+              return {
+                room_type: item.room_type,
+                ply1, ply2, ply3, ply4
+
+              }
+            })
+          })
+
+          dispatch({
+            type: 'ogMatch/read',
+            payload: { id: match_ids },
+          }).then(() => {
+            const { odooData: { ogMatch } } = this.props;
+            const matchData = lookup(match_ids, ogMatch);
+            BoardTable = BoardTable.map((item, key) => {
+              const matchNumber = matchData[key].number;
+              const BoardDataItem = BoardData[key];
+              return item = { ...item, match_number: matchNumber, ...BoardDataItem };
+            })
+            this.setState({
+              BoardData: BoardTable,
+            })
           })
         })
       }
-
     })
   }
-  shouldComponentUpdate(props, state) {
-    const { BoardData, card_str } = state;
-    if (BoardData.length > 0 && card_str.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+
   render() {
     const { card_str, BoardData } = this.state;
     //发牌人 比赛名称 排位　第几轮
@@ -83,39 +123,90 @@ class Deal extends Component {
       e_card_str = card_nwes_strArray[2];
       s_card_str = card_nwes_strArray[3];
     }
+    const cardsvg = (index) => {
+      let src
+      switch (index) {
+        case 0:
+          src = spade;
+          break;
+        case 1:
+          src = heart;
+          break;
+        case 2:
+          src = diamond;
+          break
+        case 3:
+          src = club;
+          break
+        default:
+          src = spade
+          break;
+      }
+      console.log(index);
+
+      return <img src={src} alt={index} className={styles.icons}></img>
+    }
     const cardList = (cardArray) => {
       if (cardArray.length > 0) {
-        return cardArray.map(item => {
-          return <p key={item} className={styles.cardText}>{item}</p>
+        return cardArray.map((item, index) => {
+          return (
+            <div key={item} className={styles.flex}>
+              {cardsvg(index)}
+              <p className={styles.cardText}>{item}</p>
+            </div>
+
+          )
         })
       } else {
         return ''
       }
     }
+    const renderNumber = (value, row, index) => {
+      const obj = {
+        children: value,
+        props: {},
+      };
+      if (index % 2 === 0) {
+        obj.props.rowSpan = 2;
+      } else {
+        obj.props.rowSpan = 0;
+      }
+      return obj;
+    };
+
     const columns = [{
       title: '桌号',
-      dataIndex: 'table_id',
-      render: (text, record) => {
-        return `${record.table_id[0]}`
-      }
+      dataIndex: 'match_number',
+      render: renderNumber,
     }, {
       title: '主队',
-      // children: [{
-      //   dataIndex: ""
-      // }, {
-      //   dataIndex: ""
-      // }]
-      // colSpan: 2,
+      dataIndex: 'ply1',
+      colSpan: 2,
+      render: (text, row) => {
+        return `${row.ply1[2]}  ${row.ply1[1]}`
+      }
     }, {
+      dataIndex: 'ply2',
+      colSpan: 0,
+      render: (text, row) => {
+        return `${row.ply2[2]}  ${row.ply2[1]}`
+      }
+    },
+    {
       title: "客队",
-      // children: [{
-      //   dataIndex: '',
-      // }, {
-      //   dataIndex: '',
-      // }]
-      // colSpan: 2,
+      dataIndex: 'ply3',
+      colSpan: 2,
+      render: (text, row) => {
+        return `${row.ply3[2]}  ${row.ply3[1]}`
+      }
     }, {
-      dataIndex: '',
+      dataIndex: 'ply4',
+      colSpan: 0,
+      render: (text, row) => {
+        return `${row.ply4[2]}  ${row.ply4[1]}`
+      }
+    }, {
+      dataIndex: 'room_type'
     }, {
       title: "庄家",
       dataIndex: 'declarer',

@@ -35,7 +35,7 @@ class Graresult extends Component {
     componentDidMount() {
         const {
             dispatch,
-            location: { state: { roundData: { match_ids, team_info_ids } } }
+            location: { state: { roundData: { deal_ids, match_ids, team_info_ids } } }
         } = this.props;
         dispatch({
             type: "ogMatch/read",
@@ -44,6 +44,10 @@ class Graresult extends Component {
         dispatch({
             type: 'ogTeamRoundInfo/read',
             payload: { id: team_info_ids }
+        })
+        dispatch({
+            type: 'ogDeal/read',
+            payload: { id: deal_ids }
         })
     }
     shouldComponentUpdate(props, state) {
@@ -57,28 +61,30 @@ class Graresult extends Component {
     render() {
         // 比赛对战数据
         const {
-            odooData: { ogMatch, ogTeamRoundInfo },
-            location: { state: { roundData: { match_ids, team_info_ids } } },
+            odooData: { ogMatch, ogTeamRoundInfo, ogDeal },
+            location: { state: { roundData: { match_ids, team_info_ids, deal_ids } } },
             location: { state },
         } = this.props;
         // 牌组 
         let deal = [1];
-
         const matchData = lookup(match_ids, ogMatch)
         const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo);
-        if (matchData && matchData.length > 0) {
-            matchData.map(matchItem => {
-                deal = matchItem.deal_ids;
-            })
-        }
-        const dealData = deal.sort().map(item => {
+        const dealData0 = lookup(deal_ids, ogDeal);
+        // if (dealData && dealData.length > 0) {
+        //     dealData.map(dealItem => {
+
+        //         deal = matchItem.deal_ids;
+        //     })
+        // }
+        const dealData = dealData0.map(item => {
+            console.log(item)
             return <Link
-                key={item}
+                key={item.id}
                 to={{
                     pathname: '/details/grade/graresult/deal',
-                    query: { deal_id: item },
+                    query: { deal_id: item.id },
                     state,
-                }}>{item}    </Link>
+                }}>{item.number}    </Link>
         })
         return (
             <div>

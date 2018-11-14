@@ -80,3 +80,13 @@
     width: 35%;
     text-align: center;
 }
+.icons{
+    width: 12px;
+    height: 12px;
+}
+.flex{
+    display: flex;
+    flex-flow: row nowrap;
+    align-content: space-between;
+    align-items: center;
+}
