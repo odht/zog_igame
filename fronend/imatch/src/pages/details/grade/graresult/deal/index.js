@@ -7,7 +7,7 @@ import spade from '@/assets/svg/spade.svg';
 
 import direction from '@/assets/direction.png';
 import one from '@/assets/one.png';
-import { Table, Row, Col } from "antd";
+import { Table, Row, Col, Icon } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "dva";
 import { lookup } from '@/utils/tools'
@@ -94,7 +94,7 @@ class Deal extends Component {
       }
     })
   }
-  
+
   render() {
     const { card_str, BoardData } = this.state;
     //发牌人 比赛名称 排位　第几轮
@@ -123,10 +123,39 @@ class Deal extends Component {
       e_card_str = card_nwes_strArray[2];
       s_card_str = card_nwes_strArray[3];
     }
+    const cardsvg = (index) => {
+      let src
+      switch (index) {
+        case 0:
+          src = spade;
+          break;
+        case 1:
+          src = heart;
+          break;
+        case 2:
+          src = diamond;
+          break
+        case 3:
+          src = club;
+          break
+        default:
+          src = spade
+          break;
+      }
+      console.log(index);
+
+      return <img src={src} alt={index} className={styles.icons}></img>
+    }
     const cardList = (cardArray) => {
       if (cardArray.length > 0) {
-        return cardArray.map(item => {
-          return <p key={item} className={styles.cardText}>{item}</p>
+        return cardArray.map((item, index) => {
+          return (
+            <div key={item} className={styles.flex}>
+              {cardsvg(index)}
+              <p className={styles.cardText}>{item}</p>
+            </div>
+
+          )
         })
       } else {
         return ''
@@ -134,17 +163,17 @@ class Deal extends Component {
     }
     const renderNumber = (value, row, index) => {
       const obj = {
-          children: value,
-          props: {},
+        children: value,
+        props: {},
       };
       if (index % 2 === 0) {
-          obj.props.rowSpan = 2;
+        obj.props.rowSpan = 2;
       } else {
-          obj.props.rowSpan = 0;
+        obj.props.rowSpan = 0;
       }
       return obj;
-  };
-  
+    };
+
     const columns = [{
       title: '桌号',
       dataIndex: 'match_number',
@@ -176,8 +205,8 @@ class Deal extends Component {
       render: (text, row) => {
         return `${row.ply4[2]}  ${row.ply4[1]}`
       }
-    },{
-      dataIndex:'room_type'
+    }, {
+      dataIndex: 'room_type'
     }, {
       title: "庄家",
       dataIndex: 'declarer',
