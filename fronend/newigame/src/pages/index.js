@@ -1,5 +1,5 @@
-// import React from 'react';
-// import { Redirect } from "dva/router";
+import React from 'react';
+import { Redirect } from "dva/router";
 
 
-// export default props => <div></div>
+export default props => <Redirect to="/home"><div>{props.children}</div></Redirect>
