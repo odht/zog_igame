@@ -100,8 +100,9 @@ class Deal(models.Model):
 
     @api.multi
     def unlink(self):
-        if self.env['og.round'].search([['deal_ids','in', self.ids ]]):
-            return None
+        for rec in self:
+            if rec.env['og.round'].search([['deal_ids','in', rec.ids ]]):
+                return None
         
         return super(Deal, self).unlink()
 

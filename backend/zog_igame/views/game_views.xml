@@ -232,11 +232,11 @@
             <field name="model">og.team.round.info</field>
             <field name="arch" type="xml">
                 <tree string="Score">
-                    <field name="team_id"/>
                     <field name="game_id"/>
                     <field name="phase_id"/>
                     <field name="round_id"/>
                     <field name="match_id"/>
+                    <field name="team_id"/>
                     <field name="number"/>
                     <field name="sequence"/>
                     <field name="score"/>
