@@ -32,7 +32,14 @@ class Table(models.Model):
         ('match_open_close_uniq', 'unique (room_type,match_id)', 'The match have one open table and one close table !')
     ]
     
-    name = fields.Char('Name' )
+    name = fields.Char('Name', compute='_compute_name' )
+    
+    @api.multi
+    def _compute_name(self):
+        for rec in self:
+            rec.name = rec.room_type + ',' + rec.match_id.name
+    
+    
     number = fields.Integer(default=1 )
     room_type = fields.Selection([('open','Open' ), ('close','Close')], default='open')
 

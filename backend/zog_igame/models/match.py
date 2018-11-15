@@ -15,7 +15,7 @@ class Match(models.Model):
     
     _name = "og.match"
     _description = "Match"
-    _order = 'round_id, host_tri_id'
+    _order = 'round_id, match_team_ids'
 
     name = fields.Char('Name', compute='_compute_name' )
     
