@@ -3,7 +3,7 @@
 
 records = {}
 
-records['og.game'] = [{'name': '2018河北省省会桥牌等级赛', 'date_from': '2018-11-24','date_thru': '2018-11-25'}]
+records['og.game'] = [{'name': '2018河北省会赛', 'date_from': '2018-11-24','date_thru': '2018-11-25'}]
 
 records['og.schedule'] = [
   {'name': 'Day1.1', 'number': 11, 'date_from': '2018-11-24 10:30','date_thru': '2018-11-24 12:30'},
@@ -17,7 +17,8 @@ records['og.schedule'] = [
   {'name': 'Day2.4', 'number': 24, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
 ]
 
-card_str = 'AKQ.AKQ.AKQ.AKQ2 JT9.JT9.JT92.JT9 876.8762.876.876 5432.543.543.543'
+#card_str = 'AKQ.AKQ.AKQ.AKQ2 JT9.JT9.JT92.JT9 876.8762.876.876 5432.543.543.543'
+card_str = '876.AKQ.AKQ.AKQ2 JT9.JT9.JT92.JT9 AKQ.8762.876.876 5432.543.543.543'
 deal_count = 12
 sch_num = [ s['number'] for s in records['og.schedule'] ]
 records['og.deal'] = [{'number': num, 'schedule_id': sn, 'card_str': card_str
@@ -89,7 +90,18 @@ round_turn[6] = [
   [1,2,3,4,5,6],
 ]
 
-
+records['og.team.round.info'] = [
+  {'phase_id': 21, 'schedule_id': 21, 'team_id': 1, 'number': 1},
+  {'phase_id': 21, 'schedule_id': 21, 'team_id': 3, 'number': 2},
+  {'phase_id': 21, 'schedule_id': 21, 'team_id': 7, 'number': 3},
+  {'phase_id': 21, 'schedule_id': 21, 'team_id': 8, 'number': 4},
+  {'phase_id': 22, 'schedule_id': 21, 'team_id': 2, 'number': 5},
+  {'phase_id': 22, 'schedule_id': 21, 'team_id': 9, 'number': 6},
+  {'phase_id': 23, 'schedule_id': 21, 'team_id': 4, 'number': 7},
+  {'phase_id': 23, 'schedule_id': 21, 'team_id': 5, 'number': 8},
+  {'phase_id': 23, 'schedule_id': 21, 'team_id': 10, 'number': 9},
+  {'phase_id': 23, 'schedule_id': 21, 'team_id': 11, 'number': 10},
+]
 
 
 records['res.users'] = [

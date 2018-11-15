@@ -20,20 +20,19 @@ class Match(models.Model):
     name = fields.Char('Name' )
     number = fields.Integer(default=1, help="if a stage of parent." )
 
-    _sql_constraints = [
-        ('round_host_uniq', 'unique (round_id,host_id)', 'one round one host!'),
-        ('round_huest_uniq', 'unique (round_id,guest_id)', 'one round one guest!'),
-    ]
-
     round_id = fields.Many2one('og.round', required=True, ondelete='restrict')
     phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
+    schedule_id = fields.Many2one('og.schedule', related='round_id.schedule_id')
     game_id =  fields.Many2one('og.game',  related='phase_id.game_id')
     deal_ids = fields.Many2many('og.deal', related='round_id.deal_ids')
 
-    host_id  = fields.Many2one('og.team',required=True, 
+    host_tri_id  = fields.Many2one('og.team.round.info',required=True, 
         compute='_compute_team', inverse='_inverse_team_host')
-    guest_id = fields.Many2one('og.team',required=True,
+    guest_tri_id = fields.Many2one('og.team.round.info',required=True,
         compute='_compute_team', inverse='_inverse_team_guest')
+
+    host_id  = fields.Many2one('og.team',related='host_tri_id.team_id')
+    guest_id = fields.Many2one('og.team',related='guest_tri_id.team_id')
 
     date_from = fields.Datetime(related='round_id.date_from')
     date_thru = fields.Datetime(related='round_id.date_thru')
@@ -44,31 +43,31 @@ class Match(models.Model):
     def _compute_team(self):
         def fn(pos):
             return rec.match_team_ids.filtered(
-                lambda s: s.position == pos).team_id
+                lambda s: s.position == pos).tri_id
 
         for rec in self:
-            rec.host_id  = fn('host')
-            rec.guest_id = fn('guest')
+            rec.host_tri_id  = fn('host')
+            rec.guest_tri_id = fn('guest')
 
-    @api.onchange('host_id', 'guest_id')
+    @api.onchange('host_tri_id' )
     def _inverse_team_host(self):
         self._inverse_team('host')
 
-    @api.onchange('host_id', 'guest_id')
+    @api.onchange('guest_tri_id')
     def _inverse_team_guest(self):
         self._inverse_team('guest')
 
     def _inverse_team(self,pos):
         for rec in self:
             match_team = rec.match_team_ids.filtered(lambda s: s.position==pos)
-            ptns = {'host': rec.host_id, 'guest':rec.guest_id }
+            ptns = {'host': rec.host_tri_id, 'guest':rec.guest_tri_id }
 
             if match_team:
-                match_team.team_id = ptns[pos]
+                match_team.tri_id = ptns[pos]
             else:
                 vals = {'match_id':rec.id,
                         'position':pos,
-                        'team_id': ptns[pos].id }
+                        'tri_id': ptns[pos].id }
 
                 match_team.create(vals)
 
@@ -100,7 +99,8 @@ class MatchTeam(models.Model):
     
     name = fields.Char(related='team_id.name')
     match_id = fields.Many2one('og.match', string='Match', ondelete='cascade')
-    team_id = fields.Many2one('og.team', string='Team', ondelete='restrict')
+    tri_id  = fields.Many2one('og.team.round.info', string='TeamRoundInfo', ondelete='restrict')
+    team_id = fields.Many2one('og.team', related='tri_id.team_id')
     opp_team_id = fields.Many2one('og.team', compute='_compute_opp')
     position = fields.Selection([('host','Host'), ('guest','Guest')], default='host')
 
