@@ -97,13 +97,13 @@ class DetailsLayout extends Component {
 	render() {
 		// 识别
 		const { visible, confirmLoading } = this.state;
-		const {  location: { pathname, state: { gameData }, state } } = this.props;
+		const { location: { pathname, state: { gameData }, state } } = this.props;
 		return (
 			<Layout style={{ minWidth: 780 }}>
-				<div style={{ border: 'none', textAlign: "center", lineHeight: '80px' }}>
+				{/*<div style={{ border: 'none', textAlign: "center", lineHeight: '80px' }}>
 					<img style={{ height: '80px', 'float': "left" }} src={logo} />
 					<Button type="primary" onClick={this.showModal}>登录</Button>
-				</div>
+				</div>*/}
 				<Header >
 					<DetailsHeader
 						gameData={gameData}
