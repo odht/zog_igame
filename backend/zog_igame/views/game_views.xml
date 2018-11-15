@@ -123,14 +123,14 @@
             <field name="model">og.round</field>
             <field name="arch" type="xml">
                 <tree string="Rounds">
-                    <field name="name"/>
-                    <field name="number"/>
-                    <field name="sequence"/>
                     <field name="game_id"/>
-                    <field name="schedule_id"/>
+                    <field name="name"/>
                     <field name="phase_id"/>
+                    <field name="number"/>
+                    <field name="schedule_id"/>
                     <field name="date_from"/>
                     <field name="date_thru"/>
+                    <field name="sequence"/>
                 </tree>
             </field>
         </record>

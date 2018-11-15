@@ -15,9 +15,17 @@ class Match(models.Model):
     
     _name = "og.match"
     _description = "Match"
-    _order = 'number'
+    _order = 'round_id, host_tri_id'
 
-    name = fields.Char('Name' )
+    name = fields.Char('Name', compute='_compute_name' )
+    
+    @api.multi
+    def _compute_name(self):
+        for rec in self:
+            name = rec.phase_id.name + '.' + str(rec.round_id.number)
+            rec.name = name + ', ' + str(rec.host_id.number) + 'vs' + str(rec.guest_id.number)
+    
+    
     number = fields.Integer(default=1, help="if a stage of parent." )
 
     round_id = fields.Many2one('og.round', required=True, ondelete='restrict')
@@ -38,6 +46,7 @@ class Match(models.Model):
     date_thru = fields.Datetime(related='round_id.date_thru')
 
     match_team_ids = fields.One2many('og.match.team','match_id', help='Technical field')
+
 
     @api.multi
     def _compute_team(self):
@@ -81,12 +90,6 @@ class Match(models.Model):
         for deal in match.deal_ids:
             self.env['og.match.line'].create({'match_id': match.id, 'deal_id': deal.id})
 
-        if not vals.get('name'):
-            round = match.round_id
-            name = round.game_id.name + ',' + str(round.number)
-            name = name + ',' + match.host_id.name + ' vs ' + match.guest_id.name
-            match.name = name
-        
         return match
 
 

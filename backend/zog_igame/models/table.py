@@ -18,7 +18,7 @@ POSITIONS = [
 class Table(models.Model):
     _name = "og.table"
     _description = "Table"
-    _order = 'number'
+    _order = 'match_id,room_type'
 
     @api.model
     def create(self,vals):

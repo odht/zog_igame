@@ -31,6 +31,7 @@ class Game(models.Model):
     """
     _name = "og.game"
     _description = "Ientelligent Game"
+    _order = 'number'
     
     """
     #_parent_store = True
@@ -90,7 +91,7 @@ class GamePhase(models.Model):
     """
     _name = "og.phase"
     _description = "Game Phase"
-    _order = 'sequence, name'
+    _order = 'game_id,number,id'
 
     name = fields.Char('Name', required=True )
     number = fields.Integer(help="The sorted number for the phase in a game.") 
@@ -123,7 +124,7 @@ class Schedule(models.Model):
     """
     _name = "og.schedule"
     _description = "Schedule"
-    _order = 'number'
+    _order = 'game_id,number'
 
     game_id = fields.Many2one('og.game','Game', required=True, ondelete='cascade')
     name = fields.Char()
@@ -147,7 +148,7 @@ class GameRound(models.Model):
     """
     _name = "og.round"
     _description = "Round"
-    _order = 'sequence, name'
+    _order = 'phase_id, number'
 
     phase_id = fields.Many2one('og.phase', string='Phase', required=True, ondelete='restrict')
     schedule_id = fields.Many2one('og.schedule', string='Schedule', required=True, ondelete='restrict')

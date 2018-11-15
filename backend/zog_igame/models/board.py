@@ -62,7 +62,7 @@ class Deal(models.Model):
 class Board(models.Model):
     _name = "og.board"
     _description = "Board"
-    _order = 'number'
+    _order = 'table_id,deal_id,'
 
 
     state = fields.Selection([

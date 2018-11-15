@@ -41,7 +41,7 @@ class GameTeam(models.Model):
     
     _name = "og.team"
     _description = "Game Team"
-    _order = 'id desc'
+    _order = 'game_id, number'
     _inherits = {'res.partner': 'partner_id'}
     
     # name field inherit from res.partner
@@ -135,6 +135,7 @@ class GameTeamRoundInfo(models.Model):
     
     _name = "og.team.round.info"
     _description = "Team Round Infomation"
+    _order = 'round_id, number,team_id'
 
     name = fields.Char()
     round_id = fields.Many2one('og.round', string='Round', required=True, ondelete='cascade')
