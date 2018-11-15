@@ -24,6 +24,9 @@ class GamePhase(models.Model):
 
 class GameRound(models.Model):
     _inherit = "og.round"
+    
+    team_ids = fields.Many2many('og.team', related = 'phase_id.team_ids' )
+    
     team_info_ids = fields.One2many('og.team.round.info','round_id',
         string='Teams Info', help='all teams score in this round.')
 
@@ -38,12 +41,13 @@ class GameTeam(models.Model):
     
     _name = "og.team"
     _description = "Game Team"
-    _order = 'id desc'
+    _order = 'game_id, number'
     _inherits = {'res.partner': 'partner_id'}
     
     # name field inherit from res.partner
     #name = fields.Char()
 
+    number = fields.Integer(help="The number of Team") 
     partner_id = fields.Many2one('res.partner', required=True, ondelete='cascade')
     game_id = fields.Many2one('og.game', string='Game', ondelete='cascade')
     phase_ids = fields.Many2many('og.phase')
@@ -131,6 +135,7 @@ class GameTeamRoundInfo(models.Model):
     
     _name = "og.team.round.info"
     _description = "Team Round Infomation"
+    _order = 'round_id, number,team_id'
 
     name = fields.Char()
     round_id = fields.Many2one('og.round', string='Round', required=True, ondelete='cascade')

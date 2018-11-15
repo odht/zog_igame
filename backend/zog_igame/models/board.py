@@ -62,7 +62,7 @@ class Deal(models.Model):
 class Board(models.Model):
     _name = "og.board"
     _description = "Board"
-    _order = 'number'
+    _order = 'table_id,deal_id'
 
 
     state = fields.Selection([
@@ -77,7 +77,7 @@ class Board(models.Model):
         ('cancel', 'Cancelled')
     ], string='Status', default='bidding')
 
-    table_id = fields.Many2one('og.table', required=True, ondelete='restrict')
+    table_id = fields.Many2one('og.table', required=True, ondelete='cascade')
     round_id = fields.Many2one('og.round', related='table_id.round_id')
     phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
     game_id = fields.Many2one('og.game', related='phase_id.game_id')
