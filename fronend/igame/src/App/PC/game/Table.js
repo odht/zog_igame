@@ -835,6 +835,10 @@ sucSend=(data)=>{
     console.log(data)
 }
 failSend=()=>{console.log('fail send')}
+sucClaim1=(data)=>{ console.log(data) }
+sucClaiming=(data)=>{ console.log(data) ;}
+failClaiming=()=>{console.log('fail claiming')}
+failClaim1=()=>{console.log('fail claim')}
      /*******************************************************添加函数结束 ****************************************************************************/
     /**
      * 完成挂载后，要计算 各个位置的坐标。
