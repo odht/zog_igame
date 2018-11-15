@@ -6,24 +6,31 @@ import { Menu } from 'antd';
 import { Link } from 'dva/router';
 import styles from './index.less';
 
-let CURRET='management'
+let CURRET = 'management'
 const GlobalHeader = props => {
 
     const { headerRoutes, pathname } = props;
     const HeaderMenu = headerRoutes.map(item => {
-        if(item.authority){
-            if(item.authority===CURRET){
-                return <Menu.Item key={item.path}> <Link to={item.path}>{item.name}</Link> </Menu.Item>
-            }else{
+        if (item.authority) {
+            if (item.authority === CURRET) {
+                // return <Menu.Item key={item.path}> <Link to={item.path}>{item.name}</Link> </Menu.Item>
+                return <Menu.Item key={item.path}> <Link to={{
+                    pathname: item.path,
+                    breadcrumb: item.name
+                }}>{item.name}</Link> </Menu.Item>
+            } else {
                 return null
             }
         }
-        return <Menu.Item key={item.path}> <Link to={item.path}>{item.name}</Link> </Menu.Item>
-    }).filter((item)=>(item));
+        return <Menu.Item key={item.path}> <Link  to={{
+            pathname: item.path,
+            breadcrumb: item.name
+        }}>{item.name}</Link> </Menu.Item>
+    }).filter((item) => (item));
     return (
         <div className={styles.header}>
             <Menu
-               theme='grey'
+                theme='grey'
                 mode="horizontal"
                 defaultSelectedKeys={[pathname]}
                 style={{ lineHeight: '64px' }}

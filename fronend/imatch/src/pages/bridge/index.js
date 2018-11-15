@@ -1,1 +1,0 @@
-export default ()=>(<div>桥协</div>)

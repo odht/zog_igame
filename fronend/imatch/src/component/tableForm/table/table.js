@@ -60,7 +60,7 @@ export default (WrapTableForm) => {
                 return {...state,visible:!state.visible,record:record}
             })
         }
-        editChange = (newEdit) => {//新建或者编辑
+        editChange = (newEdit) => {//新建或编辑
             const dataSource = this.getdata();
             const index = dataSource.findIndex(item => newEdit.id === item.id);
             if (index > -1) {

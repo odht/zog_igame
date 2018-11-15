@@ -36,13 +36,13 @@
 
 
         <menuitem id="menu_game_channel_list"
-            name="channels"
+            name="Game channels"
             parent="menu_channel"
             action="action_game_channel_list"
             sequence="30"/>
 
         <record id="view_game_channel_tree" model="ir.ui.view">
-            <field name="name">channel</field>
+            <field name="name">Game channel</field>
             <field name="model">og.channel</field>
             <field name="arch" type="xml">
                 <tree string="Channel">

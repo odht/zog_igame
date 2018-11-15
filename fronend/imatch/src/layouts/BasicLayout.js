@@ -2,8 +2,8 @@
 //lsy
 //2018-9-4
 
-import React, { Component, Fragment } from 'react';
-import { Layout,Row,Col, Button ,Dropdown,Menu} from 'antd';
+import React, { Component } from 'react';
+import { Layout, Row, Col, Button, Dropdown, Menu } from 'antd';
 import { connect } from 'dva';
 import GlobalHeader from '../component/GlobalHeader';
 import BasicFooter from '../component/BasicFooter'
@@ -19,14 +19,15 @@ const { headerRoutes } = routes;
 //面包屑
 
 class BasicLayout extends Component {
-  componentWillMount() {
-    const { history: { location: { pathname } } } = this.props;
-    if (pathname === '/') {
-      router.push('/home');
-    }
-  }
-  logout = ()=> {console.log(123)
-    this.props.dispatch({type:'user/logout'})
+  // componentDidMount() {
+  //   const { history: { location: { pathname } } } = this.props;
+  //   if (pathname === '/') {
+  //     router.push('/home');
+  //   }
+  // }
+  logout = () => {
+    console.log(123)
+    this.props.dispatch({ type: 'user/logout' })
     router.push('/user/login')
   }
   render() {
@@ -40,9 +41,8 @@ class BasicLayout extends Component {
       }
     }
     const siderRoute = siderData();
-    const loginButton =<div><Link to='/user/login'><Button type='normal'>立即登录</Button></Link><Link to='/user/register'><Button type='primary'>免费注册</Button></Link></div> 
-    // 0000000000000000000
-    const {currentUser} = 10;
+    const loginButton = <div><Link to='/user/login'><Button type='normal'>立即登录</Button></Link><Link to='/user/register'><Button type='primary'>免费注册</Button></Link></div>
+    const { currentUser } = 10;
     const menu = (
       <Menu>
         <Menu.Item>
@@ -54,16 +54,16 @@ class BasicLayout extends Component {
       </Menu>
     );
     const userCenter = (<Dropdown overlay={menu} placement="bottomCenter">
-                          <Button>{currentUser}</Button>
-                        </Dropdown>);
-    
+      <Button>{currentUser}</Button>
+    </Dropdown>);
+
     return (
       <div >
         <div className='g-header'>
-          <div style={{maxWidth:'1200px',margin:'0 auto'}}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <Row type='flex' align='middle'>
               <Col span={4}>
-                <img style={{width:'200px'}} src={logo} />
+                <img style={{ width: '200px' }} src={logo} />
               </Col>
               <Col offset={1} span={12}>
                 <GlobalHeader
@@ -72,16 +72,16 @@ class BasicLayout extends Component {
                 />
               </Col>
               <Col span={3}></Col>
-              <Col span={4}>
+              {/*      <Col span={4}>
             { currentUser ? userCenter: loginButton} 
-              </Col>
+    </Col>*/}
             </Row>
-          </div> 
+          </div>
         </div>
-        
-        <Content style={{maxWidth:'1200px',margin:'0 auto'}}>
+
+        <Content style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <Layout style={{ background: '#fff' }}>
-            {siderRoute && siderRoute.child.length>0 ?
+            {siderRoute && siderRoute.child.length > 0 ?
               <Sider style={{ background: '#fff', minHeight: "71vh" }} >
                 <GlobalSider
                   siderRoute={siderRoute}
@@ -95,7 +95,7 @@ class BasicLayout extends Component {
           </Layout>
         </Content>
         <footer className={styles.footer}>
-        <BasicFooter/>
+          <BasicFooter />
         </footer>
       </div>
     )
@@ -103,4 +103,4 @@ class BasicLayout extends Component {
 }
 
 
-export default connect(({user})=>({user}))(BasicLayout);
+export default connect(({ user }) => ({ user }))(BasicLayout);
