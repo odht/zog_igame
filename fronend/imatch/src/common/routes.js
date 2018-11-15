@@ -58,11 +58,11 @@ export const headerRoutes = [
     //     child:[]
     // },
 
-    {
-        name:'新闻',
-        path:'/news',
-        child:[]
-    },
+    // {
+    //     name:'新闻',
+    //     path:'/news',
+    //     child:[]
+    // },
     // {
     //     name:'桥协',
     //     path:'/bridge',

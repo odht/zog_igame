@@ -34,7 +34,7 @@ class Team extends Component {
     const { location: { state:{gameData:{team_ids} } },odooData:{ogTeam} } = this.props;
     const dataSource = lookup(team_ids, ogTeam)
     return (
-      <div style={{ width: "900px" }}>
+      <div style={{ width: "900px",margin:'0 auto' }}>
         <Table
           bordered={true}
           rowKey={row => row.id}

@@ -230,33 +230,38 @@ class Deal extends Component {
             <span className={styles.matchTextRound}>{round}</span>
           </h1>
         </div>
-        <div className={styles.header}>
-          <div className={styles.table}>
-            <div className={styles.tableN}>{cardList(n_card_str)}</div>
+          <div className={styles.header}>
+            <div className={styles.table}>
+              {/*   <div className={styles.tableN}>{cardList(n_card_str)}</div>
             <div className={styles.tableW}>{cardList(w_card_str)}</div>
-            <div className={styles.tableNWES}>
-              <div className={styles.tableN}>N</div>
-              <div className={styles.tableW}>W</div>
-              <div className={styles.tableE}>E</div>
-              <div className={styles.tableS}>S</div>
+            */}
+              <div className={styles.tableN}></div>
+              <div className={styles.tableW}></div>
+              <div className={styles.tableNWES}>
+                <div className={styles.tableN}>N</div>
+                <div className={styles.tableW}>W</div>
+                <div className={styles.tableE}>E</div>
+                <div className={styles.tableS}>S</div>
+              </div>
+              {/*<div className={styles.tableE}>{cardList(e_card_str)}</div>
+          <div className={styles.tableS}>{cardList(s_card_str)}</div>*/}
+          <div className={styles.tableE}></div>
+          <div className={styles.tableS}></div>
             </div>
-            <div className={styles.tableE}>{cardList(e_card_str)}</div>
-            <div className={styles.tableS}>{cardList(s_card_str)}</div>
+            <div className={styles.datum}>
+              <p>发牌人：{dealer}</p>
+             {/*<p>Datum 60</p>*/} 
+            </div>
           </div>
-          <div className={styles.datum}>
-            <p>发牌人：{dealer}</p>
-            <p>Datum 60</p>
-          </div>
-        </div>
-        <Table
-          rowKey={row => row.id}
-          dataSource={BoardData}
-          columns={columns}
-        />
+          <Table
+            rowKey={row => row.id}
+            dataSource={BoardData}
+            columns={columns}
+          />
       </div>
-    )
+      )
+    }
   }
-}
-
-
-export default connect(({ odooData }) => ({ odooData }))(Deal)
+  
+  
+export default connect(({odooData}) => ({odooData}))(Deal)

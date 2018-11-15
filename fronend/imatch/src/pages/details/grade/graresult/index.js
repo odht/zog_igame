@@ -93,7 +93,7 @@ class Graresult extends Component {
                                 state={state}
                             />
                             <div style={{ width: "600px" }}>
-                                <Row>
+                                {/*  <Row>
                                     <Col span={12}>点击桌号 查看计分表</Col>
                                     <Col span={12}><Link to='/details/grade/score'>瑞士成绩赛表</Link></Col>
                                 </Row>
@@ -101,8 +101,9 @@ class Graresult extends Component {
                                     <Col span={12}>点击队名 查看对阵记录</Col>
                                     <Col span={12}><Link to='/details/grade/score/rank'>瑞士成绩赛表（按名次排序）</Link></Col>
                                 </Row>
+                             */}
                                 <Row>
-                                    <Col span={12}><Link to='/details/grade/datumn'>Datumn</Link>   </Col>
+                                    <Col span={12}><Link to='/details/grade/datumn'></Link>   </Col>
                                     <Col span={12}>牌：{dealData}</Col>
                                 </Row>
                             </div>

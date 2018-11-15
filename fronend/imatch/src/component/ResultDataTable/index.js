@@ -19,8 +19,8 @@ const ResultDataTable = ({ matchData, state }) => {
         }, {
             title: "完成",
             dataIndex: "deal_ids",
-            render:(text,record)=>{
-               return `${record.deal_ids.length}`
+            render: (text, record) => {
+                return `${record.deal_ids.length}`
             }
         }, {
             title: "主队",
@@ -68,7 +68,9 @@ const ResultDataTable = ({ matchData, state }) => {
                 pagination={false}
                 size='middle'
                 columns={columns}
-                dataSource={matchData}
+                dataSource={matchData.sort((number1, number2) => {
+                    return number1.number - number2.number
+                })}
                 bordered
             /> : '暂无数据'
     )
