@@ -5,21 +5,10 @@ import diamond from '@/assets/svg/diamond.svg';
 import heart from '@/assets/svg/heart.svg';
 import spade from '@/assets/svg/spade.svg';
 
-import direction from '@/assets/direction.png';
-import one from '@/assets/one.png';
-import { Table, Row, Col, Icon } from "antd";
-import { Link } from "react-router-dom";
+import { Table } from "antd";
 import { connect } from "dva";
 import { lookup } from '@/utils/tools'
 
-async function dispatch_read(props, model, id) {
-  props.dispatch({
-    type: `${model}/read`,
-    payload: { id }
-  }).then(() => {
-    console.log(props.odooData[model])
-  })
-}
 
 
 
@@ -142,7 +131,6 @@ class Deal extends Component {
           src = spade
           break;
       }
-      console.log(index);
 
       return <img src={src} alt={index} className={styles.icons}></img>
     }

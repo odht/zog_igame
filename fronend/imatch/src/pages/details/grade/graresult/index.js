@@ -62,7 +62,7 @@ class Graresult extends Component {
         // 比赛对战数据
         const {
             odooData: { ogMatch, ogTeamRoundInfo, ogDeal },
-            location: { state: { roundData: { match_ids, team_info_ids, deal_ids } } },
+            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id } } },
             location: { state },
         } = this.props;
         // 牌组 
@@ -70,14 +70,7 @@ class Graresult extends Component {
         const matchData = lookup(match_ids, ogMatch)
         const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo);
         const dealData0 = lookup(deal_ids, ogDeal);
-        // if (dealData && dealData.length > 0) {
-        //     dealData.map(dealItem => {
-
-        //         deal = matchItem.deal_ids;
-        //     })
-        // }
         const dealData = dealData0.map(item => {
-            console.log(item)
             return <Link
                 key={item.id}
                 to={{
@@ -89,7 +82,7 @@ class Graresult extends Component {
         return (
             <div>
                 <div style={{ textAlign: 'center' }} >
-                    <h2>公开团体赛 排位赛第1轮</h2>
+                    <h2>{game_id[1]} {name}</h2>
                 </div>
 
                 <div>
