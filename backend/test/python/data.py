@@ -105,34 +105,34 @@ records['og.team.round.info'] = [
 
 
 records['res.users'] = [
-  {'login': '101', 'name': '101', 'password':'101.101'},
-  {'login': '102', 'name': '102', 'password':'102.101'},
-  {'login': '103', 'name': '103', 'password':'103.101'},
-  {'login': '104', 'name': '104', 'password':'104.101'},
-  {'login': '105', 'name': '105', 'password':'105.101'},
-  {'login': '106', 'name': '106', 'password':'106.101'},
-  {'login': '201', 'name': '201', 'password':'201.201'},
-  {'login': '202', 'name': '202', 'password':'202.202'},
-  {'login': '203', 'name': '203', 'password':'203.203'},
-  {'login': '204', 'name': '204', 'password':'204.204'},
-  {'login': '205', 'name': '205', 'password':'205.205'},
-  {'login': '206', 'name': '206', 'password':'206.206'},
+  {'login': '101', 'name': '101', 'email': '101', 'password':'101.101'},
+  {'login': '102', 'name': '102', 'email': '102', 'password':'102.102'},
+  {'login': '103', 'name': '103', 'email': '103', 'password':'103.103'},
+  {'login': '104', 'name': '104', 'email': '104', 'password':'104.104'},
+  {'login': '105', 'name': '105', 'email': '105', 'password':'105.105'},
+  {'login': '106', 'name': '106', 'email': '106', 'password':'106.106'},
+  {'login': '201', 'name': '201', 'email': '201', 'password':'201.201'},
+  {'login': '202', 'name': '202', 'email': '202', 'password':'202.202'},
+  {'login': '203', 'name': '203', 'email': '203', 'password':'203.203'},
+  {'login': '204', 'name': '204', 'email': '204', 'password':'204.204'},
+  {'login': '205', 'name': '205', 'email': '205', 'password':'205.205'},
+  {'login': '206', 'name': '206', 'email': '206', 'password':'206.206'},
 
 ]
 
 
 records['og.team.player'] = [
-  {'name': '101', 'team_id': 99},
-  {'name': '102', 'team_id': 99},
-  {'name': '103', 'team_id': 99},
-  {'name': '104', 'team_id': 99},
-  {'name': '105', 'team_id': 99},
-  {'name': '106', 'team_id': 99},
-  {'name': '201', 'team_id': 99},
-  {'name': '202', 'team_id': 99},
-  {'name': '203', 'team_id': 99},
-  {'name': '204', 'team_id': 99},
-  {'name': '205', 'team_id': 99},
-  {'name': '206', 'team_id': 99},
+  {'partner_id': '101', 'team_id': 99},
+  {'partner_id': '102', 'team_id': 99},
+  {'partner_id': '103', 'team_id': 99},
+  {'partner_id': '104', 'team_id': 99},
+  {'partner_id': '105', 'team_id': 99},
+  {'partner_id': '106', 'team_id': 99},
+  {'partner_id': '201', 'team_id': 99},
+  {'partner_id': '202', 'team_id': 99},
+  {'partner_id': '203', 'team_id': 99},
+  {'partner_id': '204', 'team_id': 99},
+  {'partner_id': '205', 'team_id': 99},
+  {'partner_id': '206', 'team_id': 99},
 ]
 

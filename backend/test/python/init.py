@@ -285,7 +285,7 @@ def tri_one(rec):
 def tri_circle_multi():
     domain = [('org_type','in',['circle']),('game_id','=',game_id) ]
     phases = execute(usid, 'og.phase', 'search_read', domain, ['round_ids'])
-    for phase in phases:
+    for phase_index, phase in enumerate(phases)  :
         round_ids = phase['round_ids']
         rounds = execute(usid, 'og.round', 'read', round_ids, ['number','team_ids'])
         
@@ -301,7 +301,7 @@ def tri_circle_multi():
             
             for vals in [ { 'round_id': round['id'], 
                             'team_id': team['id'],
-                            'number': pos_nums[index+1]
+                            'number': pos_nums[index+1] + phase_index * len(teams)
                           } for index, team in enumerate(teams) ]:
                           
                 tri_one(vals)
@@ -386,6 +386,7 @@ def match_multi():
     
     guests= [{'round_id': tri['round_id'][0], 
               'guest_tri_id': tri['id'],
+              'number': tri['number']
              } for index, tri in enumerate(tris) if index % 2 == 1 ]
     
     
@@ -394,7 +395,8 @@ def match_multi():
     
     for vals in [ { 'round_id': host['round_id'], 
                     'host_tri_id':  host['host_tri_id'] , 
-                    'guest_tri_id': guests[index]['guest_tri_id'] 
+                    'guest_tri_id': guests[index]['guest_tri_id'],
+                    'number': guests[index]['number'] / 2 ,
                    } for index, host in enumerate(hosts) ]:
         match_one(vals)
         pass
@@ -415,26 +417,104 @@ def table_one(rec):
 
 def table_multi():
     domain = [('game_id','=',game_id ),   ]
-    match_ids = execute(usid, 'og.match', 'search', domain )
+    matchs = execute(usid, 'og.match', 'search_read', domain, ['number'] )
     
-    for vals in [ {'match_id': mid, 'room_type': 'open' } for mid in match_ids ] + [
-                  {'match_id': mid, 'room_type': 'close'} for mid in match_ids ]:
+    for vals in [ {'match_id': match['id'], 'number': match['number'] + 100, 'room_type': 'open' } for match in matchs ] + [
+                  {'match_id': match['id'], 'number': match['number'] + 200, 'room_type': 'close'} for match in matchs ]:
         table_one(vals)
     
 
 
+def res_users_one(rec):
+    model = 'res.users'
+    domain = [('login','=',rec['login']) ]
+    id = find(model, domain, record=rec )
+    print id
+    if id:
+        #print execute(usid, model, 'read', id)
+        pass
+
+def res_users_multi():
+    
+    for rec in records['res.users']:
+        res_users_one(rec)
+    
+
+def team_player_one(rec):
+    partner_id = rec['partner_id']
+    team_id = rec['team_id']
+
+    domain = [('name','=',partner_id ),   ]
+    partner_id = search_one( 'res.partner', domain )
+    
+    print partner_id
+
+    domain = [('number','=',team_id ), ('game_id','=',game_id)  ]
+    team_id = search_one( 'og.team', domain )
+
+    print team_id
+    
+    model = 'og.team.player'
+    domain = [('partner_id','=',partner_id ), ('team_id','=',team_id )]
+    
+    vals = { 'partner_id': partner_id, 'team_id': team_id }
+    id = find(model, domain, record=vals )
+    print id
+    if id:
+        #print execute(usid, model, 'read', id)
+        pass
+
+def team_player_multi():
+
+    for rec in records['og.team.player']:
+        team_player_one(rec)
+    
+
+def table_player_one(rec):
+    table_id = rec['table_id']
+    position = rec['position']
+    model = 'og.table.player'
+    domain = [('table_id','=',table_id ),('position','=',position )   ]
+    id = find(model, domain, record=rec )
+    print id
+    if id:
+        #print execute(usid, model, 'read', id)
+        pass
+
+
 def table_player_multi():
-    pass
-
-
+    domain = [('game_id','=',game_id) ]
+    
+    tables = execute(usid, 'og.table', 'search_read', domain, ['number'] )
+    
+    def fn(tno):
+        dm = [('name','=',tno)]
+        return search_one( 'og.team.player', dm )
+    
+    for table in tables:
+        vals = {
+            'table_id':  table['id'],
+            'player_id': fn(table['number']),
+            'position':  'S',
+        }
+        
+        table_player_one(vals)
+    
 
 game_id = game_one()
-#schedule_multi()
-#deal_multi()
-#phase_multi()
-#round_multi()
-#team_multi()
-#tri_circle_multi()
-#tri_manule_multi()
-#match_multi()
+"""
+schedule_multi()
+deal_multi()
+phase_multi()
+round_multi()
+team_multi()
+tri_circle_multi()
+tri_manule_multi()
+match_multi()
+
 table_multi()   
+"""
+
+res_users_multi()
+team_player_multi()
+table_player_multi()
