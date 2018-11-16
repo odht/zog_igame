@@ -612,7 +612,7 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('number', {
-                                initialValue: scoringData ? scoringData.number : '',
+                                initialValue: scoringData.number ? scoringData.number : '',
                                 rules: [
                                     { required: true, message: '请填写牌号!' },
                                 ],
@@ -644,7 +644,7 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('declarer', {
-                                initialValue: scoringData ? scoringData.declarer : '',
+                                initialValue: scoringData.declarer ? scoringData.declarer : '',
                                 rules: [
                                     { required: true, message: '请填写庄家!' },
                                 ],
@@ -664,7 +664,7 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('contract', {
-                                initialValue: scoringData ? scoringData.contract.split('') : null,
+                                initialValue: scoringData.contract ? scoringData.contract.split('') : null,
                                 rules: [{ type: 'array', required: true, message: '请填写定约!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写定约" options={dealData} />
@@ -677,7 +677,7 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('openlead', {
-                                initialValue: scoringData ? scoringData.openlead.split('') : null,
+                                initialValue: scoringData.openlead ? scoringData.openlead.split('') : null,
                                 rules: [{ type: 'array', required: true, message: '请填写首攻!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写首攻" options={leaderData} />
@@ -690,7 +690,7 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('result', {
-                                initialValue: scoringData ? scoringData.result.split('') : null,
+                                initialValue: scoringData.result ? scoringData.result.split('') : null,
                                 rules: [{ type: 'array', required: true, message: '请填写结果!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写结果" options={resultData} />

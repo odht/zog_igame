@@ -102,13 +102,13 @@ export default class Home extends Component {
                     item.declarer = null
                 }
                 if (!item.contract) {
-                    item.contract = '  ';
+                    item.contract = null;
                 }
                 if (!item.openlead) {
-                    item.openlead = '  ';
+                    item.openlead = null;
                 }
                 if (!item.result) {
-                    item.result = '= '
+                    item.result = null;
                 } else {
                     const { result } = item;
                     if (result.toString().split('').length === 1 && result !== 0) {
