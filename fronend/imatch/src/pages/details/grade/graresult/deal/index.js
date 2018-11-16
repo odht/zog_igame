@@ -54,8 +54,8 @@ class Deal extends Component {
             const tableData = lookup(table_ids, ogTable);
             BoardTable = tableData.map(item => {
               const [ply1, ply2, ply3, ply4] = item.room_type === 'open' ?
-                [[...item.north_id, 'N'], [...item.south_id, 'S'], [...item.east_id, 'E'], [...item.west_id, 'W']]
-                : [[...item.east_id, 'E'], [...item.west_id, 'W'], [...item.north_id, 'N'], [...item.south_id, 'S']]
+                [[...item.north_id || '', 'N'], [...item.south_id || '', 'S'], [...item.east_id || '', 'E'], [...item.west_id || '', 'W']]
+                : [[...item.east_id || '', 'E'], [...item.west_id || '', 'W'], [...item.north_id || '', 'N'], [...item.south_id || '', 'S']]
               return {
                 room_type: item.room_type,
                 ply1, ply2, ply3, ply4
@@ -171,13 +171,13 @@ class Deal extends Component {
       dataIndex: 'ply1',
       colSpan: 2,
       render: (text, row) => {
-        return `${row.ply1[2]}  ${row.ply1[1]}`
+        return text.length > 1 ? `${row.ply1[2]}  ${row.ply1[1]}` : `${row.ply1[0]}`
       }
     }, {
       dataIndex: 'ply2',
       colSpan: 0,
       render: (text, row) => {
-        return `${row.ply2[2]}  ${row.ply2[1]}`
+        return text.length > 1 ? `${row.ply2[2]}  ${row.ply2[1]}` : `${row.ply2[0]}`
       }
     },
     {
@@ -185,13 +185,13 @@ class Deal extends Component {
       dataIndex: 'ply3',
       colSpan: 2,
       render: (text, row) => {
-        return `${row.ply3[2]}  ${row.ply3[1]}`
+        return text.length > 1 ? `${row.ply3[2]}  ${row.ply3[1]}` : `${row.ply3[0]}`
       }
     }, {
       dataIndex: 'ply4',
       colSpan: 0,
       render: (text, row) => {
-        return `${row.ply4[2]}  ${row.ply4[1]}`
+        return text.length > 1 ? `${row.ply4[2]}  ${row.ply4[1]}` : `${row.ply4[0]}`
       }
     }, {
       dataIndex: 'room_type'
@@ -230,38 +230,38 @@ class Deal extends Component {
             <span className={styles.matchTextRound}>{round}</span>
           </h1>
         </div>
-          <div className={styles.header}>
-            <div className={styles.table}>
-              {/*   <div className={styles.tableN}>{cardList(n_card_str)}</div>
+        <div className={styles.header}>
+          <div className={styles.table}>
+            {/*   <div className={styles.tableN}>{cardList(n_card_str)}</div>
             <div className={styles.tableW}>{cardList(w_card_str)}</div>
             */}
-              <div className={styles.tableN}></div>
-              <div className={styles.tableW}></div>
-              <div className={styles.tableNWES}>
-                <div className={styles.tableN}>N</div>
-                <div className={styles.tableW}>W</div>
-                <div className={styles.tableE}>E</div>
-                <div className={styles.tableS}>S</div>
-              </div>
-              {/*<div className={styles.tableE}>{cardList(e_card_str)}</div>
+            <div className={styles.tableN}></div>
+            <div className={styles.tableW}></div>
+            <div className={styles.tableNWES}>
+              <div className={styles.tableN}>N</div>
+              <div className={styles.tableW}>W</div>
+              <div className={styles.tableE}>E</div>
+              <div className={styles.tableS}>S</div>
+            </div>
+            {/*<div className={styles.tableE}>{cardList(e_card_str)}</div>
           <div className={styles.tableS}>{cardList(s_card_str)}</div>*/}
-          <div className={styles.tableE}></div>
-          <div className={styles.tableS}></div>
-            </div>
-            <div className={styles.datum}>
-              <p>发牌人：{dealer}</p>
-             {/*<p>Datum 60</p>*/} 
-            </div>
+            <div className={styles.tableE}></div>
+            <div className={styles.tableS}></div>
           </div>
-          <Table
-            rowKey={row => row.id}
-            dataSource={BoardData}
-            columns={columns}
-          />
+          <div className={styles.datum}>
+            <p>发牌人：{dealer}</p>
+            {/*<p>Datum 60</p>*/}
+          </div>
+        </div>
+        <Table
+          rowKey={row => row.id}
+          dataSource={BoardData}
+          columns={columns}
+        />
       </div>
-      )
-    }
+    )
   }
-  
-  
-export default connect(({odooData}) => ({odooData}))(Deal)
+}
+
+
+export default connect(({ odooData }) => ({ odooData }))(Deal)
