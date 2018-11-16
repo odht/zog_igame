@@ -32,7 +32,7 @@ const ResultDataTable = ({ matchData, state }) => {
             title: "客队",
             dataIndex: "guest_id",
             render: (text, record) => {
-                return <Link to={{ pathname: '/details/grade/teamMatch', state, search: `?team_id=${record.guest_id[0]}` }}>{record.guest_id[1]}</Link>;
+                return <Link to={{ pathname: '/details/grade/graresult/teamMatch', state, search: `?team_id=${record.guest_id[0]}` }}>{record.guest_id[1]}</Link>;
             }
         }, {
             title: "IMPS",
