@@ -18,7 +18,7 @@ POSITIONS = [
 class Table(models.Model):
     _name = "og.table"
     _description = "Table"
-    _order = 'number'
+    _order = 'match_id,room_type'
 
     @api.model
     def create(self,vals):
@@ -32,7 +32,14 @@ class Table(models.Model):
         ('match_open_close_uniq', 'unique (room_type,match_id)', 'The match have one open table and one close table !')
     ]
     
-    name = fields.Char('Name' )
+    name = fields.Char('Name', compute='_compute_name' )
+    
+    @api.multi
+    def _compute_name(self):
+        for rec in self:
+            rec.name = rec.room_type + ',' + rec.match_id.name
+    
+    
     number = fields.Integer(default=1 )
     room_type = fields.Selection([('open','Open' ), ('close','Close')], default='open')
 
@@ -160,8 +167,9 @@ class Partner(models.Model):
     team_player_ids = fields.One2many('og.team.player','partner_id' )
 
     todo_table_ids = fields.One2many('og.table', compute='_get_table')
-    doing_table_id = fields.Many2one('og.table', compute='_get_table')
     done_table_ids = fields.One2many('og.table', compute='_get_table')
+
+    doing_table_ids = fields.One2many('og.table', compute='_get_table')
     
     @api.multi
     def _get_table(self):
@@ -174,5 +182,13 @@ class Partner(models.Model):
                     
             rec.done_table_ids = table_ids.filtered(
                     lambda tbl: tbl.state == 'done').sorted('date_from')
-                    
-            rec.doing_table_id = rec.todo_table_ids and rec.todo_table_ids[0]
+            
+            for game in rec.todo_table_ids.mapped('game_id'):
+                doings = rec.todo_table_ids.filtered(
+                    lambda tbl: tbl.game_id == game).sorted('schedule_number')
+                if doings:
+                    rec.doing_table_ids += doings[0]
+            
+            
+
+

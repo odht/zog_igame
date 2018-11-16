@@ -123,13 +123,14 @@
             <field name="model">og.round</field>
             <field name="arch" type="xml">
                 <tree string="Rounds">
-                    <field name="name"/>
-                    <field name="number"/>
                     <field name="game_id"/>
-                    <field name="schedule_id"/>
+                    <field name="name"/>
                     <field name="phase_id"/>
+                    <field name="number"/>
+                    <field name="schedule_id"/>
                     <field name="date_from"/>
                     <field name="date_thru"/>
+                    <field name="sequence"/>
                 </tree>
             </field>
         </record>
@@ -158,6 +159,7 @@
                 <tree string="Teams">
                     <field name="game_id"/>
                     <field name="name"/>
+                    <field name="number"/>
                     <field name="rank"/>
                 </tree>
             </field>
@@ -170,6 +172,7 @@
                 <form string="Team">
                     <group col="4">
                         <field name="name"/>
+                        <field name="number"/>
                         <field name="game_id"/>
                     </group>
                     <group col="2">
@@ -229,11 +232,11 @@
             <field name="model">og.team.round.info</field>
             <field name="arch" type="xml">
                 <tree string="Score">
-                    <field name="team_id"/>
                     <field name="game_id"/>
                     <field name="phase_id"/>
                     <field name="round_id"/>
                     <field name="match_id"/>
+                    <field name="team_id"/>
                     <field name="number"/>
                     <field name="sequence"/>
                     <field name="score"/>

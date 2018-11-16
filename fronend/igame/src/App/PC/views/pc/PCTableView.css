@@ -1,0 +1,295 @@
+*{
+    /* font-family:'Courier New', Courier, monospace; */
+    font-family:monospace;
+}
+button{
+
+    position: relative;
+    padding:0px;
+    background-color: #1B9AF7;
+    border:0px solid #ffffff;
+    color:#FFFFFF;
+    border-radius:4px;
+    height:2vw;
+    /* box-shadow: 0 2px 0 #0880d7, 0 2px 1px rgba(0, 0, 0, 0.3); */
+}
+button:focus,button:hover{
+    background-color: #0880d7;
+}
+button:active{
+    opacity: 0.6;
+    /* -webkit-box-shadow: none;
+    box-shadow: none;
+    text-shadow: none;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: .3s;
+    transition-duration: .3s;  */
+}
+button.disable{
+    color:#bbbbbb;
+    opacity:0.6;
+}
+
+.table{
+    overflow: hidden;
+    position: relative;
+    background-color: #000000;
+    width: 100vw;
+    height: 100vh;
+    font-size: 4vh;
+}
+.panel{
+    position: absolute;
+    z-index:2;
+    top: 5vh;
+    left: 40vh;
+    width: 60vh;
+    height: 60vh;
+    /* filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;     */
+}
+.header{
+    font-size:3.5vh;
+    line-height:3.8vh;
+    /*position: relative;*/
+    float:left;
+    width: 20vh;
+    height: 70vh;  
+}
+
+.re{
+    background-color: #0099cc;
+    /* float: left; */
+    margin:1vh;
+    width:18vh;
+}
+.imps {height:12vh;vertical-align: middle}
+.time {height:12vh;}
+.header > .seats, .header > .tricks{height:18vh;}
+
+.header button{
+    margin:1% 4%;
+    width:90%;
+    height:6%;
+}
+
+.body{
+    position: relative;
+    float:left;
+    background-image: url(/imgs/bg1.png);
+    background-position: 50% -10%;
+    /*background: linear-gradient(#000055,#000055);*/
+    background-size: 100% 100%;
+    border-radius:3%;
+    width: 100vh;
+    height: 100vh;
+    font-size: 4vh;
+
+}
+.lastTrick{
+    position: absolute;
+    width: 30%;
+    height:30%;
+    background-color:#eeee99;
+    z-index: 1;
+    border-radius:5%;
+
+}
+.footer{
+    position: relative;
+    float:left;
+    bottom: 0;
+    font-size:1.2vw;
+    background-color: #000000;
+    width: 40vh;
+    height: 100vh;
+    /* vertical-align:top;
+    display: table-cell; */
+    /* display: none; */
+}
+.footer > input[type=text]{
+    position: absolute;
+    border:0px;
+    margin:0px;
+    padding:0px;
+    width:80%;
+    height:100%;
+}
+.footer > input[type=button]{
+    position: absolute;
+    top:0px;
+    right:0px;
+    width:19%;
+    height:100%;
+}
+.footer > div{
+    margin:1%;
+    width:98%;
+}
+.footer > #video{
+    height:25%;
+    background-color: #552299;
+    background-image: url(/imgs/video.jpg);
+    background-size:100% 100%;  
+}
+.footer > #userlist{
+    height:25%;
+    background-color: #ffffff;
+}
+#ad{
+    float:left;
+    height:100%;
+    width:10.5%;
+    background-image: url(/imgs/imgad.gif);    
+}
+#advertising{
+    background-size:100% 100%;      
+    background-image: url(/imgs/imgad1.jpg);    
+}
+#userlist >table{
+    width:100%;
+}
+.footer > #message{
+    position: relative;
+    height:38%;
+}
+.footer > #advertising{
+    background-color: #119966;
+    height:10%;
+/*    margin-bottom:250px;*/
+}
+#message #msg{
+    height:89%;
+    background-color: #cccccc;
+}
+#message #msginput{
+    position: absolute;
+    bottom:0px;
+    height:10%;
+    width:80%;
+    margin:0px;
+    padding:0px;
+    border:0px;
+}
+#message #msgbtn{
+    /* height:2vw;
+    width:18%; */
+    position: absolute;
+    right: 0;
+    width: 20%;
+    height: 10%;
+    bottom: 0px;
+}
+
+.right {
+    position: absolute;
+    right: 0;
+    top: 20vh;
+    width: 20vh;
+    height: 60vh;
+
+    /*background-color: #880000;*/
+}
+.down {
+    position: absolute;
+    bottom: 0;
+    width: 100vh;
+    height:20vh;
+
+    /*background-color: #008800;*/
+}
+.left {
+    position: absolute;
+    top: 20vh;
+    width: 20vh;
+    height: 60vh;
+
+    /*background-color: #880000;*/
+}
+.up {
+    position: absolute;
+    top: 0;
+    width: 100vh;
+    height: 20vh;
+
+    /*background-color: #008800*/
+}
+.board {
+    position: absolute;
+    /* border: 1px solid #6666aa; */
+    opacity: 0.8;
+    width:60vh;
+    height: 60vh;
+    top: 20vh;
+    left: 20vh;
+
+}
+
+/*
+.userTag    用户名称显示的黄色长条
+.seat       在里面显示为换色，这两个div 可以省略一个。
+.user
+*/
+.board > .userTag{
+    position: absolute;
+    /* background-color: #eeeeee; */
+    height:10%;
+}
+.board .seat {
+    text-align:center;
+    /* background-color: #ffff55; */
+}
+.board > .userTag:nth-child(1) > .seat{
+         height:100%;
+}
+.board > .userTag:nth-child(2) > .seat{
+    height:100%;      
+}
+.board > .userTag:nth-child(3) > .seat{
+         height:100%; 
+}
+.board > .userTag:nth-child(4) > .seat{
+    height:100%;      
+}
+.board > .userTag:nth-child(2){
+    right:-35%;   width:80%;    top:45%;   transform: rotate(-90deg)
+}
+.board > .userTag:nth-child(3){
+    bottom:0px;   width:100%;    left:0%;
+}
+.board > .userTag:nth-child(4){
+    left:-35%;    width:80%;    top:45%;    transform: rotate(90deg)
+}
+.board > .userTag:nth-child(1){
+    width:100%;    left:0%;
+}
+.result {
+    position: absolute;
+    background-color:rgba(0, 0, 66, 0.2);
+    opacity:0.8;
+    border:1px solid #eeee99;
+    width:60vh;
+    height: 20vh;
+    top: 60vh;
+    left: 20vh;
+    z-index: 1000;
+    text-align: center;
+    font-size: 6vh;
+
+}
+.result > div,img {
+    float:left;
+    height:60%;
+}
+.result > img {
+    width:25%;
+}
+.result > div {
+    width:75%
+}
+.result > button {
+    margin:0
+}
