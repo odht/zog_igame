@@ -62,7 +62,7 @@ class Graresult extends Component {
         // 比赛对战数据
         const {
             odooData: { ogMatch, ogTeamRoundInfo, ogDeal },
-            location: { state: { roundData: { match_ids, team_info_ids, deal_ids } } },
+            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id } } },
             location: { state },
         } = this.props;
         // 牌组 
@@ -70,14 +70,7 @@ class Graresult extends Component {
         const matchData = lookup(match_ids, ogMatch)
         const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo);
         const dealData0 = lookup(deal_ids, ogDeal);
-        // if (dealData && dealData.length > 0) {
-        //     dealData.map(dealItem => {
-
-        //         deal = matchItem.deal_ids;
-        //     })
-        // }
         const dealData = dealData0.map(item => {
-            console.log(item)
             return <Link
                 key={item.id}
                 to={{
@@ -89,7 +82,7 @@ class Graresult extends Component {
         return (
             <div>
                 <div style={{ textAlign: 'center' }} >
-                    <h2>公开团体赛 排位赛第1轮</h2>
+                    <h2>{game_id[1]} {name}</h2>
                 </div>
 
                 <div>
@@ -99,8 +92,8 @@ class Graresult extends Component {
                                 matchData={matchData}
                                 state={state}
                             />
-                            <div style={{ width: "600px" }}>
-                                <Row>
+                            <div >
+                                {/*  <Row>
                                     <Col span={12}>点击桌号 查看计分表</Col>
                                     <Col span={12}><Link to='/details/grade/score'>瑞士成绩赛表</Link></Col>
                                 </Row>
@@ -108,9 +101,10 @@ class Graresult extends Component {
                                     <Col span={12}>点击队名 查看对阵记录</Col>
                                     <Col span={12}><Link to='/details/grade/score/rank'>瑞士成绩赛表（按名次排序）</Link></Col>
                                 </Row>
+                             */}
                                 <Row>
-                                    <Col span={12}><Link to='/details/grade/datumn'>Datumn</Link>   </Col>
-                                    <Col span={12}>牌：{dealData}</Col>
+                                    {/*  <Col span={12}><Link to='/details/grade/datumn'></Link>   </Col>*/}
+                                    <Col style={{fontSize:17}} span={12}>牌：{dealData}</Col>
                                 </Row>
                             </div>
                         </Col>
