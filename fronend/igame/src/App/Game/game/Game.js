@@ -22,8 +22,7 @@ class Game extends Component {
         super(props);
         this.width = window.screen.width;
         this.height = window.screen.height;
-        console.log('width:'+this.width)
-        console.log('height:'+this.height)
+       
         if(this.width < 400) settings.scale = 0.5;
     }
     toResult=(table_id)=>{
