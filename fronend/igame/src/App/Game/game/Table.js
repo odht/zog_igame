@@ -70,7 +70,7 @@ class Table extends Component {
                 top: this.width * 0.15,
                 // top: this.width * 0.32,
                 left: this.width * 0.2,
-                width: this.width * 0.6,
+                width: this.width * 0.5,
                 height: this.width * 0.6
             },
             header: {
