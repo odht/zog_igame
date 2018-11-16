@@ -4,8 +4,8 @@
 import requests
 import json
 
-HOST = 'http://192.168.1.8:8069'
 HOST = 'http://192.168.56.105:8069'
+HOST = 'http://192.168.1.8:8069'
 SERVER = 'TT'
 
 URI_LOGIN = HOST + '/json/user/login'
@@ -55,6 +55,7 @@ def jsonrpc(uri, data=None, params=None, sid=None, client=None):
         rspd = client.post(uri,params=params1,
                           data=json.dumps(data1),
                           headers=headers)
+        #print rspd
         #ret(rspd)
         
         content = json.loads(rspd.content)
@@ -62,7 +63,10 @@ def jsonrpc(uri, data=None, params=None, sid=None, client=None):
         
         error = content.get('error',{})
         if error:
+            print uri, data, sid
             print error
+            
+            
             return None
 
         return json.loads(rspd.content).get('result',{})
@@ -150,9 +154,6 @@ def game_one():
     
     return game_id
 
-game_id = game_one()
-
-        
 def schedule_one(rec):
     rec = rec.copy()
     rec['game_id'] = game_id
@@ -170,8 +171,6 @@ def schedule_one(rec):
 def schedule_multi():
     for rec in records['og.schedule']:
         schedule_one(rec)
-
-schedule_multi()
 
 def deal_one(rec):
     schedule_id = rec['schedule_id']
@@ -197,9 +196,6 @@ def deal_multi():
     for rec in records['og.deal']:
         deal_one(rec)
 
-deal_multi()
-
-  
 def phase_one(rec):
     rec = rec.copy()
     rec['game_id'] = game_id
@@ -217,9 +213,6 @@ def phase_multi():
     for rec in records['og.phase']:
         phase_one(rec)
 
-phase_multi()
-
-  
 def round_one(rec):
     
     phase_id = rec['phase_id']
@@ -249,8 +242,6 @@ def round_multi():
     for rec in records['og.round']:
         round_one(rec)
 
-round_multi()
-
 
 def team_one(rec):
     phase_ids = rec.get('phase_ids',[])
@@ -278,7 +269,6 @@ def team_multi():
     for rec in records['og.team']:
         team_one(rec)
 
-team_multi()
 
 def tri_one(rec):
     team_id = rec['team_id']
@@ -319,9 +309,6 @@ def tri_circle_multi():
                 print vals
             
 
-tri_circle_multi()
-
-
 def tri_manule_one(rec):
     team_id = rec['team_id']
     phase_id = rec['phase_id']
@@ -361,9 +348,6 @@ def tri_manule_multi():
     for rec in records['og.team.round.info']:
         tri_manule_one(rec)
     
-
-tri_manule_multi()
-
 
 
 def match_one(rec):
@@ -417,8 +401,6 @@ def match_multi():
         print vals
 
 
-match_multi()
-
 def table_one(rec):
     match_id = rec['match_id']
     room_type = rec['room_type']
@@ -439,11 +421,20 @@ def table_multi():
                   {'match_id': mid, 'room_type': 'close'} for mid in match_ids ]:
         table_one(vals)
     
-    
-table_multi()   
 
 
 def table_player_multi():
     pass
 
 
+
+game_id = game_one()
+#schedule_multi()
+#deal_multi()
+#phase_multi()
+#round_multi()
+#team_multi()
+#tri_circle_multi()
+#tri_manule_multi()
+#match_multi()
+table_multi()   
