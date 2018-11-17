@@ -79,7 +79,7 @@ class BasicLayout extends Component {
           </div>
         </div>
 
-        <Content style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <Content style={{ margin: '0 auto' }}>
           <Layout style={{ background: '#fff' }}>
             {siderRoute && siderRoute.child.length > 0 ?
               <Sider style={{ background: '#fff', minHeight: "71vh" }} >

@@ -125,7 +125,7 @@ class Round extends Component {
         //　　比赛对手　轮次　imps vps 比分
         if (lineData && lineData.length > 0) {
             IMPS = `${matchData.host_imp} : ${matchData.guest_imp}`
-            Vps = `${matchData.host_vp} : ${matchData.guest_vp}`
+            Vps = `${matchData.host_vp.toFixed(2)} : ${matchData.guest_vp.toFixed(2)}`
             match_name = matchData.game_id[1];
             match_round = matchData.round_id[1];
             matchVs = `${matchData.host_id[1]} VS ${matchData.guest_id[1]}`;

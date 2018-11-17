@@ -8,16 +8,8 @@ const Footer = () => {
 			<div>
 				<div className={style.link}>
 					<Row >
-						<Col span={6}>
-							<ul>
-								<li><a href="#">关于SjzBA</a></li>
-								<li><a href="#">协会历史</a></li>
-								<li><a href="#">组织结构</a></li>
-								<li><a href="#">重大赛事</a></li>
-								<li><a href="#">联系我们</a></li>
-							</ul>
-						</Col>
-						<Col span={6}>
+					<Col span={2} ></Col>
+						<Col span={6} >
 							<ul>
 								<li><a href="#">网站支持</a></li>
 								<li><a href="#">桥牌资料</a></li>
@@ -26,7 +18,7 @@ const Footer = () => {
 								<li><a href="#">防守测试</a></li>
 							</ul>
 						</Col>
-						<Col span={6}>
+						<Col span={8}>
 							<ul>
 								<li><a href="#">下载专区</a></li>
 								<li><a href="#">中国桥牌竞赛规则（2013年）</a></li>
@@ -35,7 +27,7 @@ const Footer = () => {
 								<li><a href="#">more</a></li>
 							</ul>
 						</Col>
-						<Col span={6}>
+						<Col span={8}>
 						<ul>
 								<li><a href="#">协会论坛</a></li>
 								<li><a href="#">桥牌资料</a></li>
@@ -46,7 +38,7 @@ const Footer = () => {
 						</Col>
 					</Row>
 					<div className={style.copyright}>
-						<div className={style.owner}>石家庄桥牌协会版权所有</div>
+						<div className={style.owner}>智赛棋牌版权所有</div>
 						<div>北京欧德慧通信息技术有限公司提供技术支持</div>
 					</div>
 				</div>

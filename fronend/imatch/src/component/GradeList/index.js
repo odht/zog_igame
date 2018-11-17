@@ -55,7 +55,7 @@ const GradeList = ({ dataSource, gameData }) => {
         }
     }]
     return (
-        <div style={{ width: '700px', margin: "0 auto" }}>
+        <div style={{  margin: "0 auto" }}>
             <Table
                 rowKey={row => row.id}
                 columns={columns}

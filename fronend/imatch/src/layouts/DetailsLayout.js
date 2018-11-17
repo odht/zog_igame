@@ -5,10 +5,10 @@
 import React, { Component, Fragment } from 'react';
 import { Layout, Breadcrumb, Icon, Input, Button, Modal, Form, Checkbox } from 'antd';
 import DetailsHeader from '../component/DetailsHeader';
-import GlobalFooter from '../component/GlobalFooter';
-import logo from '../assets/57130611.jpg';
 import * as routes from '../common/detailsroutes';
 import Breadcrumbs from '../component/Breakcrumbs'
+import styles from './BasicLayout.css';
+import BasicFooter from '../component/BasicFooter';
 const { Header, Content, Footer } = Layout;
 const { details: headerRoutes } = routes;
 
@@ -115,42 +115,16 @@ class DetailsLayout extends Component {
 					<Breadcrumbs
 						state={state}
 					>1111</Breadcrumbs>
-					<Layout style={{ padding: '12px 0', background: '#fff' }}>
+					<Layout style={{ padding: '0px 0', background: '#fff' }}>
 
-						<Content style={{ padding: '0 24px', minHeight: '69.5vh' }}>
+						<Content style={{ padding: '0 0', minHeight: '69.5vh' }}>
 							{this.props.children}
 						</Content>
 					</Layout>
 				</Content>
-				<Footer style={{ padding: 0 }}>
-					<GlobalFooter
-						links={[
-							{
-								key: 'Pro 首页',
-								title: 'Pro 首页',
-								href: 'http://pro.ant.design',
-								blankTarget: true,
-							},
-							{
-								key: 'github',
-								title: <Icon type="github" />,
-								href: 'https://github.com/ant-design/ant-design-pro',
-								blankTarget: true,
-							},
-							{
-								key: 'Ant Design',
-								title: 'Ant Design',
-								href: 'http://ant.design',
-								blankTarget: true,
-							},
-						]}
-						copyright={
-							<Fragment>
-								Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
-               				</Fragment>
-						}
-					/>
-				</Footer>
+				<footer className={styles.footer}>
+					<BasicFooter />
+				</footer>
 				<Modal
 					bodyStyle={{ paddingTop: "35px" }}
 					visible={visible}

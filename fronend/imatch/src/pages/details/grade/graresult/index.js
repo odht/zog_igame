@@ -24,7 +24,7 @@ const columnRank = [{
             title: 'VPs',
             dataIndex: 'rankTeam',
             className: styles.red,
-            render: (text, record) => { return `${record.score}` }
+            render: (text, record) => { return `${record.score.toFixed(2)}` }
         },
         { title: '罚分', dataIndex: 'punish' },
     ]
@@ -87,7 +87,7 @@ class Graresult extends Component {
 
                 <div>
                     <Row type='flex' justify='center'>
-                        <Col span={9}>
+                        <Col span={14} >
                             <ResultDataTable
                                 matchData={matchData}
                                 state={state}
@@ -108,7 +108,7 @@ class Graresult extends Component {
                                 </Row>
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col span={10}>
                             {
                                 <Table
                                     rowKey={record => record.id}

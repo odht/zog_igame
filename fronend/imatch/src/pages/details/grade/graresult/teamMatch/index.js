@@ -33,6 +33,7 @@ class TeamMatch extends Component {
   }
   render() {
     const { TeamRoundInfoData } = this.state;
+
     const TeamMatchColumns = [
       {
         title: '轮次',
@@ -49,8 +50,15 @@ class TeamMatch extends Component {
       }, {
         title: 'IMPs',
         children: [{
-          title: TeamRoundInfoData.length > 0 ? `${TeamRoundInfoData[0].team_id[1]}` : '',
-          dataIndex: 'imp'
+          title: () => {
+            if (TeamRoundInfoData.length > 0 && TeamRoundInfoData[0].team_id.length > 0) {
+              return TeamRoundInfoData[0].team_id[1]
+            } else {
+              ''
+            }
+          },
+          dataIndex: 'imp',
+
         }, {
           title: '对手',
           dataIndex: 'imp_opp',
@@ -58,11 +66,23 @@ class TeamMatch extends Component {
       }, {
         title: 'VPs',
         children: [{
-          title: TeamRoundInfoData.length > 0 ? `${TeamRoundInfoData[0].team_id[1]}` : '',
+          title: () => {
+            if (TeamRoundInfoData.length > 0 && TeamRoundInfoData[0].team_id.length > 0) {
+              return TeamRoundInfoData[0].team_id[1]
+            } else {
+              ''
+            }
+          },
           dataIndex: 'vp',
+          render: (text) => {
+            return text.toFixed(2);
+          }
         }, {
           title: '对手',
           dataIndex: 'vp_opp',
+          render: (text) => {
+            return text.toFixed(2);
+          }
         }],
       }, {
         title: '总分',
