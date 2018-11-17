@@ -48,9 +48,15 @@ const ResultDataTable = ({ matchData, state }) => {
             children: [{
                 title: "主队",
                 dataIndex: "host_vp",
+                render: (text) => {
+                    return text.toFixed(2);
+                }
             }, {
                 title: "客队",
                 dataIndex: "guest_vp",
+                render: (text) => {
+                    return text.toFixed(2);
+                }
             }]
         }]
     }]

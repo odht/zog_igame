@@ -1,7 +1,5 @@
 .footer{
     margin: 0px auto;
-    width:1200px;
-
 }
 .link{
 	padding-top: 20px;
@@ -16,7 +14,7 @@
 }
 .copyright{
 	text-align: center;
-	height: 116px;
+	height: 25px;
 	font-size: 11px;
 	color: #888;
 }
