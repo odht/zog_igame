@@ -502,7 +502,6 @@ def table_player_multi():
     
 
 game_id = game_one()
-"""
 schedule_multi()
 deal_multi()
 phase_multi()
@@ -513,8 +512,24 @@ tri_manule_multi()
 match_multi()
 
 table_multi()   
-"""
-
 res_users_multi()
 team_player_multi()
 table_player_multi()
+"""
+"""
+
+def input_score():
+    print('usid')
+    result = UserSudo().login('101','101.101')
+    
+    print result
+    
+    usid = result['sid']
+    uid = result['uid']
+    
+    res = execute(usid, 'res.users', 'read', uid, 
+      ['name', 'doing_table_ids', 'team_player_ids', 'todo_table_ids'] )
+    
+    print res
+
+input_score()
