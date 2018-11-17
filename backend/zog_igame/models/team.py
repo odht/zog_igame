@@ -102,7 +102,7 @@ class GameTeamPlayer(models.Model):
             if partner_id:
                 partner = self.partner_id.browse(partner_id)
                 if partner.user_ids:
-                    vals['default_user_id'] = partner.user_ids[0]
+                    vals['default_user_id'] = partner.user_ids[0].id
         
         return super(GameTeamPlayer,self).create(vals)
 
