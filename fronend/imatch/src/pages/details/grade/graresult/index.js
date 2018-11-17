@@ -24,7 +24,7 @@ const columnRank = [{
             title: 'VPs',
             dataIndex: 'rankTeam',
             className: styles.red,
-            render: (text, record) => { return `${record.score.toFixed(2)}` }
+            render: (text, record) => { return `${record.score_close.toFixed(2)}` }
         },
         { title: '罚分', dataIndex: 'punish' },
     ]

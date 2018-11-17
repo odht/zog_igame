@@ -26,7 +26,6 @@ class BasicLayout extends Component {
   //   }
   // }
   logout = () => {
-    console.log(123)
     this.props.dispatch({ type: 'user/logout' })
     router.push('/user/login')
   }

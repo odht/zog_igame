@@ -78,7 +78,10 @@ class Round extends Component {
             dispatch,
         } = this.props;
 
-
+        dispatch({
+            type: 'ogDeal/read',
+            payload: { id: matchData.deal_ids }
+        })
         dispatch({
             type: 'ogTable/read',
             payload: { id: [matchData.open_table_id[0], matchData.close_table_id[0]] }
@@ -91,9 +94,9 @@ class Round extends Component {
     render() {
         const {
             location: { state: { matchData } },
-            odooData: { ogTable, ogMatchLine },
+            odooData: { ogTable, ogMatchLine, ogDeal },
         } = this.props
-
+        const dealData = lookup(matchData.deal_ids, ogDeal);
         // 开id, 闭室id
         const tableData = lookup([matchData.open_table_id[0], matchData.close_table_id[0]], ogTable);
         // 开室 N W E S 人
@@ -131,12 +134,12 @@ class Round extends Component {
             matchVs = `${matchData.host_id[1]} VS ${matchData.guest_id[1]}`;
         }
         if (lineData && lineData.length > 0) {
-            lineData.map(item => {
+            lineData.map((item, index) => {
                 //总Vps
                 // open_Vps += item.host_vps;
                 // close_Vps += item.guest_vps;
                 // 牌号
-                const number = item.id;
+                const number = dealData[index].number;
                 // 房间开闭室
                 const open_room_type = '开';
                 const close_room_type = '闭';
