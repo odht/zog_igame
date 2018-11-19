@@ -202,10 +202,8 @@ class Table extends Component {
         }
     }
     failPolling=()=>{return false}
-
-    dealMsg = (data) =>{
-        this.pollingId=data.slice(-1)[0]['id']
-        let body = data[data.length-1].message.body;    //"<p>{'board_id': 44, 'number': 1, 'name': u'1S', 'pos': u'S'}</p>"
+    
+    dealMessageBody=(body)=>{
         if(body.substring(3,body.length-4)==='all ready'){
             this.splitCards() ;
         }else if(body.substring(3,body.length-4)==='claim agreed'){
@@ -246,7 +244,7 @@ class Table extends Component {
                     scene:2
                 })
             }
-            if(body.number&&body.rank&&body.card&&body.number!==this.state.playCardNumber){    //收到打牌消息 {ns_win:0,number:1,rank:'5',pos:'W',suit:'C',nextplayer:'W',card:'C5',ew_win:0}
+            if(body.number&&body.rank&&body.card&&body.number!==this.state.playCardNumber && this.state.lastState==null){    //收到打牌消息 {ns_win:0,number:1,rank:'5',pos:'W',suit:'C',nextplayer:'W',card:'C5',ew_win:0}
                 this.state.playCardNumber = body.number
                 // this.setState({lastTrick:false})
                 if(this.state.lastTrick){this.lastTrick(false)};
@@ -314,6 +312,125 @@ class Table extends Component {
               
             }
         }
+    }
+    dealMsg = (data) =>{
+        data.forEach((dataItem)=>{
+            this.pollingId=dataItem['id']
+            let body = dataItem.message.body;
+            this.dealMessageBody(body)
+        })
+        this.state.lastState=null;
+        // this.pollingId=data.slice(-1)[0]['id']
+        // let body = data[data.length-1].message.body;    //"<p>{'board_id': 44, 'number': 1, 'name': u'1S', 'pos': u'S'}</p>"
+        // if(body.substring(3,body.length-4)==='all ready'){
+        //     this.splitCards() ;
+        // }else if(body.substring(3,body.length-4)==='claim agreed'){
+        //         this.setState({scene:2});
+        //         this.addChatMsg('系统消息','庄家claim成功，正在为您计算本副牌成绩...')
+        //         Models.claim(this.sucClaim,this.failClaim,this.board_id,this.state.claimnum.pos,this.channel_id);
+        // }else{
+        //     body = body.replace(/u'/g,"'").replace(/ /g,'')
+        //     body = eval('('+body.substring(3,body.length-4)+')')
+        
+        
+
+        //     if(body.pos&&body.send_msg){         //收到聊天消息  {pos:'W',send_msg:'msg'}
+        //         this.addChatMsg(body.pos,body.send_msg)
+        //     }
+        //     if(body.board_id&&body.name&&body.pos&&body.number){  //收到叫牌消息  
+        //         this.setState({
+        //             next:NEXTPLAYER[body.pos]
+        //         })
+                
+        //         this.timing(null,0,()=>{},true)   //提示下一个叫牌人
+        //         this.validatePass(body)
+        //     }
+        //     if(body.dummy&&body.openlead&&body.declarer){   //收到叫牌结果信息   {dummy:'N',openlead:'W',declarer:'S',nextplayer:'W',contract:'1S'}
+        //         ReactDOM.unmountComponentAtNode(document.querySelector('#clock'));
+        //         this.setState({
+        //             nextplayer:body.nextplayer,
+        //             next:body.openlead
+        //         })
+               
+        //         this.timing(null,0,()=>{},true);
+        //         this.playRules(body.nextplayer,null,null);      //根据打牌规则提示
+        //         this.setState({
+        //             cards:TableModel.state.cards,
+        //             contract:body.contract,
+        //             declarer:body.declarer,
+        //             dummy:body.dummy,
+        //             scene:2
+        //         })
+        //     }
+        //     if(body.number&&body.rank&&body.card&&body.number!==this.state.playCardNumber){    //收到打牌消息 {ns_win:0,number:1,rank:'5',pos:'W',suit:'C',nextplayer:'W',card:'C5',ew_win:0}
+        //         this.state.playCardNumber = body.number
+        //         // this.setState({lastTrick:false})
+        //         if(this.state.lastTrick){this.lastTrick(false)};
+        //         this.dummyCards = this.cards[this.state.dummy];       //拿到明手的牌
+        //         this.dummySeat = Table.seats[this.state.userdir.indexOf(this.state.dummy)]   //计算明手的方位
+        //         if(body.number===1){this.testDummy(this.dummySeat,this.dummyCards)}
+        //         if(body.number%4===1){  this.playSuit = body.suit; }
+        //         //验证打牌规则，根据打牌规则进行提示
+        //         this.playRules(body.nextplayer,this.playSuit,body.number);    
+        //         if(body.pos===this.state.declarer){this.claimtrick = this.claimtrick-1;}       //计算当前庄家可claim的墩数
+                
+        //         const playSeatCard = TableModel.state.cards[this.state.userdir.indexOf(body.pos)]     //拿到当前出牌人对应的牌，应为XXXXXXXXXXXXX
+        //         const setItem = [body.pos,body.card];
+        //         this.recoverTrick(setItem,'play',true);
+        //         this.setState({
+        //             cards: TableModel.state.cards,
+        //             ew_win:body.ew_win,
+        //             ns_win:body.ns_win,
+        //             nextplayer:body.nextplayer,
+        //             next:body.nextplayer
+        //         })
+        //         this.timing(null,10,()=>{},true);        //提示下一个出牌人  
+             
+        //         if(body.number===52){   //当52张牌全部出完后，查询当前这幅牌的成绩
+        //             console.log('52张牌已经打完')
+        //             if(this.board_id_list.indexOf(this.board_id)<=this.board_id_list.length-1){
+        //                 Models.board_points(this.sucBoardPoints,this.failBoardPoints,this.board_id)
+        //             }
+        //         }
+        //     }
+        //     if(body.pos&&body.num&&body.board){   //收到庄家claim消息  {pos:'W', num:3, board:['SQ','ST']}
+        //         this.setState({claimnum:body})
+        //         if(this.myseat!==body.pos){
+        //             //展示庄家的牌
+        //             let claimCard = TableModel.state.cards[this.state.userdir.indexOf(body.pos)].splice(13-body.board.length,body.board.length);  
+        //             claimCard.map((item1,index1)=>{
+        //                 item1.card = body.board[index1].split('')[1]+body.board[index1].split('')[0];
+        //                 TableModel.state.cards[this.state.userdir.indexOf(body.pos)].push(item1)
+        //             })
+        //             this.setState({
+        //                 scene:3,
+        //                 cards: TableModel.state.cards,
+        //             });
+        //         } 
+        //     }
+        //     if(body.pos&&body.agreeClaim){   //收到防守方是否同意
+        //         const agreeClaimPos = TableModel.unifyDirection(body.pos);
+        //         if(body.agreeClaim==='false'){  //当有防守方拒绝claim时，继续打牌过程
+        //             this.addChatMsg('系统消息',this.state.user[agreeClaimPos]['name']+' 拒绝庄家的claim请求，请继续打牌')
+        //             this.setState({scene:2, claimnum:{pos:null, num:0}, claiming:0, claimingState:[]});
+        //             if(this.state.playCardNumber%4===0){this.playRules(this.state.nextplayer,null,null);}
+        //             else{this.playRules(this.state.nextplayer,this.playSuit,null);}
+        //         }
+        //         else if(body.agreeClaim==='true'){
+        //             this.state.claimingState.push(body.pos)
+        //             this.setState({claimingState:this.state.claimingState})
+        //             this.addChatMsg('系统消息',this.state.user[agreeClaimPos]['name']+' 同意了庄家的claim请求')
+        //         }
+        //     }
+        
+        //     if(body.pos&&body.state==='ready'){
+        //         const seat = Table.seats[this.state.userdir.indexOf(body.pos)]
+        //         this.state.ready[seat]='R'
+        //         this.setState({ready:this.state.ready})
+              
+        //     }
+        // }
+       
     }
 
     bidCall=(card)=>{   //牌手的叫牌事件，发送叫牌消息
@@ -658,6 +775,7 @@ class Table extends Component {
     sucPlay=(data)=>{
         Models.sendplay(this.sucSearchPlay,this.failSearchPlay, this.board_id, data, this.channel_id);  //查询出牌结果
     }
+    failSearchPlay=()=>{}
     sucSearchPlay=(data)=>{console.log(data)}
     recoverMyCards=()=>{
         const mycards = [[],[],[],[]];       /*恢复自己的牌 */

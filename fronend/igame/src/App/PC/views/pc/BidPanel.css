@@ -8,14 +8,17 @@
 }
 .bidpanel table{
     width:100%;
-    font-size:3vh;
+    font-size:2vh;
     border-collapse: collapse;
 }
 .bidpanel tr{
     border-bottom: 1px solid #666699;
     text-align: center;
 }
-.bidpanel td {width:7vh;height:4vh}
+.bidpanel td {
+    width:7vh;
+    height:3vh;
+}
 .bidpanel button{
     height: 2.7vh;
     width: 21vh;
