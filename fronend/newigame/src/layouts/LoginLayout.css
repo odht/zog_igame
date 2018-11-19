@@ -1,0 +1,15 @@
+.loginbox{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    /* 注意这里需要设置高度来查看垂直居中效果 */
+    height: 800px;
+}
+.login{
+    width: 367px;
+    height: 317px;
+}
+.loginbutton{
+    margin-top:20px;
+    width: 100%;
+}

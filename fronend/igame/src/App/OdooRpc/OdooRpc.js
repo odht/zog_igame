@@ -1,6 +1,7 @@
 import session from '../User/session';
-const config = require('../../config');
-const HOST = config.HOST;
+// const config = require('../../config');
+import config from '../../config'
+const HOST = config.HOST; 
 // const HOST = 'http://124.42.117.43:8069';
 // const HOST = 'http://192.168.0.20:8069';
 // const HOST = 'http://192.168.0.21:8069';
@@ -16,7 +17,7 @@ class OdooRpc {
         return OdooRpc.models;
     }
     jsonrpc(url, data) {
-        console.log(url)
+       
         const data1 = {
             "jsonrpc": "2.0",
             "method": "call",
@@ -24,7 +25,7 @@ class OdooRpc {
             // "id":123,
             "params": data
         }
-        console.log(data1)
+       
         fetch(url, {
             method: 'POST',
             body: JSON.stringify(data1),
@@ -34,7 +35,6 @@ class OdooRpc {
         }).then(res => res.json()
         ).catch(error => console.error('Error:', error)
         ).then(response => {
-            console.log('response', response)
             if(response){
                 if (response.result) {
                     this.success(response.result)

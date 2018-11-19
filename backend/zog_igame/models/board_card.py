@@ -10,6 +10,10 @@ from .bridge_tools import POSITIONS
 from .bridge_tools import SUITS,RANKS,CARDS
 
 class BoardCard(models.Model):
+    """
+    Technical model
+    """
+    
     _name = "og.board.card"
     _description = "Board Card"
     _order = 'board_id desc, number, id'

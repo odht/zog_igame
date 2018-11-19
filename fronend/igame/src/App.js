@@ -138,6 +138,7 @@ class TabBarExample extends React.Component {
             onPress={() => {
               this.setState({
                 selectedTab: 'greenTab',
+                hidden:true,
               });
             }}
           >
