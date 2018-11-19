@@ -9,7 +9,13 @@ import { lookup } from '@/utils/tools';
 @connect(({ odooData }) => ({ odooData }))
 export default class Home extends Component {
     state = {
-        boardData: []
+        boardData: [],
+        isAdmin: this.props.isAdmin || false,
+    }
+    changeAdmin = () => {
+        this.setState({
+            isAdmin: true,
+        })
     }
     componentDidMount() {
         const { dispatch, location: { query: { table_id } } } = this.props;
@@ -83,6 +89,9 @@ export default class Home extends Component {
                 })
             })
         }
+        this.setState({
+            isAdmin: false,
+        })
     }
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.odooData.ogBoard) {
@@ -93,8 +102,7 @@ export default class Home extends Component {
     }
     render() {
         let scoringData = [];
-        const { boardData } = this.state;
-
+        const { boardData, isAdmin } = this.state;
         if (boardData && boardData.length > 0) {
             scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
             boardData.map(item => {
@@ -107,14 +115,15 @@ export default class Home extends Component {
                 if (!item.openlead) {
                     item.openlead = null;
                 }
-                if (!item.result) {
+                if (!item.result.toString()) {
                     item.result = null;
                 } else {
                     const { result } = item;
                     if (result.toString().split('').length === 1 && result !== 0) {
                         item.result = `\+${item.result.toString()}`;
                     } else if (result.toString().split('').length === 1 && result === 0) {
-                        item.result = `=${item.result.toString()}`;
+                        // console.log(result)
+                        // item.result = `${item.result.toString()}`;
                     } else {
                         item.result = item.result.toString();
                     }
@@ -128,6 +137,8 @@ export default class Home extends Component {
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable
+                        changeAdmin={this.changeAdmin}
+                        isAdmin={isAdmin}
                         writeSoringData={this.writeSoringData}
                         scoringData={scoringData}
                     />
