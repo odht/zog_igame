@@ -42,10 +42,10 @@ button.disable{
 .panel{
     position: absolute;
     z-index:2;
-    top: 5vh;
-    left: 40vh;
-    width: 60vh;
-    height: 60vh;
+    top: 27vh;
+    left: 54vh;
+    width: 30vh;
+    height: 31vh;
     /* filter:alpha(opacity=50);
     -moz-opacity:0.5;
     -khtml-opacity: 0.5;

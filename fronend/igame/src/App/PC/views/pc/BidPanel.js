@@ -95,16 +95,33 @@ class BidPanel extends Component {
    * 这里应该 补充 确认后，叫品是什么。比如：this.bid 记录最后叫品。
    */
   handleConfirm = () => {
+    const name = this.state.selectedName;
+    if(name){
+      this.props.bidCall(name);
+    }
     this.setState({
-      active: 0
+      selectedName : ''
     })
   }
+  unclickable(){
+    return false
+  }
+  handleSelecte=(item) => {
+    console.log(item)
+    if(item.active!==0){
+      this.setState({
+        selectedName : item.name
+      })
+    }
+  }
   render() {
+    const name = this.state.selectedName;
+    const {clickable}=this.props
     const bidblocks = this.state.bidblocks.map((e1, i1) => e1.map((e2, i2) => {
       
       return <BidBlock key={e2.name} name={e2.name}
         active={e2.active}
-        onclick={this.handleCall.bind(this, {name:e2.name})} />
+        onclick={clickable ? this.handleSelecte.bind(this, {name:e2.name,active:e2.active}):this.unclickable} />
     }))
     console.log(bidblocks)
     const rows = this.props.calldata.map((item, index) => {
@@ -144,17 +161,23 @@ class BidPanel extends Component {
         </div>
         {bidblocks}
         <BidCard name='PASS' active={this.state.bidcards[0].active}
-          onclick={this.handleCall.bind(this, { name: 'Pass' })}
+          onclick={clickable ? this.handleSelecte.bind(this, { name: 'Pass' }):this.unclickable}
         />
         <BidCard name='ALERT' active={this.state.bidcards[1].active}
-          onclick={this.handleCall.bind(this, { name: 'ALERT' })}
+          onclick={clickable ?this.handleSelecte.bind(this, { name: 'ALERT' }):this.unclickable}
         />
         <BidCard name='X' active={this.state.bidcards[2].active}
-          onclick={this.handleCall.bind(this, { name: 'x' })}
+          onclick={clickable ?this.handleSelecte.bind(this, { name: 'x' }):this.unclickable}
         />
         <BidCard name='XX' active={this.state.bidcards[3].active}
-          onclick={this.handleCall.bind(this, { name: 'xx' })}
+          onclick={clickable ?this.handleSelecte.bind(this, { name: 'xx' }):this.unclickable}
         />
+        <span style={{float: 'left',width: '8vh',backgroundColor: '#7a88e8',margin: '0.9%'}}>
+          <BidCard name={name} active={1} 
+            onclick={()=>{}}
+          />
+        </span>
+        
         <button onClick={this.handleConfirm}>确认</button>
       </div>
     );
@@ -202,7 +225,7 @@ class BidBlock extends Component {
 class BidCard extends Component {
   render() {
     const bgcolor = { PASS: '#88FF88', X: '#FF8888', XX: '#FF3333', ALERT: '#8888FF' };
-    const width = { PASS: '23.3vh', X: '11.4vh', XX: '11.4vh', ALERT: '11.4vh' };
+    const width = { PASS: '7.8vh', X: '7vh', XX: '7vh', ALERT: '7vh' };
     const style = {
       backgroundColor: `${bgcolor[this.props.name]}`,
       width: `${width[this.props.name]}`,
@@ -216,7 +239,8 @@ class BidCard extends Component {
     return (
       <Motion animation={animation} className='bidcard'> 
         <div className='cn1' onClick={this.props.onclick} style={style}>
-          <img className='suit' src={`/cards/bids/${this.props.name}.svg`} />
+        {this.props.name ? <img className='suit' src={`/cards/bids/${this.props.name}.svg`} />:""}
+          
         </div>
       </Motion>
     );

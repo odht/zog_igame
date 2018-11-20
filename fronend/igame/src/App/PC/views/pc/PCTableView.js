@@ -112,7 +112,7 @@ const userTags = [];
       {(table.state.scene == 1) ?
         <div className='panel'>
           <BidPanel calldata={table.state.calldata} active='1' bidCard={table.state.bidCard}
-								bidCall={table.bidCall}/>
+								bidCall={table.bidCall} clickable={table.myseat==table.state.next?true:false}/>
         </div> : null
       }
       <div id='table' className='table'>
