@@ -3,13 +3,14 @@ import { Card, Col, Row } from 'antd';
 import styles from './index.less';
 
 const ListDecorator = ({ detailData, announcement }) => {
+    console.log(detailData)
     const annList = announcement && announcement.map(child => <a key={child.id} to="#"><p >{child.text}</p></a>)
     return (
         <div style={{ background: '#ECECEC', padding: '15px' }}>
             <Row gutter={18}>
                 <Col span={14}>
-                    <Card title="比赛信息" bordered={false}>
-                        <p><span className={styles.list_text}>比赛名称：</span>{detailData.name}</p>
+                    <Card title="比赛信息" bordered={false} className={styles.list_text}>
+                        <p ><span >比赛名称：</span >{detailData.name}</p>
                         <p><span className={styles.list_text}>比赛时间：</span>{detailData.time}</p>
                         <p><span className={styles.list_text}>主办单位：</span>{detailData.host}</p>
                         <p><span className={styles.list_text}>承办单位：</span>{detailData.unit}</p>

@@ -11,6 +11,7 @@ export default class Home extends Component {
     state = {
         boardData: [],
         isAdmin: this.props.isAdmin || false,
+        round_id: [],
     }
     changeAdmin = () => {
         this.setState({
@@ -33,14 +34,15 @@ export default class Home extends Component {
                 const { odooData: { ogBoard } } = this.props;
                 const boardData = lookup(board_ids, ogBoard)
                 this.setState({
-                    boardData: boardData
+                    boardData: boardData,
+                    round_id: tableData[0].round_id,
                 })
             })
         })
 
     }
     writeSoringData = (vals) => {
-        const { dispatch, location: { query: table_id } } = this.props;
+        const { dispatch } = this.props;
         const { type } = vals;
         let valus;
         if (type === "pass") {
@@ -102,7 +104,7 @@ export default class Home extends Component {
     }
     render() {
         let scoringData = [];
-        const { boardData, isAdmin } = this.state;
+        const { boardData, isAdmin, round_id } = this.state;
         if (boardData && boardData.length > 0) {
             scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
             boardData.map(item => {
@@ -133,7 +135,7 @@ export default class Home extends Component {
         return (
             <div>
                 <div className={styles.headerTitle}>
-                    <h1 className={styles.headerTitleText}>计分表</h1>
+                    <h1 className={styles.headerTitleText}>计分表（{round_id && round_id.length > 0 ? round_id[1] : 'x'}）</h1>
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable

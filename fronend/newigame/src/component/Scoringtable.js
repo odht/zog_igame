@@ -58,13 +58,13 @@ class Scoringtable extends Component {
                 render: (record) => {
                     return (
                         <React.Fragment>
-                            {record.declarer && !isAdmin ?
+                            {record.state === 'done' && !isAdmin ?
                                 <a
                                     onClick={this.isAdmin}
                                     className={styles.submitA}
                                     href="#"
                                 >
-                                    纠正
+                                    修改
                                 </a> :
                                 <ScoringFrom
                                     writeSoringData={writeSoringData}
@@ -75,7 +75,7 @@ class Scoringtable extends Component {
                                         className={styles.submitA}
                                         href="#"
                                     >
-                                        编辑
+                                        录入
                              </a>
                                 </ScoringFrom>
                             }
@@ -101,6 +101,7 @@ class Scoringtable extends Component {
             </div>
             */}
                 <Table
+                    style={{ background: '#fff', minHeight: '59.5vh' }}
                     rowKey={row => row.id}
                     dataSource={scoringData}
                     columns={scoringColumns}

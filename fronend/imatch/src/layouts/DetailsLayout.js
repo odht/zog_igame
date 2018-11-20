@@ -112,9 +112,11 @@ class DetailsLayout extends Component {
 					/>
 				</Header>
 				<Content style={{ padding: '0 50px' }}>
-					<Breadcrumbs
-						state={state}
-					>1111</Breadcrumbs>
+					<div style={{ padding: '13px 10px 13px 0', fontSize: 18 }}>
+						<Breadcrumbs
+							state={state}
+						></Breadcrumbs>
+					</div>
 					<Layout style={{ padding: '0px 0', background: '#fff' }}>
 
 						<Content style={{ padding: '0 0', minHeight: '69.5vh' }}>

@@ -55,6 +55,7 @@ export default class MyTableList extends Component {
         return (
             <div>
                 <Table
+                    style={{ background: '#fff',minHeight:'59.5vh' }}
                     rowKey={row => row.id}
                     pagination
                     dataSource={gameName}
