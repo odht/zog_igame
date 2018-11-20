@@ -148,7 +148,12 @@ class MatchLine(models.Model):
     @api.multi
     def _compute_point(self):
         for rec in self:
-            point = rec.open_board_id.point - rec.close_board_id.point
+            point = 0
+            ob = rec.open_board_id
+            cb = rec.close_board_id
+            if ob and ob.state == 'done' and cb and cb.state == 'done':
+                point = rec.open_board_id.point - rec.close_board_id.point
+                
             rec.point = point
             rec.host_point  = point>0 and point or 0
             rec.guest_point = point<0 and point or 0
