@@ -10,7 +10,8 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
 const copyright = (
     <Fragment>
-        Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+        <p>智赛棋牌版权所有</p>
+        Copyright <Icon type="copyright" />北京欧德慧通信息技术有限公司提供技术支持
     </Fragment>
 );
 class LoginLayout extends Component {

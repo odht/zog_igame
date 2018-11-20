@@ -131,7 +131,7 @@ class Round extends Component {
             Vps = `${matchData.host_vp.toFixed(2)} : ${matchData.guest_vp.toFixed(2)}`
             match_name = matchData.game_id[1];
             match_round = matchData.round_id[1];
-            matchVs = `${matchData.host_id[1]} VS ${matchData.guest_id[1]}`;
+            matchVs = <span className={styles.match}>{matchData.host_id[1]} <span className={styles.VS}>VS</span> {matchData.guest_id[1]}</span>
         }
         if (lineData && lineData.length > 0) {
             lineData.map((item, index) => {
@@ -139,7 +139,7 @@ class Round extends Component {
                 // open_Vps += item.host_vps;
                 // close_Vps += item.guest_vps;
                 // 牌号
-                const number = dealData[index].number;
+                const number = dealData[index] ? dealData[index].number : '';
                 // 房间开闭室
                 const open_room_type = '开';
                 const close_room_type = '闭';
@@ -198,15 +198,14 @@ class Round extends Component {
 
         return (
             <div style={{ width: "800px", margin: "0 auto" }}>
-                <h2 style={{ textAlign: "center" }}>{match_name}：{match_round}</h2>
-                <div style={{ textAlign: "center", 'fontSize': 20 }}>{matchVs}</div>
-
-                <Row type="flex" justify="space-around">
+                <h2 style={{ textAlign: "center", marginTop: 15 }}>{match_name}：{match_round}</h2>
+                <div style={{ textAlign: "center", 'fontSize': 20, marginBottom: 10 }}>{matchVs}</div>
+                <Row type="flex" justify="end">
                     <Col span={10} >
                         <Card
                             title="开室"
                             bordered={true}
-                            style={{ width: 350 }}
+                            style={{ width: 330 }}
                             headStyle={{ background: "green", textAlign: "center" }}
                         >
                             <div className={styles.header}>
@@ -225,11 +224,12 @@ class Round extends Component {
                             </div>
                         </Card>
                     </Col>
+                    <Col span={4}></Col>
                     <Col span={10}>
                         <Card
                             title="闭室"
                             bordered={true}
-                            style={{ width: 350 }}
+                            style={{ width: 334 }}
                             headStyle={{ background: "green", textAlign: "center" }}
                         >
                             <div className={styles.header}>
@@ -251,6 +251,7 @@ class Round extends Component {
                 </Row>
 
                 <Table
+                    style={{ marginTop: 10 }}
                     rowKey={row => row.id}
                     bordered
                     columns={columns}
@@ -258,9 +259,9 @@ class Round extends Component {
                     dataSource={lineSource}
                     size='xs'
                 />
-                <Row>
-                    <Col span={6} style={{ border: '1px solid grey' }}>IMPs</Col><Col span={18} style={{ border: '1px solid grey', textAlign: 'right' }}>{IMPS}</Col>
-                    <Col span={6} style={{ border: '1px solid grey' }}>VPs</Col><Col style={{ border: '1px solid grey', textAlign: 'right' }} span={18}>{Vps}</Col>
+                <Row >
+                    <Col className={styles.IMPS} span={6} >IMPs</Col><Col className={styles.IMPSr} span={18} >{IMPS}</Col>
+                    <Col span={6} className={styles.vps}>VPs</Col><Col className={styles.vpsr} span={18}>{Vps}</Col>
                 </Row>
             </div>
         )

@@ -13,7 +13,11 @@ import { lookup } from '@/utils/tools'
 const columnRank = [{
     title: '赛队排名',
     children: [
-        { title: '名次', dataIndex: 'number' },
+        {
+            title: '名次', dataIndex: 'number', render: (text, index, key) => {
+                return key + 1
+            }
+        },
         {
             title: '参赛队',
             dataIndex: 'rankTeam',
@@ -32,11 +36,12 @@ const columnRank = [{
 
 
 class Graresult extends Component {
-    componentDidMount() {
+    timer = null
+    getData(props) {
         const {
             dispatch,
             location: { state: { roundData: { deal_ids, match_ids, team_info_ids } } }
-        } = this.props;
+        } = props;
         dispatch({
             type: "ogMatch/read",
             payload: { id: match_ids }
@@ -50,6 +55,20 @@ class Graresult extends Component {
             payload: { id: deal_ids }
         })
     }
+    componentDidMount() {
+        this.getdatas()
+    }
+    getdatas = () => {
+        this.getData(this.props)
+        this.timer = setInterval(() => {
+            this.getData(this.props)
+        }, 180000)
+    }
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    }
+
+
     shouldComponentUpdate(props, state) {
         const { odooData: { ogTeamRoundInfo } } = props;
         if (ogTeamRoundInfo) {
@@ -66,18 +85,23 @@ class Graresult extends Component {
             location: { state },
         } = this.props;
         // 牌组 
-        let deal = [1];
         const matchData = lookup(match_ids, ogMatch)
-        const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo);
+        const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo).sort((prestate, nextstate) => {
+            return nextstate.score - prestate.score;
+        });
         const dealData0 = lookup(deal_ids, ogDeal);
         const dealData = dealData0.map(item => {
-            return <Link
-                key={item.id}
-                to={{
-                    pathname: '/details/grade/graresult/deal',
-                    query: { deal_id: item.id },
-                    state,
-                }}>{item.number}    </Link>
+            return (
+                <Link
+                    style={{ padding: 3}}
+                    key={item.id}
+                    to={{
+                        pathname: '/details/grade/graresult/deal',
+                        query: { deal_id: item.id },
+                        state,
+                    }}>{item.number}
+                </Link>
+            )
         })
         return (
             <div>
