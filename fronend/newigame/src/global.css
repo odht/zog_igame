@@ -7,3 +7,10 @@ html, body, #root {
 body {
   margin: 0;
 }
+:global(ul.ant-table-pagination.ant-pagination ){
+  /* position: relative;
+  left: -50%;
+  transform: translateX(50%) */
+  float: none;
+  text-align: center;
+}

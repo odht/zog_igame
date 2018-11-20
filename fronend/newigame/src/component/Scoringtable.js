@@ -101,6 +101,7 @@ class Scoringtable extends Component {
             </div>
             */}
                 <Table
+                style={{ background: '#fff',minHeight:'59.5vh' }}
                     rowKey={row => row.id}
                     dataSource={scoringData}
                     columns={scoringColumns}

@@ -81,18 +81,18 @@ class Graresult extends Component {
         })
         return (
             <div>
-                <div style={{ textAlign: 'center' }} >
-                    <h2>{game_id[1]} {name}</h2>
+                <div className={styles.title} >
+                    <span>{game_id[1]} {name}</span>
                 </div>
 
                 <div>
                     <Row type='flex' justify='center'>
-                        <Col span={14} >
+                        <Col xs={24} xl={16}  >
                             <ResultDataTable
                                 matchData={matchData}
                                 state={state}
                             />
-                            <div >
+                            <div className={styles.dealData}>
                                 {/*  <Row>
                                     <Col span={12}>点击桌号 查看计分表</Col>
                                     <Col span={12}><Link to='/details/grade/score'>瑞士成绩赛表</Link></Col>
@@ -102,13 +102,11 @@ class Graresult extends Component {
                                     <Col span={12}><Link to='/details/grade/score/rank'>瑞士成绩赛表（按名次排序）</Link></Col>
                                 </Row>
                              */}
-                                <Row>
-                                    {/*  <Col span={12}><Link to='/details/grade/datumn'></Link>   </Col>*/}
-                                    <Col style={{fontSize:17}} span={12}>牌：{dealData}</Col>
-                                </Row>
+                                {/*  <Col span={12}><Link to='/details/grade/datumn'></Link>   </Col>*/}
+                                牌：{dealData}
                             </div>
                         </Col>
-                        <Col span={10}>
+                        <Col xs={24} xl={8}>
                             {
                                 <Table
                                     rowKey={record => record.id}
@@ -123,7 +121,7 @@ class Graresult extends Component {
                     </Row>
                 </div>
 
-            </div>
+            </div >
         )
     }
 }

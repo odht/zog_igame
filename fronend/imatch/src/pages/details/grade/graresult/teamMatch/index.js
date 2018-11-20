@@ -39,7 +39,7 @@ class TeamMatch extends Component {
         title: '轮次',
         dataIndex: 'round_id',
         render: (text, record) => {
-          return `${record.round_id[0]}`
+          return `${record.round_id[1]}`
         }
       }, {
         title: '对阵方',
@@ -91,7 +91,6 @@ class TeamMatch extends Component {
     ]
     return (
       <div>
-        <div><h2>石家庄</h2></div>
         <Table
           rowKey={row => row.id}
           columns={TeamMatchColumns}
