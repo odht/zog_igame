@@ -160,7 +160,7 @@ class BidPanel extends Component {
           </table>
         </div>
         {bidblocks}
-        <BidCard name='PASS' active={this.state.bidcards[0].active}
+        <BidCard name='Pass' active={this.state.bidcards[0].active}
           onclick={clickable ? this.handleSelecte.bind(this, { name: 'Pass' }):this.unclickable}
         />
         <BidCard name='ALERT' active={this.state.bidcards[1].active}
@@ -224,8 +224,8 @@ class BidBlock extends Component {
  */
 class BidCard extends Component {
   render() {
-    const bgcolor = { PASS: '#88FF88', X: '#FF8888', XX: '#FF3333', ALERT: '#8888FF' };
-    const width = { PASS: '7.8vh', X: '7vh', XX: '7vh', ALERT: '7vh' };
+    const bgcolor = { Pass: '#88FF88', X: '#FF8888', XX: '#FF3333', ALERT: '#8888FF' };
+    const width = { Pass: '7.8vh', X: '7vh', XX: '7vh', ALERT: '7vh' };
     const style = {
       backgroundColor: `${bgcolor[this.props.name]}`,
       width: `${width[this.props.name]}`,

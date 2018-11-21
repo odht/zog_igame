@@ -79,14 +79,14 @@ const TableView = (props) => {
  
   const stat = Object.values(table.state.user).map(e => e.ready)
  const style = {
-    position: 'absolute',
-    top: '20px',
-    right: '20px',
-    width: '10%',
+  
+    width: '100%',
     height:this.width * 0.10,
     zIndex:6,
-    color:'red',
-    fontSize:'50px'
+    color:'rgba(0, 0, 0, 0.65)',
+    fontSize:'30px',
+    backgroundColor:"#fff",
+    textAlign:"center",
 }
 const user = table.state.user;
 const userInfo = [user.east,user.west,user.south,user.north];
@@ -118,7 +118,7 @@ const userTags = [];
       <div id='table' className='table'>
         <div id='header' className='header'>
           <div className='re imps'><Imps /></div>
-          <div className='re seats'><Seats /></div>
+          <div className='re seats'><Seats nth={table.nth} myseat={table.myseat} dealer={table.dealer} vulnerable={table.originData?table.originData.vulnerable:''}/></div>
           <div onClick={table.lastTrick.bind(table)} className='re tricks'>
             <Tricks 
             contract={table.state.contract}
@@ -134,13 +134,17 @@ const userTags = [];
               time='1:2:5'
               callback={() => console.log('计时结束')}/>
           </div>
-          <button onTouchEnd={table.claim} onClick={table.claim} className="claimbtn disable">摊牌</button>
+          <button onTouchEnd={table.claim} onClick={table.claim} className={table.myseat==table.state.declarer?'':"disable"}>摊牌</button>
           <button onClick={() => table.timer.stop()} onDoubleClick={() => table.timer.start()} className="calljudge">呼叫裁判</button>
           <button onTouchEnd={table.claim} onClick={table.lastTrick.bind(table)} className="lasttrick">上一墩牌</button>
           {/* <button onTouchEnd={table.claim} onClick={table.bid.bind(table)} className="showbid">显示叫牌</button> */}
 
           {/* <div className='re' id='lastTrick'>上墩牌</div>*/}
           {/* 注意比赛结果会挂载到下面的div */}
+          <div id='nextPlayer' className="re " style={{height:'100px',position:'relative'}}>
+            <div id = 'next' style = {style}>当前：{table.state.next}</div>
+            <div id='clock'></div>
+          </div>
           <div id='result'></div>
           <div id='sound'></div>
         </div>
@@ -159,8 +163,7 @@ const userTags = [];
            cancelClaim={table.cancelClaim}
 
           /> : null}
-          <div id='clock'></div>
-          <div id = 'next' style = {style}>{table.state.next}</div>
+         
           <div id='east' className='right' ref={table.ref.east}></div>
           <div id='west' className='left' ref={table.ref.west}></div>
           <div id='south' className='down' ref={table.ref.south}></div>

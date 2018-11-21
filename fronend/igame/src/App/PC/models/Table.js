@@ -170,6 +170,23 @@ class TableModel {
     let cards = this.state.cards[seatIndex]
     cards = this.resetCards(cards, seatIndex, true)
   }
+  failPlay=(card)=>{
+    window._CARD=this.state.cards[1];
+    console.log("1111111")
+    const playCard =card;
+    playCard.status='';
+    playCard.zIndex=0;
+    playCard.active=2;
+    
+    let [x, y] = [this.seat['south'][0].x, this.seat['south'][0].y]
+      x = x + this.height / 16 / 5;
+      y = y + this.height / 16 / 5; //
+      playCard['animation']['left'] = x;
+      playCard['animation']['top'] = y;
+      this.resetCards(this.state.cards[1],1);
+     
+    
+}
   /**
    * 清理桌面上的牌
    * 定位参考：
