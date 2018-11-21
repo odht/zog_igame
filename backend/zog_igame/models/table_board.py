@@ -60,7 +60,7 @@ class Table(models.Model):
     state = fields.Selection([
         ('todo',  'Todo'),
         ('done',  'Done'),
-    ], string='Status' #, compute='_compute_state'
+    ], string='Status' , compute='_compute_state'
     )
 
     @api.multi
