@@ -3,18 +3,18 @@
 
 records = {}
 
-records['og.game'] = [{'name': '2018河北省会赛', 'date_from': '2018-11-24','date_thru': '2018-11-25'}]
+records['og.game'] = [{'name': '2018石家庄赛', 'date_from': '2018-11-24','date_thru': '2018-11-25'}]
 
 records['og.schedule'] = [
-  {'name': 'Day1.1', 'number': 11, 'date_from': '2018-11-24 10:30','date_thru': '2018-11-24 12:30'},
-  {'name': 'Day1.2', 'number': 12, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
-  {'name': 'Day1.3', 'number': 13, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
-  {'name': 'Day1.4', 'number': 14, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
-  {'name': 'Day1.5', 'number': 15, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
-  {'name': 'Day2.1', 'number': 21, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
-  {'name': 'Day2.2', 'number': 22, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
-  {'name': 'Day2.3', 'number': 23, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
-  {'name': 'Day2.4', 'number': 24, 'date_from': '2018-11-24 13:00','date_thru': '2018-11-24 14:30'},
+  {'name': 'Day1.1', 'number': 11, 'date_from': '2018-11-24 08:40','date_thru': '2018-11-24 10:15'},
+  {'name': 'Day1.2', 'number': 12, 'date_from': '2018-11-24 10:30','date_thru': '2018-11-24 12:05'},
+  {'name': 'Day1.3', 'number': 13, 'date_from': '2018-11-24 13:10','date_thru': '2018-11-24 14:45'},
+  {'name': 'Day1.4', 'number': 14, 'date_from': '2018-11-24 15:00','date_thru': '2018-11-24 16:35'},
+  {'name': 'Day1.5', 'number': 15, 'date_from': '2018-11-24 16:50','date_thru': '2018-11-24 18:25'},
+  {'name': 'Day2.1', 'number': 21, 'date_from': '2018-11-25 08:30','date_thru': '2018-11-25 10:05'},
+  {'name': 'Day2.2', 'number': 22, 'date_from': '2018-11-25 10:20','date_thru': '2018-11-25 11:55'},
+  {'name': 'Day2.3', 'number': 23, 'date_from': '2018-11-25 13:00','date_thru': '2018-11-25 14:35'},
+  {'name': 'Day2.4', 'number': 24, 'date_from': '2018-11-25 14:50','date_thru': '2018-11-25 16:25'},
 ]
 
 #card_str = 'AKQ.AKQ.AKQ.AKQ2 JT9.JT9.JT92.JT9 876.8762.876.876 5432.543.543.543'
@@ -63,19 +63,19 @@ records['og.round'] = [
 ]
 
 records['og.team'] = [
-  {'name': 'TA1', 'number': 1, 'phase_ids': [11] },
-  {'name': 'TA2', 'number': 2, 'phase_ids': [11] },
-  {'name': 'TA3', 'number': 3, 'phase_ids': [11] },
-  {'name': 'TA4', 'number': 4, 'phase_ids': [11] },
-  {'name': 'TA5', 'number': 5, 'phase_ids': [11] },
-  {'name': 'TA6', 'number': 6, 'phase_ids': [11] },
-  {'name': 'TB1', 'number': 7, 'phase_ids': [12] },
-  {'name': 'TB2', 'number': 8, 'phase_ids': [12] },
-  {'name': 'TB3', 'number': 9, 'phase_ids': [12] },
-  {'name': 'TB4', 'number': 10,'phase_ids': [12] },
-  {'name': 'TB5', 'number': 11,'phase_ids': [12] },
-  {'name': 'TB6', 'number': 12,'phase_ids': [12] },
-  {'name': 'Admins', 'number': 99},
+  {'name': '爱好队',   'number': 1, 'phase_ids': [11] },
+  {'name': '晴天队',   'number': 2, 'phase_ids': [11] },
+  {'name': '河北蓝地', 'number': 3, 'phase_ids': [11] },
+  {'name': '快乐桥牌', 'number': 4, 'phase_ids': [11] },
+  {'name': '沧州龙兴', 'number': 5, 'phase_ids': [11] },
+  {'name': '鼎峰队',   'number': 6, 'phase_ids': [11] },
+  {'name': '伊特队',   'number': 7, 'phase_ids': [12] },
+  {'name': '智云队',   'number': 8, 'phase_ids': [12] },
+  {'name': '漳河队',   'number': 9, 'phase_ids': [12] },
+  {'name': '613队',   'number': 10,'phase_ids': [12] },
+  {'name': 'IPTV队',  'number': 11,'phase_ids': [12] },
+  {'name': '宏鸿集团', 'number': 12,'phase_ids': [12] },
+  {'name': 'Admins',  'number': 99},
 ]
 
 
@@ -88,19 +88,6 @@ round_turn[6] = [
   [1,4,2,5,3,6],
   [5,1,3,2,6,4],
   [1,2,3,4,5,6],
-]
-
-records['og.team.round.info'] = [
-  {'phase_id': 21, 'schedule_id': 21, 'team_id': 1, 'number': 1},
-  {'phase_id': 21, 'schedule_id': 21, 'team_id': 6, 'number': 2},
-  {'phase_id': 21, 'schedule_id': 21, 'team_id': 7, 'number': 3},
-  {'phase_id': 21, 'schedule_id': 21, 'team_id': 8, 'number': 4},
-  {'phase_id': 22, 'schedule_id': 21, 'team_id': 2, 'number': 5},
-  {'phase_id': 22, 'schedule_id': 21, 'team_id': 9, 'number': 6},
-  {'phase_id': 23, 'schedule_id': 21, 'team_id': 4, 'number': 7},
-  {'phase_id': 23, 'schedule_id': 21, 'team_id': 5, 'number': 8},
-  {'phase_id': 23, 'schedule_id': 21, 'team_id': 10, 'number': 9},
-  {'phase_id': 23, 'schedule_id': 21, 'team_id': 11, 'number': 10},
 ]
 
 
