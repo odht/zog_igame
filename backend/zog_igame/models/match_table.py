@@ -152,7 +152,7 @@ class MatchLine(models.Model):
             ob = rec.open_board_id
             cb = rec.close_board_id
             if ob and ob.state == 'done' and cb and cb.state == 'done':
-                point = rec.open_board_id.point - rec.close_board_id.point
+                point = ob.ns_point - ob.ew_point + (cb.ew_point - cb.ns_point)
                 
             rec.point = point
             rec.host_point  = point>0 and point or 0
