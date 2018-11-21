@@ -19,7 +19,7 @@ records['og.schedule'] = [
 
 #card_str = 'AKQ.AKQ.AKQ.AKQ2 JT9.JT9.JT92.JT9 876.8762.876.876 5432.543.543.543'
 card_str = '876.AKQ.AKQ.AKQ2 JT9.JT9.JT92.JT9 AKQ.8762.876.876 5432.543.543.543'
-deal_count = 2
+deal_count = 12
 sch_num = [ s['number'] for s in records['og.schedule'] ]
 records['og.deal'] = [{'number': num, 'schedule_id': sn, 'card_str': card_str
                       } for sn in sch_num for num in range(1,deal_count+1) ]
