@@ -60,8 +60,10 @@ class Table(models.Model):
     state = fields.Selection([
         ('todo',  'Todo'),
         ('done',  'Done'),
-    ], string='Status' , compute='_compute_state' )
+    ], string='Status' #, compute='_compute_state' 
+    )
 
+    """ 
     @api.multi
     def _compute_state(self):
         for rec in self:
@@ -70,7 +72,7 @@ class Table(models.Model):
     def _get_state(self):
         bd = self.board_ids.filtered(lambda bd: bd.state not in ['done','cancel'])
         return bd and 'todo' or 'done'
-
+    """
 
     board_ids = fields.One2many('og.board', 'table_id', string='Boards')
     doing_board_id = fields.Many2one('og.board', compute='_compute_board' )
@@ -87,17 +89,3 @@ class Table(models.Model):
         if board:
             return board[0]
 
-""" 
-
-class Board(models.Model):
-    _inherit = "og.board"
-
-    @api.multi
-    def write(self,vals):
-        ret = super(Board,self).write(vals)
-
-        if vals.get('state'):
-            self.table_id._compute_state()
-
-        return ret
-"""
