@@ -11,7 +11,7 @@ export default class Home extends Component {
     state = {
         boardData: [],
         isAdmin: this.props.isAdmin || false,
-        round_id: [],
+        tableData: [],
         loading: true,
     }
     changeAdmin = () => {
@@ -36,7 +36,7 @@ export default class Home extends Component {
                 const boardData = lookup(board_ids, ogBoard)
                 this.setState({
                     boardData: boardData,
-                    round_id: tableData[0].round_id,
+                    tableData: tableData[0],
                     loading: false,
                 })
             })
@@ -110,7 +110,14 @@ export default class Home extends Component {
     }
     render() {
         let scoringData = [];
-        const { boardData, isAdmin, round_id, loading } = this.state;
+        const { boardData, isAdmin, tableData, loading } = this.state;
+        let name
+        if (tableData.round_id) {
+            let nameArr = tableData.name.split(',');
+            let roomType = nameArr[0] === "open" ? '开室' : '闭室';
+            let vsNumber = nameArr[2];
+            name = `${roomType} , ${vsNumber}`
+        }
         if (boardData && boardData.length > 0) {
             scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
             boardData.map(item => {
@@ -141,7 +148,7 @@ export default class Home extends Component {
         return (
             <div>
                 <div className={styles.headerTitle}>
-                    <h1 className={styles.headerTitleText}>计分表（{round_id && round_id.length > 0 ? round_id[1] : ''}）</h1>
+                    <h1 className={styles.headerTitleText}>计分表（{tableData.round_id ? `${tableData.round_id[1]},${name}` : ''}）</h1>
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable

@@ -1,15 +1,4 @@
-.loginbox{
-    display: flex;
-    flex-flow: column;
-    justify-content:center;
-    align-items: center;
-    /* 注意这里需要设置高度来查看垂直居中效果 */
-    height: 100%;
-    background-image: url(../assets/Login.svg);
-    background-repeat:no-repeat; 
-    background-size:100% 100%;
-    -moz-background-size:100% 100%;
-}
+
 .login{
     width: 367px;
     height: 350px;

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styles from './game.css';
 import { connect } from 'dva'
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
