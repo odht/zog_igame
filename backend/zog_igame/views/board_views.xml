@@ -23,6 +23,7 @@
             <field name="model">og.board</field>
             <field name="arch" type="xml">
                 <tree string="Board">
+                    <field name="state"/>
                     <field name="table_id"/>
                     <field name="number"/>
                     <field name="dealer"/>

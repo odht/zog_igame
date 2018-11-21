@@ -60,8 +60,7 @@ class Table(models.Model):
     state = fields.Selection([
         ('todo',  'Todo'),
         ('done',  'Done'),
-    ], string='Status' , compute='_compute_state'
-    )
+    ], string='Status' , compute='_compute_state' )
 
     @api.multi
     def _compute_state(self):
@@ -88,6 +87,7 @@ class Table(models.Model):
         if board:
             return board[0]
 
+""" 
 
 class Board(models.Model):
     _inherit = "og.board"
@@ -100,4 +100,4 @@ class Board(models.Model):
             self.table_id._compute_state()
 
         return ret
-
+"""

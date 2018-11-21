@@ -53,7 +53,6 @@ class Table(models.Model):
 
     date_from = fields.Datetime(related='round_id.date_from')
     date_thru = fields.Datetime(related='round_id.date_thru')
-    state = fields.Selection(related='round_id.state')
 
     deal_ids  = fields.Many2many('og.deal', string='Deals', related='round_id.deal_ids' )
 
