@@ -94,10 +94,10 @@ class Board(models.Model):
 
     @api.multi
     def write(self,vals):
-        bd = super(Board,self).write(vals)
+        ret = super(Board,self).write(vals)
 
         if vals.get('state'):
-            bd.table_id._compute_state()
+            self.table_id._compute_state()
 
-        return table
+        return ret
 
