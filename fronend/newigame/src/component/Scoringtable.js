@@ -12,7 +12,7 @@ class Scoringtable extends Component {
         }
     }
     render() {
-        const { scoringData, writeSoringData, isAdmin } = this.props;
+        const { scoringData, writeSoringData, isAdmin, loading } = this.props;
         const scoringColumns = [
             {
                 title: '牌号',
@@ -101,11 +101,16 @@ class Scoringtable extends Component {
             </div>
             */}
                 <Table
+                    loading={loading}
                     style={{ background: '#fff', minHeight: '59.5vh' }}
                     rowKey={row => row.id}
                     dataSource={scoringData}
                     columns={scoringColumns}
-                    pagination
+                    pagination={{
+                        showQuickJumper: true,
+                        showSizeChanger: true,
+                        pageSizeOptions: ['10', '15', '20'],
+                    }}
                 />
             </div>
         )

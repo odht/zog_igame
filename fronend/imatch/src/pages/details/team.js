@@ -21,6 +21,9 @@ const columns = [{
 }];
 
 class Team extends Component {
+  state = {
+    loading: true,
+  }
   componentWillMount() {
     const { location: { state: { gameData: { team_ids } } }, dispatch } = this.props;
     // const Game = lookup(id, this.props.odooData.ogGame)
@@ -28,20 +31,29 @@ class Team extends Component {
     dispatch({
       type: 'ogTeam/read',
       payload: { id: team_ids }
+    }).then(() => {
+      this.setState({
+        loading: false,
+      })
     })
   }
   render() {
     const { location: { state: { gameData: { team_ids } } }, odooData: { ogTeam } } = this.props;
+    const { loading } = this.state;
     const dataSource = lookup(team_ids, ogTeam)
     return (
       <div style={{ margin: '0 auto' }}>
         <Table
+          loading={loading}
           bordered={true}
           rowKey={row => row.id}
           columns={columns}
           dataSource={dataSource}
-          pagination={{ pageSize: 5 }}
-          scroll={{ y: 300 }}
+          pagination={{
+						showQuickJumper: true,
+						showSizeChanger: true,
+						pageSizeOptions: ['10', '15', '20'],
+					}}
         />
       </div>)
   }

@@ -3,6 +3,8 @@ import BasicLayout from './BasicLayout';
 import DetailsLayout from './DetailsLayout';
 import UserLayout from './UserLayout';
 import { connect } from 'dva';
+import { LocaleProvider } from 'antd';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
 
 class HomeIndex extends Component {
 
@@ -30,14 +32,22 @@ class HomeIndex extends Component {
 
     if (sid) {
       if (router === '/details') {
-        return <DetailsLayout  {...this.props}>{this.props.children}</DetailsLayout>
+        return (
+          <LocaleProvider locale={zhCN}>
+            <DetailsLayout  {...this.props}>{this.props.children}</DetailsLayout>
+          </LocaleProvider>
+        )
       }
 
       if (router === '/user') {
         return <UserLayout {...this.props}>{this.props.children}</UserLayout>
       }
 
-      return <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
+      return (
+        <LocaleProvider locale={zhCN}>
+          <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
+        </LocaleProvider>
+      )
     } else {
       return <div>正在加载</div>
     }
