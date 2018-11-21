@@ -22,19 +22,19 @@ const columns = [{
 
 class Team extends Component {
   componentWillMount() {
-    const { location: { state:{gameData:{team_ids} } }, dispatch } = this.props;
-      // const Game = lookup(id, this.props.odooData.ogGame)
-      // const dataSource = Game.team_ids;
-      dispatch({
-        type: 'ogTeam/read',
-        payload: { id: team_ids }
-      })
+    const { location: { state: { gameData: { team_ids } } }, dispatch } = this.props;
+    // const Game = lookup(id, this.props.odooData.ogGame)
+    // const dataSource = Game.team_ids;
+    dispatch({
+      type: 'ogTeam/read',
+      payload: { id: team_ids }
+    })
   }
   render() {
-    const { location: { state:{gameData:{team_ids} } },odooData:{ogTeam} } = this.props;
+    const { location: { state: { gameData: { team_ids } } }, odooData: { ogTeam } } = this.props;
     const dataSource = lookup(team_ids, ogTeam)
     return (
-      <div style={{ width: "900px",margin:'0 auto' }}>
+      <div style={{ margin: '0 auto' }}>
         <Table
           bordered={true}
           rowKey={row => row.id}

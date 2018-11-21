@@ -19,7 +19,12 @@ export default class IndexLayout extends Component {
             })
         }
     }
+    handlerloginOut() {
+        localStorage.removeItem('tonken');
+        localStorage.removeItem('uid');
+        router.push('/User/login');
 
+    }
     render() {
         const { location: { pathname } } = this.props;
         {
@@ -27,7 +32,7 @@ export default class IndexLayout extends Component {
                 case '/User/login':
                     return <LoginLayout {...this.props} />
                 default:
-                    return <BasicLayout {...this.props} />
+                    return <BasicLayout {...this.props} handlerloginOut={this.handlerloginOut} />
             }
         }
     }

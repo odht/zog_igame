@@ -924,8 +924,12 @@ class RecordNewForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             let id = null;
+            const { scoringData } = this.props;
+            if (scoringData) {
+                id = scoringData.id
+            }
             //根据　submitType 判断是创建还是修改
-            const { scoringData, submitType, scoringDataCraeate } = this.props;
+            // const { scoringData, submitType, scoringDataCraeate } = this.props;
             this.props.writeSoringData({ ...values, id, type: "pass" });
             this.props.form.resetFields();
             this.setState({ modalVisible: false });
@@ -1058,7 +1062,7 @@ class RecordNewForm extends React.Component {
                                         scoringData.result === 0 ?
                                             scoringData.result.split('') :
                                             scoringData.result.split('')
-                                    ] : ['=','='],
+                                    ] : ['=', '='],
                                 rules: [{ type: 'array', required: true, message: '请填写结果!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写结果" options={resultData} />

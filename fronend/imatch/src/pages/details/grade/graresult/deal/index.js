@@ -17,6 +17,7 @@ class Deal extends Component {
   state = {
     card_str: [],
     BoardData: [],
+    isDone: false,
   }
   componentDidMount() {
     const {
@@ -45,7 +46,13 @@ class Deal extends Component {
           const BoardData = lookup(board_ids, ogBoard)
           const table_ids = BoardData.map(item => item.table_id[0])
           // const match_ids = Array.from(new Set(BoardData.map(item => item.match_id[0])))
-          const match_ids = BoardData.map(item => item.match_id[0])
+          const match_ids = BoardData.map(item => item.match_id[0]);
+          const a = BoardData.filter((item) => item.state == 'done');
+          if (a.length = 0) {
+            this.setState({
+              isDone: true,
+            })
+          }
           dispatch({
             type: 'ogTable/read',
             payload: { id: table_ids },
@@ -85,7 +92,7 @@ class Deal extends Component {
   }
 
   render() {
-    const { card_str, BoardData } = this.state;
+    const { card_str, BoardData, isDone } = this.state;
     //发牌人 比赛名称 排位　第几轮
     let dealer = '';
     let game = '';
@@ -138,7 +145,7 @@ class Deal extends Component {
       if (cardArray.length > 0) {
         return cardArray.map((item, index) => {
           return (
-            <div key={item} className={styles.flex}>
+            <div key={index} className={styles.flex}>
               {cardsvg(index)}
               <p className={styles.cardText}>{item}</p>
             </div>
@@ -232,9 +239,9 @@ class Deal extends Component {
         </div>
         <div className={styles.header}>
           <div className={styles.table}>
-            {/*   <div className={styles.tableN}>{cardList(n_card_str)}</div>
-            <div className={styles.tableW}>{cardList(w_card_str)}</div>
-            */}
+            <div className={styles.tableN}> {isDone ? cardList(n_card_str) : ''}</div>
+            <div className={styles.tableW}>{isDone ? cardList(w_card_str) : ''}</div>
+
             <div className={styles.tableN}></div>
             <div className={styles.tableW}></div>
             <div className={styles.tableNWES}>
@@ -243,8 +250,8 @@ class Deal extends Component {
               <div className={styles.tableE}>E</div>
               <div className={styles.tableS}>S</div>
             </div>
-            {/*<div className={styles.tableE}>{cardList(e_card_str)}</div>
-          <div className={styles.tableS}>{cardList(s_card_str)}</div>*/}
+            <div className={styles.tableE}>{isDone ? cardList(e_card_str) : ''}</div>
+            <div className={styles.tableS}>{isDone ? cardList(s_card_str) : ''}</div>
             <div className={styles.tableE}></div>
             <div className={styles.tableS}></div>
           </div>
