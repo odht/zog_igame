@@ -84,10 +84,6 @@ class LoginLayout extends Component {
                     </div>
                     <Submit className={styles.loginbutton}>登录</Submit>
                 </Login>
-                <div className={styles.footer}>
-                    <GlobalFooter copyright={copyright} />
-                </div>
-
             </div>
 
         );

@@ -969,6 +969,7 @@ class RecordNewForm extends React.Component {
                                 ],
                             })(
                                 <Select
+                                     disabled
                                     dropdownMatchSelectWidth={true}
                                     placeholder="请填写牌号"
                                     allowClear>

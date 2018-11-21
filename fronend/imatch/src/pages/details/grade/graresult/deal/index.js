@@ -17,7 +17,7 @@ class Deal extends Component {
   state = {
     card_str: [],
     BoardData: [],
-    isDone: false,
+    isDone: true,
     loading: true,
   }
   componentDidMount() {
@@ -45,13 +45,14 @@ class Deal extends Component {
 
           const { odooData: { ogBoard } } = this.props;
           const BoardData = lookup(board_ids, ogBoard)
+
           const table_ids = BoardData.map(item => item.table_id[0])
           // const match_ids = Array.from(new Set(BoardData.map(item => item.match_id[0])))
           const match_ids = BoardData.map(item => item.match_id[0]);
-          const a = BoardData.filter((item) => item.state == 'done');
-          if (a.length = 0) {
+          const a = BoardData.filter((item) => item.state != 'done');
+          if (a.length == 0) {
             this.setState({
-              isDone: true,
+              isDone: false,
             })
           }
           dispatch({
@@ -92,7 +93,6 @@ class Deal extends Component {
       }
     })
   }
-
   render() {
     const { card_str, BoardData, isDone, loading } = this.state;
     //发牌人 比赛名称 排位　第几轮
@@ -226,9 +226,11 @@ class Deal extends Component {
     }, {
       title: '主队IMP',
       dataIndex: 'host_imp',
+      render: renderNumber,
     }, {
       title: '客队IMP',
       dataIndex: 'guest_imp',
+      render: renderNumber,
     }]
     return (
       <div>
@@ -241,8 +243,8 @@ class Deal extends Component {
         </div>
         <div className={styles.header}>
           <div className={styles.table}>
-            <div className={styles.tableN}> {isDone ? cardList(n_card_str) : ''}</div>
-            <div className={styles.tableW}>{isDone ? cardList(w_card_str) : ''}</div>
+            <div className={styles.tableN}> {isDone ? '' : cardList(n_card_str)}</div>
+            <div className={styles.tableW}>{isDone ? '' : cardList(w_card_str)}</div>
 
             <div className={styles.tableN}></div>
             <div className={styles.tableW}></div>
@@ -252,8 +254,8 @@ class Deal extends Component {
               <div className={styles.tableE}>E</div>
               <div className={styles.tableS}>S</div>
             </div>
-            <div className={styles.tableE}>{isDone ? cardList(e_card_str) : ''}</div>
-            <div className={styles.tableS}>{isDone ? cardList(s_card_str) : ''}</div>
+            <div className={styles.tableE}>{isDone ? '' : cardList(e_card_str)}</div>
+            <div className={styles.tableS}>{isDone ? '' : cardList(s_card_str)}</div>
             <div className={styles.tableE}></div>
             <div className={styles.tableS}></div>
           </div>
@@ -263,6 +265,7 @@ class Deal extends Component {
           </div>
         </div>
         <Table
+          bordered
           loading={loading}
           rowKey={row => row.id}
           dataSource={BoardData}

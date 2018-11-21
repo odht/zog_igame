@@ -1,9 +1,6 @@
 
 import React, { Component } from 'react';
 import ListDecorator from '../../component/ListDecorator';
-import { Link } from 'react-router-dom';
-import { Button } from 'antd';
-import { lookup } from '@/utils/tools';
 import { connect } from 'dva';
 class TeamList extends Component {
   componentWillMount() {

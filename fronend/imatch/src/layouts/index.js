@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BasicLayout from './BasicLayout';
 import DetailsLayout from './DetailsLayout';
 import UserLayout from './UserLayout';
+import HomeLayout from './HomeLayout';
 import { connect } from 'dva';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
@@ -42,7 +43,9 @@ class HomeIndex extends Component {
       if (router === '/user') {
         return <UserLayout {...this.props}>{this.props.children}</UserLayout>
       }
-
+      if (router === '/home') {
+        return <HomeLayout {...this.props}>{this.props.children}</HomeLayout>
+      }
       return (
         <LocaleProvider locale={zhCN}>
           <BasicLayout {...this.props}>{this.props.children}</BasicLayout>

@@ -3,7 +3,6 @@ import { Card, Col, Row } from 'antd';
 import styles from './index.less';
 
 const ListDecorator = ({ detailData, announcement }) => {
-    console.log(detailData)
     const annList = announcement && announcement.map(child => <a key={child.id} to="#"><p >{child.text}</p></a>)
     return (
         <div style={{ background: '#ECECEC', padding: '15px' }}>
