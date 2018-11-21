@@ -12,6 +12,7 @@ export default class Home extends Component {
         boardData: [],
         isAdmin: this.props.isAdmin || false,
         round_id: [],
+        loading: true,
     }
     changeAdmin = () => {
         this.setState({
@@ -36,6 +37,7 @@ export default class Home extends Component {
                 this.setState({
                     boardData: boardData,
                     round_id: tableData[0].round_id,
+                    loading: false,
                 })
             })
         })
@@ -71,6 +73,9 @@ export default class Home extends Component {
                 payload: { id, declarer, contract, openlead, result }
             }).then(() => {
                 const { location: { query: { table_id } } } = this.props;
+                this.setState({
+                    loading: true,
+                })
                 dispatch({
                     type: 'ogTable/read',
                     payload: { id: parseInt(table_id) }
@@ -85,7 +90,8 @@ export default class Home extends Component {
                         const { odooData: { ogBoard } } = this.props;
                         const boardData = lookup(board_ids, ogBoard)
                         this.setState({
-                            boardData: boardData
+                            boardData: boardData,
+                            loading: false,
                         })
                     })
                 })
@@ -104,7 +110,7 @@ export default class Home extends Component {
     }
     render() {
         let scoringData = [];
-        const { boardData, isAdmin, round_id } = this.state;
+        const { boardData, isAdmin, round_id, loading } = this.state;
         if (boardData && boardData.length > 0) {
             scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
             boardData.map(item => {
@@ -135,10 +141,11 @@ export default class Home extends Component {
         return (
             <div>
                 <div className={styles.headerTitle}>
-                    <h1 className={styles.headerTitleText}>计分表（{round_id && round_id.length > 0 ? round_id[1] : 'x'}）</h1>
+                    <h1 className={styles.headerTitleText}>计分表（{round_id && round_id.length > 0 ? round_id[1] : ''}）</h1>
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable
+                        loading={loading}
                         changeAdmin={this.changeAdmin}
                         isAdmin={isAdmin}
                         writeSoringData={this.writeSoringData}

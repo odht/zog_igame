@@ -18,6 +18,7 @@ class Deal extends Component {
     card_str: [],
     BoardData: [],
     isDone: false,
+    loading: true,
   }
   componentDidMount() {
     const {
@@ -84,6 +85,7 @@ class Deal extends Component {
             })
             this.setState({
               BoardData: BoardTable,
+              loading: false,
             })
           })
         })
@@ -92,7 +94,7 @@ class Deal extends Component {
   }
 
   render() {
-    const { card_str, BoardData, isDone } = this.state;
+    const { card_str, BoardData, isDone, loading } = this.state;
     //发牌人 比赛名称 排位　第几轮
     let dealer = '';
     let game = '';
@@ -261,6 +263,7 @@ class Deal extends Component {
           </div>
         </div>
         <Table
+          loading={loading}
           rowKey={row => row.id}
           dataSource={BoardData}
           columns={columns}

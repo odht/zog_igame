@@ -70,6 +70,9 @@ const dataSource = [
 
 ]
 class Round extends Component {
+    state = {
+        loading: true,
+    }
     componentDidMount() {
         const {
             location: { state: { matchData } },
@@ -89,6 +92,10 @@ class Round extends Component {
         dispatch({
             type: 'ogMatchLine/read',
             payload: { id: matchData.line_ids },
+        }).then(() => {
+            this.setState({
+                loading: false,
+            })
         })
     }
     render() {
@@ -96,6 +103,7 @@ class Round extends Component {
             location: { state: { matchData } },
             odooData: { ogTable, ogMatchLine, ogDeal },
         } = this.props
+        const { loading } = this.state;
         const dealData = lookup(matchData.deal_ids, ogDeal);
         // 开id, 闭室id
         const tableData = lookup([matchData.open_table_id[0], matchData.close_table_id[0]], ogTable);
@@ -251,6 +259,7 @@ class Round extends Component {
                 </Row>
 
                 <Table
+                    loading={loading}
                     style={{ marginTop: 10 }}
                     rowKey={row => row.id}
                     bordered

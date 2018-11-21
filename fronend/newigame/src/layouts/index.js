@@ -3,6 +3,8 @@ import LoginLayout from './LoginLayout';
 import BasicLayout from './BasicLayout';
 import router from 'umi/router';
 import { connect } from 'dva';
+import { LocaleProvider } from 'antd';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
 
 @connect(({ login }) => ({ login }))
 export default class IndexLayout extends Component {
@@ -32,7 +34,12 @@ export default class IndexLayout extends Component {
                 case '/User/login':
                     return <LoginLayout {...this.props} />
                 default:
-                    return <BasicLayout {...this.props} handlerloginOut={this.handlerloginOut} />
+                    return (
+                        <LocaleProvider locale={zhCN}>
+                            <BasicLayout {...this.props} handlerloginOut={this.handlerloginOut} />
+                        </LocaleProvider>
+
+                    )
             }
         }
     }
