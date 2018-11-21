@@ -77,14 +77,18 @@ class Table(models.Model):
 
 
     # 4 player in table
-    east_id = fields.Many2one('og.team.player', 
-                compute='_compute_player', inverse='_inverse_player_east')
-    west_id = fields.Many2one('og.team.player',
-                compute='_compute_player', inverse='_inverse_player_west')
-    north_id = fields.Many2one('og.team.player',
-                compute='_compute_player', inverse='_inverse_player_north')
-    south_id = fields.Many2one('og.team.player',
-                compute='_compute_player', inverse='_inverse_player_south')
+    east_id = fields.Many2one('og.team.player', compute='_compute_player'
+        #, inverse='_inverse_player_east'
+        )
+    west_id = fields.Many2one('og.team.player', compute='_compute_player'
+        #, inverse='_inverse_player_west'
+        )
+    north_id = fields.Many2one('og.team.player', compute='_compute_player'
+        #, inverse='_inverse_player_north'
+        )
+    south_id = fields.Many2one('og.team.player', compute='_compute_player'
+        #, inverse='_inverse_player_south'
+        )
                 
     table_player_ids = fields.One2many('og.table.player','table_id',help='Technical field')
     player_ids = fields.Many2many('og.team.player', compute='_compute_player')
@@ -101,6 +105,7 @@ class Table(models.Model):
             rec.south_id = _get('S')
             rec.player_ids = rec.table_player_ids.mapped('player_id')
 
+    """ 
     @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_east(self):
         self._inverse_player('E')
@@ -135,6 +140,7 @@ class Table(models.Model):
 
                 table_player.create(vals)
 
+    """
 
 class TablePlayer(models.Model):
     """
