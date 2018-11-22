@@ -3,8 +3,8 @@ import Scoringtable from '@/component/Scoringtable';
 import styles from './score.css';
 import { connect } from 'dva';
 import { lookup } from '@/utils/tools';
-
-
+import { notification } from 'antd';
+import router from 'umi/router';
 
 @connect(({ odooData }) => ({ odooData }))
 export default class Home extends Component {
@@ -42,6 +42,25 @@ export default class Home extends Component {
             })
         })
 
+    }
+
+    //提交全部成绩
+    handleSbumitScore = () => {
+        this.props.dispatch({
+            type: "ogTable/write",
+            payload: { state: "done" }
+        }).then(() => {
+            notification.config({
+                placement: "topLeft",
+            })
+            notification['success']({
+                message: '提交成功',
+                description: '返回登录页面'
+            })
+            localStorage.removeItem('tonken');
+            localStorage.removeItem('uid');
+            router.push('/User/login');
+        })
     }
     writeSoringData = (vals) => {
         const { dispatch } = this.props;
@@ -152,6 +171,7 @@ export default class Home extends Component {
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable
+                        handleSbumitScore={this.handleSbumitScore}
                         loading={loading}
                         changeAdmin={this.changeAdmin}
                         isAdmin={isAdmin}
