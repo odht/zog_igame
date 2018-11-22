@@ -5,7 +5,8 @@ import { lookup } from '@/utils/tools'
 
 class TeamMatch extends Component {
   state = {
-    TeamRoundInfoData: []
+    TeamRoundInfoData: [],
+    loading: true,
   }
   componentDidMount() {
     const {
@@ -27,18 +28,20 @@ class TeamMatch extends Component {
         const TeamRoundInfoData = lookup(round_info_ids, ogTeamRoundInfo);
         this.setState({
           TeamRoundInfoData: TeamRoundInfoData,
+          loading: false,
         })
       })
     })
   }
   render() {
-    const { TeamRoundInfoData } = this.state;
+    const { TeamRoundInfoData, loading } = this.state;
+
     const TeamMatchColumns = [
       {
         title: '轮次',
         dataIndex: 'round_id',
         render: (text, record) => {
-          return `${record.round_id[0]}`
+          return `${record.round_id[1]}`
         }
       }, {
         title: '对阵方',
@@ -49,8 +52,15 @@ class TeamMatch extends Component {
       }, {
         title: 'IMPs',
         children: [{
-          title: TeamRoundInfoData.length > 0 ? `${TeamRoundInfoData[0].team_id[1]}` : '',
-          dataIndex: 'imp'
+          title: () => {
+            if (TeamRoundInfoData.length > 0 && TeamRoundInfoData[0].team_id.length > 0) {
+              return TeamRoundInfoData[0].team_id[1]
+            } else {
+              ''
+            }
+          },
+          dataIndex: 'imp',
+
         }, {
           title: '对手',
           dataIndex: 'imp_opp',
@@ -58,11 +68,23 @@ class TeamMatch extends Component {
       }, {
         title: 'VPs',
         children: [{
-          title: TeamRoundInfoData.length > 0 ? `${TeamRoundInfoData[0].team_id[1]}` : '',
+          title: () => {
+            if (TeamRoundInfoData.length > 0 && TeamRoundInfoData[0].team_id.length > 0) {
+              return TeamRoundInfoData[0].team_id[1]
+            } else {
+              ''
+            }
+          },
           dataIndex: 'vp',
+          render: (text) => {
+            return text.toFixed(2);
+          }
         }, {
           title: '对手',
           dataIndex: 'vp_opp',
+          render: (text) => {
+            return text.toFixed(2);
+          }
         }],
       }, {
         title: '总分',
@@ -71,12 +93,16 @@ class TeamMatch extends Component {
     ]
     return (
       <div>
-        <div><h2>石家庄</h2></div>
         <Table
+          loading={loading}
           rowKey={row => row.id}
           columns={TeamMatchColumns}
           dataSource={TeamRoundInfoData}
-          pagination
+          pagination={{
+						showQuickJumper: true,
+						showSizeChanger: true,
+						pageSizeOptions: ['10', '15', '20'],
+					}}
         />
       </div>
     )

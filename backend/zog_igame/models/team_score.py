@@ -54,7 +54,10 @@ class GameTeamRoundInfo(models.Model):
     def _compute_score(self):
         def fn_team(rec):
             rec.score = rec.score_manual + {
-                    'IMP':rec.vp,'MP':rec.bam}[rec.phase_id.score_type]
+                    'IMP':rec.imp,'MP':rec.bam,
+                    'VP':rec.vp, 
+                    
+                    }[rec.phase_id.score_type]
 
         def fn_pair(rec):
             """ 

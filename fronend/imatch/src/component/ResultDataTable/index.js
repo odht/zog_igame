@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'antd';
 import { Link } from 'dva/router';
 
-const ResultDataTable = ({ matchData, state }) => {
+const ResultDataTable = ({ matchData, state, loading }) => {
     const columns = [{
         title: "对阵结果",
         children: [{
@@ -19,8 +19,8 @@ const ResultDataTable = ({ matchData, state }) => {
         }, {
             title: "完成",
             dataIndex: "deal_ids",
-            render:(text,record)=>{
-               return `${record.deal_ids.length}`
+            render: (text, record) => {
+                return `${record.deal_ids.length}`
             }
         }, {
             title: "主队",
@@ -32,7 +32,7 @@ const ResultDataTable = ({ matchData, state }) => {
             title: "客队",
             dataIndex: "guest_id",
             render: (text, record) => {
-                return <Link to={{ pathname: '/details/grade/teamMatch', state, search: `?team_id=${record.guest_id[0]}` }}>{record.guest_id[1]}</Link>;
+                return <Link to={{ pathname: '/details/grade/graresult/teamMatch', state, search: `?team_id=${record.guest_id[0]}` }}>{record.guest_id[1]}</Link>;
             }
         }, {
             title: "IMPS",
@@ -48,9 +48,15 @@ const ResultDataTable = ({ matchData, state }) => {
             children: [{
                 title: "主队",
                 dataIndex: "host_vp",
+                render: (text) => {
+                    return text.toFixed(2);
+                }
             }, {
                 title: "客队",
                 dataIndex: "guest_vp",
+                render: (text) => {
+                    return text.toFixed(2);
+                }
             }]
         }]
     }]
@@ -62,16 +68,18 @@ const ResultDataTable = ({ matchData, state }) => {
     //     })
     // }
     return (
-        matchData ?
-            <Table
-                rowKey={record => record.id}
-                pagination={false}
-                size='middle'
-                columns={columns}
-                dataSource={matchData}
-                bordered
-            /> : '暂无数据'
-    )
+        <Table
+            loading={loading}
+            rowKey={record => record.id}
+            pagination={false}
+            size='middle'
+            columns={columns}
+            dataSource={matchData ? matchData.sort((number1, number2) => {
+                return number1.number - number2.number
+            }) : []}
+            bordered
+        />
+    );
 }
 
 export default ResultDataTable;

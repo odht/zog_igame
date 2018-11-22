@@ -13,7 +13,11 @@ import { lookup } from '@/utils/tools'
 const columnRank = [{
     title: '赛队排名',
     children: [
-        { title: '名次', dataIndex: 'number' },
+        {
+            title: '名次', dataIndex: 'number', render: (text, index, key) => {
+                return key + 1
+            }
+        },
         {
             title: '参赛队',
             dataIndex: 'rankTeam',
@@ -24,7 +28,7 @@ const columnRank = [{
             title: 'VPs',
             dataIndex: 'rankTeam',
             className: styles.red,
-            render: (text, record) => { return `${record.score}` }
+            render: (text, record) => { return `${record.score_close.toFixed(2)}` }
         },
         { title: '罚分', dataIndex: 'punish' },
     ]
@@ -32,11 +36,15 @@ const columnRank = [{
 
 
 class Graresult extends Component {
-    componentDidMount() {
+    state = {
+        loading: true,
+    }
+    timer = null
+    getData(props) {
         const {
             dispatch,
             location: { state: { roundData: { deal_ids, match_ids, team_info_ids } } }
-        } = this.props;
+        } = props;
         dispatch({
             type: "ogMatch/read",
             payload: { id: match_ids }
@@ -48,8 +56,26 @@ class Graresult extends Component {
         dispatch({
             type: 'ogDeal/read',
             payload: { id: deal_ids }
+        }).then(() => {
+            this.setState({
+                loading: false
+            })
         })
     }
+    componentDidMount() {
+        this.getdatas()
+    }
+    getdatas = () => {
+        this.getData(this.props)
+        this.timer = setInterval(() => {
+            this.getData(this.props)
+        }, 180000)
+    }
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    }
+
+
     shouldComponentUpdate(props, state) {
         const { odooData: { ogTeamRoundInfo } } = props;
         if (ogTeamRoundInfo) {
@@ -62,45 +88,45 @@ class Graresult extends Component {
         // 比赛对战数据
         const {
             odooData: { ogMatch, ogTeamRoundInfo, ogDeal },
-            location: { state: { roundData: { match_ids, team_info_ids, deal_ids } } },
+            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id } } },
             location: { state },
         } = this.props;
+        const { loading } = this.state;
         // 牌组 
-        let deal = [1];
         const matchData = lookup(match_ids, ogMatch)
-        const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo);
+        const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo).sort((prestate, nextstate) => {
+            return nextstate.score - prestate.score;
+        });
         const dealData0 = lookup(deal_ids, ogDeal);
-        // if (dealData && dealData.length > 0) {
-        //     dealData.map(dealItem => {
-
-        //         deal = matchItem.deal_ids;
-        //     })
-        // }
         const dealData = dealData0.map(item => {
-            console.log(item)
-            return <Link
-                key={item.id}
-                to={{
-                    pathname: '/details/grade/graresult/deal',
-                    query: { deal_id: item.id },
-                    state,
-                }}>{item.number}    </Link>
+            return (
+                <Link
+                    style={{ padding: 3 }}
+                    key={item.id}
+                    to={{
+                        pathname: '/details/grade/graresult/deal',
+                        query: { deal_id: item.id },
+                        state,
+                    }}>{item.number}
+                </Link>
+            )
         })
         return (
             <div>
-                <div style={{ textAlign: 'center' }} >
-                    <h2>公开团体赛 排位赛第1轮</h2>
+                <div className={styles.title} >
+                    <span>{game_id[1]} {name}</span>
                 </div>
 
                 <div>
                     <Row type='flex' justify='center'>
-                        <Col span={9}>
+                        <Col xs={24} xl={16}  >
                             <ResultDataTable
+                                loading={loading}
                                 matchData={matchData}
                                 state={state}
                             />
-                            <div style={{ width: "600px" }}>
-                                <Row>
+                            <div className={styles.dealData}>
+                                {/*  <Row>
                                     <Col span={12}>点击桌号 查看计分表</Col>
                                     <Col span={12}><Link to='/details/grade/score'>瑞士成绩赛表</Link></Col>
                                 </Row>
@@ -108,15 +134,15 @@ class Graresult extends Component {
                                     <Col span={12}>点击队名 查看对阵记录</Col>
                                     <Col span={12}><Link to='/details/grade/score/rank'>瑞士成绩赛表（按名次排序）</Link></Col>
                                 </Row>
-                                <Row>
-                                    <Col span={12}><Link to='/details/grade/datumn'>Datumn</Link>   </Col>
-                                    <Col span={12}>牌：{dealData}</Col>
-                                </Row>
+                             */}
+                                {/*  <Col span={12}><Link to='/details/grade/datumn'></Link>   </Col>*/}
+                                牌：{dealData}
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col xs={24} xl={8}>
                             {
                                 <Table
+                                    loading={loading}
                                     rowKey={record => record.id}
                                     size='xs'
                                     columns={columnRank}
@@ -129,7 +155,7 @@ class Graresult extends Component {
                     </Row>
                 </div>
 
-            </div>
+            </div >
         )
     }
 }

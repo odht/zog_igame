@@ -1,12 +1,20 @@
+import React, { Fragment, Component } from 'react';
 import { Login } from 'ant-design-pro';
-import { Alert, Checkbox } from 'antd';
+import { Alert, Checkbox, Icon } from 'antd';
 import styles from './LoginLayout.css';
 import { connect } from 'dva';
 import router from 'umi/router';
+import GlobalFooter from '../component/GlobalFooter';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
-class LoginLayout extends React.Component {
+const copyright = (
+    <Fragment>
+        <p>智赛棋牌版权所有</p>
+        Copyright <Icon type="copyright" />北京欧德慧通信息技术有限公司提供技术支持
+    </Fragment>
+);
+class LoginLayout extends Component {
     state = {
         notice: '',
         type: 'account',
@@ -51,6 +59,7 @@ class LoginLayout extends React.Component {
     render() {
         return (
             <div className={styles.loginbox}>
+                <div className={styles.titleBox}><span className={styles.title}>智赛棋牌</span></div>
                 <Login
                     className={styles.login}
                     defaultActiveKey={this.state.type}
@@ -76,6 +85,7 @@ class LoginLayout extends React.Component {
                     <Submit className={styles.loginbutton}>登录</Submit>
                 </Login>
             </div>
+
         );
     }
 }

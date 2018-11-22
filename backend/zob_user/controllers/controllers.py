@@ -75,7 +75,7 @@ class JsonApi(http.Controller):
 
     @http.route('/json/api',type='json', auth='user',cors='*',csrf=False)
     def json_api(self,model,method, args,kwargs):
-        print('json/api:',model,method, args,kwargs)
+        #print('json/api:',model,method, args,kwargs)
         if method not in ['read2','search_read2']:
             return api.call_kw(request.env[model],method,args,kwargs)
 
@@ -109,13 +109,13 @@ class JsonApi(http.Controller):
             return res
 
         res.update(userinfo)
-        print(res)
+        #print(res)
         return res
 
 
     @http.route('/json/user/login',type='json', auth='none', cors='*', csrf=False )
     def login(self,db,login,password, type):
-        print('1231',db,login,password, type)
+        #print('1231',db,login,password, type)
 
         if type not in ['account', 'mobile']:
             return self._login_return('error', type, 'guest')
