@@ -84,10 +84,11 @@ const TableView = (props) => {
     height:this.width * 0.10,
     zIndex:6,
     color:'rgba(0, 0, 0, 0.65)',
-    fontSize:'30px',
+    fontSize:'3vh',
     backgroundColor:"#fff",
     textAlign:"center",
 }
+const seatDirections=['N','E','S','W']
 const user = table.state.user;
 const userInfo = [user.east,user.west,user.south,user.north];
 window._UserInfo=userInfo;
@@ -95,10 +96,11 @@ const userTags = [];
  for(var i = 0;i<4;i++){
   userInfo.forEach((item)=>{
     if(item.directionNum === i){
+      const blink = item.playerDirection === table.state.next ? true : false;
       console.log(item.name)
         var userTag = (<div className='userTag'>
                       <div className='seat'>
-                        <UserTag user={item} table={table} />
+                        <UserTag user={item} table={table} blink={blink}/>
                       </div>
                     </div>)
         userTags.push(userTag)  
@@ -204,7 +206,7 @@ const userTags = [];
           </div>
           <div id='advertising'></div>
         </div>
-        <div id='ad'>桥牌竞技</div>
+        <div id='ad'></div>
       </div>
 
     </div >
