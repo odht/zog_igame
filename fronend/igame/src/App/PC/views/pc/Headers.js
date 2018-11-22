@@ -25,11 +25,11 @@ class Seats extends Component{
         const s3 =Direction[Direction.indexOf(myseat)+3]; 
         return(
             <div className='seats'>
-                <div className={vulnerable.indexOf("Both")!=-1?"s1 vulnerable": vulnerable.indexOf(s1)==-1?'s1':'s1 vulnerable'}>{s1}{dealer==s1?"-D":''}</div>
-                <div className={vulnerable.indexOf("Both")!=-1?"s2 vulnerable":vulnerable.indexOf(s2)==-1?'s2':'s2 vulnerable'}>{s2}{dealer==s2?"-D":''}</div>
+                <div className={vulnerable.indexOf("B")!=-1?"s1 vulnerable": vulnerable.indexOf('NO')==-1?(vulnerable.indexOf(s1)==-1?'s1':'s1 vulnerable'):'s1'}>{s1}{dealer==s1?"-D":''}</div>
+                <div className={vulnerable.indexOf("B")!=-1?"s2 vulnerable": vulnerable.indexOf('NO')==-1?(vulnerable.indexOf(s2)==-1?'s2':'s2 vulnerable'):"s2"}>{s2}{dealer==s2?"-D":''}</div>
                 <div className='center'>{nth}</div>
-                <div className={vulnerable.indexOf("Both")!=-1?"s3 vulnerable":vulnerable.indexOf(s3)==-1?'s3':'s3 vulnerable'}>{s3}{dealer==s3?"-D":''}</div>
-                <div className={vulnerable.indexOf("Both")!=-1?"s4 vulnerable":vulnerable.indexOf(myseat)==-1?'s4':'s4 vulnerable'}>{myseat}{dealer==myseat?"-D":''}</div>
+                <div className={vulnerable.indexOf("B")!=-1?"s3 vulnerable": vulnerable.indexOf('NO')==-1 ? (vulnerable.indexOf(s3)==-1?'s3':'s3 vulnerable'):'s3'}>{s3}{dealer==s3?"-D":''}</div>
+                <div className={vulnerable.indexOf("B")!=-1?"s4 vulnerable": vulnerable.indexOf('NO')==-1?(vulnerable.indexOf(myseat)==-1?'s4':'s4 vulnerable'):'s4'}>{myseat}{dealer==myseat?"-D":''}</div>
             </div>
         )
     }
