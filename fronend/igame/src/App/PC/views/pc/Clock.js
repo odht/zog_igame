@@ -20,14 +20,14 @@ class Clock extends Component {
         this.state.time = props.time;
     }
     timing = () => {
-        if (this.state.time == 0) {
-            this.props.callback();
-            clearInterval(this._clock);
-        } else {
+        // if (this.state.time == 0) {
+        //     this.props.callback();
+        //     clearInterval(this._clock);
+        // } else {
             this.setState({
-                time: --this.state.time
+                time: ++ this.state.time
             })
-        }
+        // }
     }
     componentDidMount() {
         this._clock = setInterval(this.timing, 1000)

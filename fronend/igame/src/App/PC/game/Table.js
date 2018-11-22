@@ -54,7 +54,9 @@ class Table extends Component {
      */
     
     constructor(props) {
-        super(props);  
+       
+        super(props); 
+        window._TABLE=this; 
         /**添加********************************************************************************* */
         this.table_id_list =null;
         this.table_id = null;
@@ -65,7 +67,7 @@ class Table extends Component {
 		this.pollingId = 1;     //消息ID
         this.callResult = 0;    //叫牌时，对'Pass'进行计数，判断是否叫牌结束
         this.dealer = null;     //发牌人
-        
+        this.delFirstMessage = 1;
         this.dummyCards = null;
         this.dummySeat = null;
         // this.claimnum = 0;      //claim的墩数、方位、庄家剩余的牌
@@ -73,7 +75,7 @@ class Table extends Component {
         this.claimtrick = 13;    //可claim的数目
         this.playSuit = null;
         this.originData = null; //初始化牌桌时的所有数据
-      
+        this.body={};
         this.lastTrickCard = null    //上墩牌
         this.lastTrickPos = [];  //上墩牌的方位
         this.cards = {N:'',E:'',S:'',W:''};  //保存四个玩家牌的真实数据
@@ -107,6 +109,7 @@ class Table extends Component {
         this.ref.board = React.createRef();
         this.state = TableModel.state
         window.__Board=TableModel.board;
+        this.nth=0;
     }
     /**
      * 通过计算获得 Card 的 size
@@ -135,6 +138,7 @@ class Table extends Component {
     }
 
     sucChannel=(data)=>{    //查询公共频道号,board_id,私有频道号,  [2, Array(8), 5]
+        
         const boardData = data.slice(-3); 
         if(data.length===3){ this.setBoardId(boardData) }
      
@@ -155,10 +159,12 @@ class Table extends Component {
     setBoardId=(data,board_id)=>{
         this.my_channel_id = data[2]; 
         this.board_id_list = data[1];
-        this.channel_id = data[0];
+        this.channel_id = data[0];window._CHANNEL_ID=data[0];
         this.board_id = board_id||data[1][0];
+        this.nth = this.board_id_list.indexOf(this.board_id) + 1 ;
         Models.init_board(this.sucInit,this.failInit,this.board_id,this.channel_id);    //初始化牌桌，第三个参数表示牌号
     }
+    failInit(data){console.log(data)}
     sucInit=(data)=>{
        
     // {cards:"AQ93.T9632.T7.73 6.K7.K984.AQJ964 K42.AQ5.AJ3.KT85 JT875.J84.Q652.2",dealer:'E',players:[["111 1111 1111", "S", 7],["222 2222 2222", "N", 8],["333 3333 3333", "E", 9],["444 4444 4444", "W", 10]],vulnerable:"NS"}
@@ -195,7 +201,13 @@ class Table extends Component {
       
         if(data.length && data.slice(-1)[0]['id']!==this.pollingId && data[data.length-1].message.body.indexOf('data-oe-id')===-1){
             //准备遍历消息
-            this.dealMsg(data);
+            if(this.delFirstMessage===1){
+                this.delFirstMessage=0
+                this.pollingId=data.slice(-1)[0]['id'];
+            }else{
+                this.dealMsg(data);
+            }
+           
         } 
         if(!this.state.toResult){
             Models.polling(this.sucPolling,this.failPolling,this.pollingId)
@@ -244,7 +256,7 @@ class Table extends Component {
                     scene:2
                 })
             }
-            if(body.number&&body.rank&&body.card&&body.number!==this.state.playCardNumber && this.state.lastState==null){    //收到打牌消息 {ns_win:0,number:1,rank:'5',pos:'W',suit:'C',nextplayer:'W',card:'C5',ew_win:0}
+            if(body.number&&body.rank&&body.card&&body.number!==this.state.playCardNumber ){    //收到打牌消息 {ns_win:0,number:1,rank:'5',pos:'W',suit:'C',nextplayer:'W',card:'C5',ew_win:0}
                 this.state.playCardNumber = body.number
                 // this.setState({lastTrick:false})
                 if(this.state.lastTrick){this.lastTrick(false)};
@@ -252,6 +264,7 @@ class Table extends Component {
                 this.dummySeat = Table.seats[this.state.userdir.indexOf(this.state.dummy)]   //计算明手的方位
                 if(body.number===1){this.testDummy(this.dummySeat,this.dummyCards)}
                 if(body.number%4===1){  this.playSuit = body.suit; }
+                this.body=body;
                 //验证打牌规则，根据打牌规则进行提示
                 this.playRules(body.nextplayer,this.playSuit,body.number);    
                 if(body.pos===this.state.declarer){this.claimtrick = this.claimtrick-1;}       //计算当前庄家可claim的墩数
@@ -266,7 +279,7 @@ class Table extends Component {
                     nextplayer:body.nextplayer,
                     next:body.nextplayer
                 })
-                this.timing(null,10,()=>{},true);        //提示下一个出牌人  
+                this.timing(null,0,()=>{},true);        //提示下一个出牌人  
              
                 if(body.number===52){   //当52张牌全部出完后，查询当前这幅牌的成绩
                     console.log('52张牌已经打完')
@@ -314,118 +327,123 @@ class Table extends Component {
         }
     }
     dealMsg = (data) =>{
-      
-        this.pollingId=data.slice(-1)[0]['id']
-        let body = data[data.length-1].message.body;    //"<p>{'board_id': 44, 'number': 1, 'name': u'1S', 'pos': u'S'}</p>"
+        data.forEach((dataItem)=>{
+            this.pollingId=dataItem['id'];
+            let body = dataItem.message.body;
+            this.dealMessageBody(body)
+        })
+        // this.pollingId=data.slice(-1)[0]['id']
+        // let body = data[data.length-1].message.body;    //"<p>{'board_id': 44, 'number': 1, 'name': u'1S', 'pos': u'S'}</p>"
         
-        if(body.substring(3,body.length-4)==='all ready'){
-            this.splitCards() ;
-        }else if(body.substring(3,body.length-4)==='claim agreed'){
-                this.setState({scene:2});
-                this.addChatMsg('系统消息','庄家claim成功，正在为您计算本副牌成绩...')
-                Models.claim(this.sucClaim,this.failClaim,this.board_id,this.state.claimnum.pos,this.channel_id);
-        }else{
-            body = body.replace(/u'/g,"'").replace(/ /g,'')
-            body = eval('('+body.substring(3,body.length-4)+')')
+        // if(body.substring(3,body.length-4)==='all ready'){
+        //     this.splitCards() ;
+        // }else if(body.substring(3,body.length-4)==='claim agreed'){
+        //         this.setState({scene:2});
+        //         this.addChatMsg('系统消息','庄家claim成功，正在为您计算本副牌成绩...')
+        //         Models.claim(this.sucClaim,this.failClaim,this.board_id,this.state.claimnum.pos,this.channel_id);
+        // }else{
+        //     body = body.replace(/u'/g,"'").replace(/ /g,'')
+        //     body = eval('('+body.substring(3,body.length-4)+')')
         
         
 
-            if(body.pos&&body.send_msg){         //收到聊天消息  {pos:'W',send_msg:'msg'}
-                this.addChatMsg(body.pos,body.send_msg)
-            }
-            if(body.board_id&&body.name&&body.pos&&body.number){  //收到叫牌消息  
-                this.setState({
-                    next:NEXTPLAYER[body.pos]
-                })
+        //     if(body.pos&&body.send_msg){         //收到聊天消息  {pos:'W',send_msg:'msg'}
+        //         this.addChatMsg(body.pos,body.send_msg)
+        //     }
+        //     if(body.board_id&&body.name&&body.pos&&body.number){  //收到叫牌消息  
+        //         this.setState({
+        //             next:NEXTPLAYER[body.pos]
+        //         })
                 
-                this.timing(null,0,()=>{},true)   //提示下一个叫牌人
-                this.validatePass(body)
-            }
-            if(body.dummy&&body.openlead&&body.declarer){   //收到叫牌结果信息   {dummy:'N',openlead:'W',declarer:'S',nextplayer:'W',contract:'1S'}
-                ReactDOM.unmountComponentAtNode(document.querySelector('#clock'));
-                this.setState({
-                    nextplayer:body.nextplayer,
-                    next:body.openlead
-                })
+        //         this.timing(null,0,()=>{},true)   //提示下一个叫牌人
+        //         this.validatePass(body)
+        //     }
+        //     if(body.dummy&&body.openlead&&body.declarer){   //收到叫牌结果信息   {dummy:'N',openlead:'W',declarer:'S',nextplayer:'W',contract:'1S'}
+        //         ReactDOM.unmountComponentAtNode(document.querySelector('#clock'));
+        //         this.setState({
+        //             nextplayer:body.nextplayer,
+        //             next:body.openlead
+        //         })
                
-                this.timing(null,0,()=>{},true);
-                this.playRules(body.nextplayer,null,null);      //根据打牌规则提示
-                this.setState({
-                    cards:TableModel.state.cards,
-                    contract:body.contract,
-                    declarer:body.declarer,
-                    dummy:body.dummy,
-                    scene:2
-                })
-            }
-            if(body.number&&body.rank&&body.card&&body.number!==this.state.playCardNumber){    //收到打牌消息 {ns_win:0,number:1,rank:'5',pos:'W',suit:'C',nextplayer:'W',card:'C5',ew_win:0}
-                this.state.playCardNumber = body.number
-                // this.setState({lastTrick:false})
-                if(this.state.lastTrick){this.lastTrick(false)};
-                this.dummyCards = this.cards[this.state.dummy];       //拿到明手的牌
-                this.dummySeat = Table.seats[this.state.userdir.indexOf(this.state.dummy)]   //计算明手的方位
-                if(body.number===1){this.testDummy(this.dummySeat,this.dummyCards)}
-                if(body.number%4===1){  this.playSuit = body.suit; }
-                //验证打牌规则，根据打牌规则进行提示
-                this.playRules(body.nextplayer,this.playSuit,body.number);    
-                if(body.pos===this.state.declarer){this.claimtrick = this.claimtrick-1;}       //计算当前庄家可claim的墩数
+        //         this.timing(null,0,()=>{},true);
+        //         this.playRules(body.nextplayer,null,null);      //根据打牌规则提示
+        //         this.setState({
+        //             cards:TableModel.state.cards,
+        //             contract:body.contract,
+        //             declarer:body.declarer,
+        //             dummy:body.dummy,
+        //             scene:2
+        //         })
+        //     }
+        //     if(body.number&&body.rank&&body.card&&body.number!==this.state.playCardNumber){    //收到打牌消息 {ns_win:0,number:1,rank:'5',pos:'W',suit:'C',nextplayer:'W',card:'C5',ew_win:0}
+        //         this.state.playCardNumber = body.number
+        //         // this.setState({lastTrick:false})
+        //         if(this.state.lastTrick){this.lastTrick(false)};
+        //         this.dummyCards = this.cards[this.state.dummy];       //拿到明手的牌
+        //         this.dummySeat = Table.seats[this.state.userdir.indexOf(this.state.dummy)]   //计算明手的方位
+        //         if(body.number===1){this.testDummy(this.dummySeat,this.dummyCards)}
+        //         if(body.number%4===1){  this.playSuit = body.suit; }
+        //         //验证打牌规则，根据打牌规则进行提示
+        //         this.body=body;
+        //         this.playRules(body.nextplayer,this.playSuit,body.number);    
+        //         if(body.pos===this.state.declarer){this.claimtrick = this.claimtrick-1;}       //计算当前庄家可claim的墩数
                 
-                const playSeatCard = TableModel.state.cards[this.state.userdir.indexOf(body.pos)]     //拿到当前出牌人对应的牌，应为XXXXXXXXXXXXX
-                const setItem = [body.pos,body.card];
-                this.recoverTrick(setItem,'play',true);
-                this.setState({
-                    cards: TableModel.state.cards,
-                    ew_win:body.ew_win,
-                    ns_win:body.ns_win,
-                    nextplayer:body.nextplayer,
-                    next:body.nextplayer
-                })
-                this.timing(null,10,()=>{},true);        //提示下一个出牌人  
+        //         const playSeatCard = TableModel.state.cards[this.state.userdir.indexOf(body.pos)]     //拿到当前出牌人对应的牌，应为XXXXXXXXXXXXX
+        //         const setItem = [body.pos,body.card];
+        //         this.recoverTrick(setItem,'play',true);
+        //         this.setState({
+        //             cards: TableModel.state.cards,
+        //             ew_win:body.ew_win,
+        //             ns_win:body.ns_win,
+        //             nextplayer:body.nextplayer,
+        //             next:body.nextplayer
+        //         })
+        //         this.timing(null,10,()=>{},true);        //提示下一个出牌人  
              
-                if(body.number===52){   //当52张牌全部出完后，查询当前这幅牌的成绩
-                    console.log('52张牌已经打完')
-                    if(this.board_id_list.indexOf(this.board_id)<=this.board_id_list.length-1){
-                        Models.board_points(this.sucBoardPoints,this.failBoardPoints,this.board_id)
-                    }
-                }
-            }
-            if(body.pos&&body.num&&body.board){   //收到庄家claim消息  {pos:'W', num:3, board:['SQ','ST']}
-                this.setState({claimnum:body})
-                if(this.myseat!==body.pos){
-                    //展示庄家的牌
-                    let claimCard = TableModel.state.cards[this.state.userdir.indexOf(body.pos)].splice(13-body.board.length,body.board.length);  
-                    claimCard.map((item1,index1)=>{
-                        item1.card = body.board[index1].split('')[1]+body.board[index1].split('')[0];
-                        TableModel.state.cards[this.state.userdir.indexOf(body.pos)].push(item1)
-                    })
-                    this.setState({
-                        scene:3,
-                        cards: TableModel.state.cards,
-                    });
-                } 
-            }
-            if(body.pos&&body.agreeClaim){   //收到防守方是否同意
-                const agreeClaimPos = TableModel.unifyDirection(body.pos);
-                if(body.agreeClaim==='false'){  //当有防守方拒绝claim时，继续打牌过程
-                    this.addChatMsg('系统消息',this.state.user[agreeClaimPos]['name']+' 拒绝庄家的claim请求，请继续打牌')
-                    this.setState({scene:2, claimnum:{pos:null, num:0}, claiming:0, claimingState:[]});
-                    if(this.state.playCardNumber%4===0){this.playRules(this.state.nextplayer,null,null);}
-                    else{this.playRules(this.state.nextplayer,this.playSuit,null);}
-                }
-                else if(body.agreeClaim==='true'){
-                    this.state.claimingState.push(body.pos)
-                    this.setState({claimingState:this.state.claimingState})
-                    this.addChatMsg('系统消息',this.state.user[agreeClaimPos]['name']+' 同意了庄家的claim请求')
-                }
-            }
+        //         if(body.number===52){   //当52张牌全部出完后，查询当前这幅牌的成绩
+        //             console.log('52张牌已经打完')
+        //             if(this.board_id_list.indexOf(this.board_id)<=this.board_id_list.length-1){
+        //                 Models.board_points(this.sucBoardPoints,this.failBoardPoints,this.board_id)
+        //             }
+        //         }
+        //     }
+        //     if(body.pos&&body.num&&body.board){   //收到庄家claim消息  {pos:'W', num:3, board:['SQ','ST']}
+        //         this.setState({claimnum:body})
+        //         if(this.myseat!==body.pos){
+        //             //展示庄家的牌
+        //             let claimCard = TableModel.state.cards[this.state.userdir.indexOf(body.pos)].splice(13-body.board.length,body.board.length);  
+        //             claimCard.map((item1,index1)=>{
+        //                 item1.card = body.board[index1].split('')[1]+body.board[index1].split('')[0];
+        //                 TableModel.state.cards[this.state.userdir.indexOf(body.pos)].push(item1)
+        //             })
+        //             this.setState({
+        //                 scene:3,
+        //                 cards: TableModel.state.cards,
+        //             });
+        //         } 
+        //     }
+        //     if(body.pos&&body.agreeClaim){   //收到防守方是否同意
+        //         const agreeClaimPos = TableModel.unifyDirection(body.pos);
+        //         if(body.agreeClaim==='false'){  //当有防守方拒绝claim时，继续打牌过程
+        //             this.addChatMsg('系统消息',this.state.user[agreeClaimPos]['name']+' 拒绝庄家的claim请求，请继续打牌')
+        //             this.setState({scene:2, claimnum:{pos:null, num:0}, claiming:0, claimingState:[]});
+        //             if(this.state.playCardNumber%4===0){this.playRules(this.state.nextplayer,null,null);}
+        //             else{this.playRules(this.state.nextplayer,this.playSuit,null);}
+        //         }
+        //         else if(body.agreeClaim==='true'){
+        //             this.state.claimingState.push(body.pos)
+        //             this.setState({claimingState:this.state.claimingState})
+        //             this.addChatMsg('系统消息',this.state.user[agreeClaimPos]['name']+' 同意了庄家的claim请求')
+        //         }
+        //     }
         
-            if(body.pos&&body.state==='ready'){
-                const seat = Table.seats[this.state.userdir.indexOf(body.pos)]
-                this.state.ready[seat]='R'
-                this.setState({ready:this.state.ready})
+        //     if(body.pos&&body.state==='ready'){
+        //         const seat = Table.seats[this.state.userdir.indexOf(body.pos)]
+        //         this.state.ready[seat]='R'
+        //         this.setState({ready:this.state.ready})
               
-            }
-        }
+        //     }
+        // }
        
     }
 
@@ -459,7 +477,7 @@ class Table extends Component {
     re_init=()=>{
         //未准备，准备阶段，叫牌阶段，打牌阶段，claim中，claim完成，
         const lastState=this.state.lastState;
-      
+        
         // 1 叫牌阶段 2 出牌阶段 3 claim 等待，4 claim 确认
         // ReactDOM.unmountComponentAtNode(document.querySelector('#clock'));
         if(lastState.state==='calling ready'||lastState.state==='start playing'){
@@ -554,9 +572,11 @@ class Table extends Component {
             /* 恢复验证规则 */
             if(lastState.current_trick.length===4||lastState.current_trick.length===0){
                 this.playRules(this.state.nextplayer,null,null);
+                this.body.nextplayer=this.state.nextplayer;
             }else{
                 this.playSuit = lastState.current_trick.slice(0,1)[0][2].split('')[0];
                 this.playRules(this.state.nextplayer,this.playSuit,null);
+                this.body.nextplayer=this.state.nextplayer;
             }
         }
 
@@ -623,6 +643,7 @@ class Table extends Component {
         this.deals = 'XXX.XX.XXXX.XXXX '+ this.cards[this.myseat] +' XXX.XX.XXXX.XXXX XXX.XX.XXXX.XXXX';
         //二维数组，数组元素是josn对象，josn对象有每一张牌的信息，全部放在state的cards中
         TableModel.state.cards = this.initCards();
+        window._Card=TableModel.state.cards;
         TableModel.state.cards=TableModel.state.cards;
         this.deal();
         //状态变成叫牌阶段
@@ -771,7 +792,12 @@ class Table extends Component {
     sucPlay=(data)=>{
         Models.sendplay(this.sucSearchPlay,this.failSearchPlay, this.board_id, data, this.channel_id);  //查询出牌结果
     }
-    failSearchPlay=()=>{}
+    failSearchPlay=(data)=>{
+        // console.log('打牌失败')
+        // TableModel.failPlay(this.playing);
+        // this.playing='';
+        // this.forceUpdate()
+    }
     sucSearchPlay=(data)=>{console.log(data)}
     recoverMyCards=()=>{
         const mycards = [[],[],[],[]];       /*恢复自己的牌 */
@@ -920,7 +946,7 @@ moveToPlayed=(item)=>{
     item.active = 3;
 }
 
-failPlay=(data)=>{console.log('fail play',data)}
+
 
 sucBoardPoints=(data)=>{    //查询当前牌成绩的成功回调，调取展示成绩模块进行展示
     this.showResult(data);
@@ -962,7 +988,9 @@ failClaim1=()=>{console.log('fail claim')}
         this._initSeat(); 
         Models.get_matches(this.sucGetMatch,this.failGetMatch)
     }
-
+    failGetMatch(data){
+        console.log('初始化失败')
+    }
 
     /**
     * 根据dom 定位 初始化 发牌位置 出牌位置 坐标
@@ -1013,12 +1041,18 @@ failClaim1=()=>{console.log('fail claim')}
      * @param {card} item
      */
     play = (item) => { 
-        return ()=>{
+        return ()=>{console.log("测试点击")
             if (item.active == 2) {
                 TableModel.preplay(item);
                 this.setState({ cards: TableModel.state.cards });
-            } else if (item.active == 3) {//先采用收到消息后再打牌
+            } else if (item.active == 3) {
                 TableModel.play(item);
+                this.playing=item;
+                TableModel.state.cards.forEach((playerCards)=>{
+                    playerCards.forEach((item)=>{
+                        item.onclick=() => false
+                    })
+                })
                 this.setState({ cards: TableModel.state.cards });
                 Sound.play('play'); 
                 const card = item.card.split('')[1]+item.card.split('')[0];
@@ -1027,7 +1061,15 @@ failClaim1=()=>{console.log('fail claim')}
             } else return;
         }
     }
-    
+
+    failPlay=(data)=>{
+        console.log('打牌失败')
+        TableModel.failPlay(this.playing);
+        this.playing='';
+        this.playRules(this.body.nextplayer,this.playSuit,this.body.number);
+        this.forceUpdate()
+        
+    }
 
     /**
      * 触发 claim
@@ -1132,7 +1174,7 @@ failClaim1=()=>{console.log('fail claim')}
 
     // }
     timing = (seat, time, callback,addOrReduce) => {
-        // ReactDOM.unmountComponentAtNode(document.querySelector('#clock'));
+        ReactDOM.unmountComponentAtNode(document.querySelector('#clock'));
         // const p = this.width * 0.25;
         // const offset = {
         //     east: { x: p, y: 0 },
@@ -1151,10 +1193,11 @@ failClaim1=()=>{console.log('fail claim')}
         // }
         const style = {
             position: 'absolute',
-            top: this.width * 0.08,
-            right: this.width*0.05,
-            width: '10%',
-            height:this.width * 0.10,
+            bottom: "0px",
+            right: '50%',
+            width: '60px',
+            height:'60px',
+            marginRight:'-30px',
             zIndex:6
         }
         const clock = (
