@@ -32,9 +32,13 @@ class OdooRpc {
             headers: new Headers({
                 'Content-Type': 'application/json'
             })
-        }).then(res => res.json()
-        ).catch(error => console.error('Error:', error)
-        ).then(response => {
+        })
+        .then(res => res.json())
+        .catch(error => {
+            this.error()
+            throw error;            
+        })
+        .then(response => {
             if(response){
                 if (response.result) {
                     this.success(response.result)

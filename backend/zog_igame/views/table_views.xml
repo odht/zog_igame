@@ -28,6 +28,7 @@
             <field name="model">og.table</field>
             <field name="arch" type="xml">
                 <tree string="Table">
+                    <field name="state"/>
                     <field name="game_id"/>
                     <field name="phase_id"/>
                     <field name="round_id"/>

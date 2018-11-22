@@ -23,6 +23,7 @@
     width:100%;
     height:100%;
     background-color: #0099cc;
+    position: relative;
 }
 .seats > div {float:left;text-align: center}
 .seats > .s1{
@@ -31,17 +32,29 @@
     background-color: #eeeeee;
 }
 .seats > .s2{
-    margin-top:2%;
-    width:20%;
-    height:57%;
+    top: 7.5vh;
+    left: -3.2vh;
+    width: 57%;
+    height: 3.5vh;
     background-color: #eeeeee;
+    position: absolute;
+    transform: rotate(90deg);
+}
+.seats > .center{
+    margin-top:2%;
+    width:100%;
+    height:57%;
+    line-height: 10vh;
+    
 }
 .seats > .s3{
-    margin-top:2%;
-    margin-left:60%;
-    width:20%;
-    height:57%;
+    width: 57%;
+    height: 3.5vh;
+    left: 11vh;
+    top: 7.3vh;
     background-color: #eeeeee;
+    transform: rotate(90deg);
+    position: absolute;
 }
 .seats > .s4{
     margin-top:2%;
@@ -75,4 +88,7 @@
     width:100%;
     height:30%;
     background-color: #eeeeee;
+}
+.vulnerable{
+    background-color: #fbaa5f !important;
 }
