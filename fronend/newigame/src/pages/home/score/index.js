@@ -48,7 +48,7 @@ export default class Home extends Component {
     handleSbumitScore = () => {
         this.props.dispatch({
             type: "ogTable/write",
-            payload: { state: "done" }
+            payload: { vals: { state: "done" } }
         }).then(() => {
             notification.config({
                 placement: "topLeft",
