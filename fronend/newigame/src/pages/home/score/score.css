@@ -1,0 +1,12 @@
+.headerTitle{
+    height: 60px;
+    text-align: center;
+    background:rgba(100, 149, 237, 1);
+}
+.headerTitleText{
+    line-height: 60px;
+    color: white;
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0px;
+}

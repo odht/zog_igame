@@ -32,7 +32,6 @@ export default class OneTable extends React.Component {
             imps = this.state.data[2].IMPs;
             vps = this.state.data[3].VPs;
         }
-        console.log(imps, '111111')
         return (
             <div>
                 <NavBar

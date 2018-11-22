@@ -25,3 +25,43 @@ Common/                     用来保存公用代码
                             SiteLogin 用于完成模态的登录动作，并且注册进来外部的回调函数，登录成功后执行外部的回调函数。完成登录后界面的调整。
 
 Models/                     计划用于保存和后台数据打交到的所有代码。
+
+# 流程
+1. App.js是入口文件，关键理解比赛页面， 点击比赛按钮，根据是否是登录状态，渲染不同页面，已经登录，渲染App2页面，未登录，渲染登录页面。
+
+2. App2页面就是App/Game/game/Game.js
+```
+export const App2 = Loadable({
+    // 赛事列表入口
+    // loader: () => import('./App2/Index2'),
+    loader: () => import('./Game/game/Game'),
+    loading: () => loading1,
+});
+```
+
+3. 分析App/Game/game/Game.js
+> state 的scene 0 显示table， 1 显示结果，默认 0 ，显示table
+
+```
+<Table toResult={this.toResult} setHiddenState={this.props.setHiddenState}> 
+    <Bid />
+</Table>
+//toResult函数显示Result组件，不显示Table组件；setHiddenState隐藏底部导航
+```
+4. 分析Table
+
+```graph
+graph TD;
+
+componentDidMount --> Models.get_matches(this.sucGetMatch,this.failGetMatch)//得到比赛数据
+
+```
+```
+{
+current_board:13
+east_ready:"R"
+north_ready:"R"
+south_ready:"R"
+state:"calling ready"
+west_ready:"R"
+}

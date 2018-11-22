@@ -1,0 +1,35 @@
+.images{
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.about{
+    border-top: 2px solid #ccc;
+    padding: 40px 0;
+    height: 200px;
+    text-align: center;
+}
+.Abouttop{
+    color: #3e93f5;
+    font-size: 45px;
+    font-weight: 700;
+}
+.aboutbottom{
+    font-size: 20px;
+}
+.company{
+    font-size: 16px;
+    text-indent: 2em;
+    text-align: justify;
+}
+.contact {
+    font-size: 18px;
+    line-height: 40px;
+}
+.contact span{
+    font-size: 20px;
+    display: inline-block;
+    width: 80px;
+    margin-right: 10px;
+    text-align: right;
+}

@@ -1,0 +1,8 @@
+.submitA{
+    display: inline-block;
+}
+.submitButton{
+    margin: 1% 0;
+    float:right;
+    margin-right: 30px;
+}

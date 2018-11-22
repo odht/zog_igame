@@ -10,7 +10,7 @@ let css1 = {
 }
 
 /**
- * 
+ * 所有叫牌点击执行 this.props.bidCall(item.name);根据name的不同，来确定操作
  */
 class BidPanel extends Component {
     state = {
@@ -21,8 +21,11 @@ class BidPanel extends Component {
         this.width = window.screen.width;
         const suits = ['NT', 'S', 'H', 'D', 'C'];
         const rank = [1, 2, 3, 4, 5, 6, 7];
+        //[['1NT', '1S', '1H', '1D', '1C'],[],[],[],[],[],[],]
         const bids = rank.map((i) => suits.map((j) => i + j))
-        //console.log(bids)
+      
+        //[[{name:'1NT',active:1}, {}, {}, {}, {}],[],[],[],[],[],[],]
+        //active:1表示可以点击
         const bidblocks = bids.map((e, i) => e.map((e1, i1) => {
             //let active = (i<5 && i1<3) ? 1:0;
             return { name: e1, active: 1 }

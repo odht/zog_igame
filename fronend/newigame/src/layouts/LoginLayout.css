@@ -1,0 +1,24 @@
+
+.login{
+    width: 367px;
+    height: 350px;
+}
+.loginbutton{
+    margin-top:20px;
+    width: 100%;
+}
+.title{
+    font-style:italic;
+    font-weight:600;
+    color: #444;
+    position: relative;
+    left: 16px;
+    margin-bottom: 25px;
+    font-size: 40px;
+    letter-spacing: 30px;
+}
+
+.footer{
+    position: absolute;
+    bottom: 0;
+}
