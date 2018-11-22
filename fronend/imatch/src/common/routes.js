@@ -1,22 +1,22 @@
 export const homeRoutes = [
     {
         name: "首页",
-        path: '/home',
+        path: '/',
         child: [],
     }, {
         name: "关于我们",
-        path: '/home/our',
+        path: '/our',
         child: [],
     }, {
         name: "产品中心",
-        path: '/home/production',
+        path: '/production',
         child: [],
     }
 ]
 export const headerRoutes = [
     {
         name: "首页",
-        path: "/",
+        path: "/home",
         child: [],
     },
     {
