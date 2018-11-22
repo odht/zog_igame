@@ -88,7 +88,10 @@ class TeamMatch extends Component {
         }],
       }, {
         title: '总分',
-        dataIndex: 'score'
+        dataIndex: 'score',
+        render: (text) => {
+          return text.toFixed(2);
+        }
       }
     ]
     return (
@@ -99,10 +102,10 @@ class TeamMatch extends Component {
           columns={TeamMatchColumns}
           dataSource={TeamRoundInfoData}
           pagination={{
-						showQuickJumper: true,
-						showSizeChanger: true,
-						pageSizeOptions: ['10', '15', '20'],
-					}}
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '15', '20'],
+          }}
         />
       </div>
     )
