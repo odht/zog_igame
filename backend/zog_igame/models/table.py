@@ -39,7 +39,7 @@ class Table(models.Model):
     @api.multi
     def _compute_name(self):
         for rec in self:
-            rec.name = rec.room_type + ',' + rec.match_id.number + ',' + rec.match_id.name
+            rec.name = rec.room_type + ',' + str(rec.match_id.number) + ',' + rec.match_id.name
     
     
     number = fields.Integer(default=1 )
