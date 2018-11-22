@@ -204,7 +204,7 @@ const userTags = [];
           </div>
           <div id='advertising'></div>
         </div>
-        <div id='ad'></div>
+        <div id='ad'>桥牌竞技</div>
       </div>
 
     </div >
