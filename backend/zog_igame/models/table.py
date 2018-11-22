@@ -20,6 +20,7 @@ class Table(models.Model):
     _description = "Table"
     _order = 'match_id,room_type, number'
 
+    """ 
     @api.model
     def create(self,vals):
         table = super(Table,self).create(vals)
@@ -27,6 +28,7 @@ class Table(models.Model):
             table.name = table.room_type + ',' + table.match_id.name
 
         return table
+    """
 
     _sql_constraints = [
         ('match_open_close_uniq', 'unique (room_type,match_id)', 'The match have one open table and one close table !')
@@ -37,7 +39,7 @@ class Table(models.Model):
     @api.multi
     def _compute_name(self):
         for rec in self:
-            rec.name = rec.room_type + ',' + rec.match_id.name
+            rec.name = rec.room_type + ',' + rec.match_id.number + ',' + rec.match_id.name
     
     
     number = fields.Integer(default=1 )
