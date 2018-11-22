@@ -3,8 +3,8 @@ import Scoringtable from '@/component/Scoringtable';
 import styles from './score.css';
 import { connect } from 'dva';
 import { lookup } from '@/utils/tools';
-
-
+import { notification } from 'antd';
+import router from 'umi/router';
 
 @connect(({ odooData }) => ({ odooData }))
 export default class Home extends Component {
@@ -42,6 +42,26 @@ export default class Home extends Component {
             })
         })
 
+    }
+
+    //提交全部成绩
+    handleSbumitScore = () => {
+        const { dispatch, location: { query: { table_id } } } = this.props;
+        dispatch({
+            type: "ogTable/write",
+            payload: { id: parseInt(table_id),vals: { state: "done" } }
+        }).then(() => {
+            notification.config({
+                placement: "topLeft",
+            })
+            notification['success']({
+                message: '提交成功',
+                description: '返回登录页面'
+            })
+            localStorage.removeItem('tonken');
+            localStorage.removeItem('uid');
+            router.push('/User/login');
+        })
     }
     writeSoringData = (vals) => {
         const { dispatch } = this.props;
@@ -113,10 +133,7 @@ export default class Home extends Component {
         const { boardData, isAdmin, tableData, loading } = this.state;
         let name
         if (tableData.round_id) {
-            let nameArr = tableData.name.split(',');
-            let roomType = nameArr[0] === "open" ? '开室' : '闭室';
-            let vsNumber = nameArr[2];
-            name = `${roomType} , ${vsNumber}`
+            name = tableData.name
         }
         if (boardData && boardData.length > 0) {
             scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
@@ -148,10 +165,11 @@ export default class Home extends Component {
         return (
             <div>
                 <div className={styles.headerTitle}>
-                    <h1 className={styles.headerTitleText}>计分表（{tableData.round_id ? `${tableData.round_id[1]},${name}` : ''}）</h1>
+                    <h1 className={styles.headerTitleText}>计分表（{tableData.round_id ? name: ''}）</h1>
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable
+                        handleSbumitScore={this.handleSbumitScore}
                         loading={loading}
                         changeAdmin={this.changeAdmin}
                         isAdmin={isAdmin}

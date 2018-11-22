@@ -44,12 +44,13 @@ class HomeIndex extends Component {
         return <UserLayout {...this.props}>{this.props.children}</UserLayout>
       }
       if (router === '/home') {
-        return <HomeLayout {...this.props}>{this.props.children}</HomeLayout>
-      }
-      return (
         <LocaleProvider locale={zhCN}>
           <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
         </LocaleProvider>
+      }
+      return (
+
+        <HomeLayout {...this.props}>{this.props.children}</HomeLayout>
       )
     } else {
       return <div>正在加载</div>

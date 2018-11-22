@@ -25,10 +25,10 @@ export default class HomeHome extends Component {
             '成绩查询：',
             '1 成绩查询网址：  http://www.odooht.com；',
             '2 各轮赛后，可以通过上述网址查询成绩；',
-            
+
             '成绩录入：',
             '1 比赛期间，各桌使用 pad 录入成绩',
-           '比赛成绩录入网址: http://www.odooht.com；',
+            '比赛成绩录入网址: http://www.odooht.com；',
             '2 各桌左上角有本桌的登录账号和密码；',
             '3  开室各桌登录账号为 100 + 桌号，如 101、102、103、…；',
             '闭室各桌登录账号为 200 + 桌号，如201、202、203、…；',
@@ -37,7 +37,7 @@ export default class HomeHome extends Component {
             '6 需要同时记录三联记分表！赛后务必自行结分，并向裁判长交计分表；',
             '7 成绩有误，请向裁判长汇报；',
             '8 不要试图去修改成绩，一切以三联计分表为准！',
-            
+
             '裁判工作须知：',
             '1 各轮比赛前后，专人负责所有平板的收发；',
             '2 每一轮比赛前，协助各桌牌手使用平板进入系统、输入账号和密码；',
@@ -75,7 +75,7 @@ export default class HomeHome extends Component {
                     <Card title="2018年河北省省会桥牌等级赛" bordered={false}>
                         <div className={styles.company}>
                             <a target="view_window" href="http://124.42.117.43:8001"><Button size="large" style={{ margin: '0 20px' }} type="primary">赛事录分入口</Button></a>
-                            <a target="view_window" href="http://124.42.117.43:8000"><Button size="large" style={{ margin: '0 20px' }} type="primary">赛事查询入口</Button></a>
+                            <a target="view_window" href="http://124.42.117.43:8000/home"><Button size="large" style={{ margin: '0 20px' }} type="primary">赛事查询入口</Button></a>
                             <Button size="large" style={{ margin: '0 20px' }} type="primary" onClick={this.showModal}>
                                 使用需知
                                 </Button>
