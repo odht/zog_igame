@@ -75,7 +75,7 @@ export default class HomeHome extends Component {
                     <Card title="2018年河北省省会桥牌等级赛" bordered={false}>
                         <div className={styles.company}>
                             <a target="view_window" href="http://124.42.117.43:8001"><Button size="large" style={{ margin: '0 20px' }} type="primary">赛事录分入口</Button></a>
-                            <a target="view_window" href="http://localhost:8000/home"><Button size="large" style={{ margin: '0 20px' }} type="primary">赛事查询入口</Button></a>
+                            <a target="view_window" href="http://124.42.117.43:8000/home"><Button size="large" style={{ margin: '0 20px' }} type="primary">赛事查询入口</Button></a>
                             <Button size="large" style={{ margin: '0 20px' }} type="primary" onClick={this.showModal}>
                                 使用需知
                                 </Button>
