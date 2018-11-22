@@ -5,8 +5,8 @@ import requests
 import json
 
 HOST = 'http://192.168.1.8:8069'
-HOST = 'http://192.168.56.105:8069'
 HOST = 'http://124.42.117.43:8069'
+HOST = 'http://192.168.56.105:8069'
 SERVER = 'TT'
 
 URI_LOGIN = HOST + '/json/user/login'

@@ -23,7 +23,7 @@ class Match(models.Model):
     def _compute_name(self):
         for rec in self:
             name = rec.phase_id.name + '.' + str(rec.round_id.number)
-            rec.name = name + ', ' + str(rec.host_id.number) + 'vs' + str(rec.guest_id.number)
+            rec.name = name + ', ' + str(rec.host_id.number) + ' vs ' + str(rec.guest_id.number)
     
     
     number = fields.Integer(default=1, help="if a stage of parent." )

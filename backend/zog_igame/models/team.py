@@ -148,6 +148,6 @@ class GameTeamRoundInfo(models.Model):
     number = fields.Integer('Number', default=1)
     sequence = fields.Integer('Sequence', default=1)
 
-    _sql_constraints = [
-        ('round_team_uniq', 'unique (round_id,team_id)', 'The team is unique in a round!'),
-    ]
+    #_sql_constraints = [
+    #    ('round_team_uniq', 'unique (round_id,team_id)', 'The team is unique in a round!'),
+    #]
