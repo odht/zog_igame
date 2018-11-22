@@ -17,6 +17,8 @@ class Deal extends Component {
   state = {
     card_str: [],
     BoardData: [],
+    isDone: true,
+    loading: true,
   }
   componentDidMount() {
     const {
@@ -43,9 +45,16 @@ class Deal extends Component {
 
           const { odooData: { ogBoard } } = this.props;
           const BoardData = lookup(board_ids, ogBoard)
+
           const table_ids = BoardData.map(item => item.table_id[0])
           // const match_ids = Array.from(new Set(BoardData.map(item => item.match_id[0])))
-          const match_ids = BoardData.map(item => item.match_id[0])
+          const match_ids = BoardData.map(item => item.match_id[0]);
+          const a = BoardData.filter((item) => item.state != 'done');
+          if (a.length == 0) {
+            this.setState({
+              isDone: false,
+            })
+          }
           dispatch({
             type: 'ogTable/read',
             payload: { id: table_ids },
@@ -54,8 +63,8 @@ class Deal extends Component {
             const tableData = lookup(table_ids, ogTable);
             BoardTable = tableData.map(item => {
               const [ply1, ply2, ply3, ply4] = item.room_type === 'open' ?
-                [[...item.north_id, 'N'], [...item.south_id, 'S'], [...item.east_id, 'E'], [...item.west_id, 'W']]
-                : [[...item.east_id, 'E'], [...item.west_id, 'W'], [...item.north_id, 'N'], [...item.south_id, 'S']]
+                [[...item.north_id || '', 'N'], [...item.south_id || '', 'S'], [...item.east_id || '', 'E'], [...item.west_id || '', 'W']]
+                : [[...item.east_id || '', 'E'], [...item.west_id || '', 'W'], [...item.north_id || '', 'N'], [...item.south_id || '', 'S']]
               return {
                 room_type: item.room_type,
                 ply1, ply2, ply3, ply4
@@ -77,15 +86,15 @@ class Deal extends Component {
             })
             this.setState({
               BoardData: BoardTable,
+              loading: false,
             })
           })
         })
       }
     })
   }
-
   render() {
-    const { card_str, BoardData } = this.state;
+    const { card_str, BoardData, isDone, loading } = this.state;
     //发牌人 比赛名称 排位　第几轮
     let dealer = '';
     let game = '';
@@ -138,7 +147,7 @@ class Deal extends Component {
       if (cardArray.length > 0) {
         return cardArray.map((item, index) => {
           return (
-            <div key={item} className={styles.flex}>
+            <div key={index} className={styles.flex}>
               {cardsvg(index)}
               <p className={styles.cardText}>{item}</p>
             </div>
@@ -171,13 +180,13 @@ class Deal extends Component {
       dataIndex: 'ply1',
       colSpan: 2,
       render: (text, row) => {
-        return `${row.ply1[2]}  ${row.ply1[1]}`
+        return text.length > 1 ? `${row.ply1[2]}  ${row.ply1[1]}` : `${row.ply1[0]}`
       }
     }, {
       dataIndex: 'ply2',
       colSpan: 0,
       render: (text, row) => {
-        return `${row.ply2[2]}  ${row.ply2[1]}`
+        return text.length > 1 ? `${row.ply2[2]}  ${row.ply2[1]}` : `${row.ply2[0]}`
       }
     },
     {
@@ -185,13 +194,13 @@ class Deal extends Component {
       dataIndex: 'ply3',
       colSpan: 2,
       render: (text, row) => {
-        return `${row.ply3[2]}  ${row.ply3[1]}`
+        return text.length > 1 ? `${row.ply3[2]}  ${row.ply3[1]}` : `${row.ply3[0]}`
       }
     }, {
       dataIndex: 'ply4',
       colSpan: 0,
       render: (text, row) => {
-        return `${row.ply4[2]}  ${row.ply4[1]}`
+        return text.length > 1 ? `${row.ply4[2]}  ${row.ply4[1]}` : `${row.ply4[0]}`
       }
     }, {
       dataIndex: 'room_type'
@@ -217,9 +226,11 @@ class Deal extends Component {
     }, {
       title: '主队IMP',
       dataIndex: 'host_imp',
+      render: renderNumber,
     }, {
       title: '客队IMP',
       dataIndex: 'guest_imp',
+      render: renderNumber,
     }]
     return (
       <div>
@@ -230,38 +241,40 @@ class Deal extends Component {
             <span className={styles.matchTextRound}>{round}</span>
           </h1>
         </div>
-          <div className={styles.header}>
-            <div className={styles.table}>
-              {/*   <div className={styles.tableN}>{cardList(n_card_str)}</div>
-            <div className={styles.tableW}>{cardList(w_card_str)}</div>
-            */}
-              <div className={styles.tableN}></div>
-              <div className={styles.tableW}></div>
-              <div className={styles.tableNWES}>
-                <div className={styles.tableN}>N</div>
-                <div className={styles.tableW}>W</div>
-                <div className={styles.tableE}>E</div>
-                <div className={styles.tableS}>S</div>
-              </div>
-              {/*<div className={styles.tableE}>{cardList(e_card_str)}</div>
-          <div className={styles.tableS}>{cardList(s_card_str)}</div>*/}
-          <div className={styles.tableE}></div>
-          <div className={styles.tableS}></div>
+        <div className={styles.header}>
+          <div className={styles.table}>
+            <div className={styles.tableN}> {isDone ? '' : cardList(n_card_str)}</div>
+            <div className={styles.tableW}>{isDone ? '' : cardList(w_card_str)}</div>
+
+            <div className={styles.tableN}></div>
+            <div className={styles.tableW}></div>
+            <div className={styles.tableNWES}>
+              <div className={styles.tableN}>N</div>
+              <div className={styles.tableW}>W</div>
+              <div className={styles.tableE}>E</div>
+              <div className={styles.tableS}>S</div>
             </div>
-            <div className={styles.datum}>
-              <p>发牌人：{dealer}</p>
-             {/*<p>Datum 60</p>*/} 
-            </div>
+            <div className={styles.tableE}>{isDone ? '' : cardList(e_card_str)}</div>
+            <div className={styles.tableS}>{isDone ? '' : cardList(s_card_str)}</div>
+            <div className={styles.tableE}></div>
+            <div className={styles.tableS}></div>
           </div>
-          <Table
-            rowKey={row => row.id}
-            dataSource={BoardData}
-            columns={columns}
-          />
+          <div className={styles.datum}>
+            <p>发牌人：{dealer}</p>
+            {/*<p>Datum 60</p>*/}
+          </div>
+        </div>
+        <Table
+          bordered
+          loading={loading}
+          rowKey={row => row.id}
+          dataSource={BoardData}
+          columns={columns}
+        />
       </div>
-      )
-    }
+    )
   }
-  
-  
-export default connect(({odooData}) => ({odooData}))(Deal)
+}
+
+
+export default connect(({ odooData }) => ({ odooData }))(Deal)

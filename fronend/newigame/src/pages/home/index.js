@@ -7,7 +7,8 @@ import { Table } from 'antd';
 @connect(({ odooData }) => ({ odooData }))
 export default class MyTableList extends Component {
     state = {
-        tableData: []
+        tableData: [],
+        loading: true,
     }
     componentDidMount() {
         const { dispatch } = this.props;
@@ -27,7 +28,8 @@ export default class MyTableList extends Component {
                 const { odooData: { ogTable } } = this.props;
                 const tableData = lookup(doing_table_ids, ogTable);
                 this.setState({
-                    tableData: tableData
+                    tableData: tableData,
+                    loading: false,
                 })
             })
         })
@@ -35,6 +37,7 @@ export default class MyTableList extends Component {
     render() {
         const {
             tableData,
+            loading,
         } = this.state;
         let gameName = [];
         if (tableData && tableData.length > 0) {
@@ -55,6 +58,8 @@ export default class MyTableList extends Component {
         return (
             <div>
                 <Table
+                    loading={loading}
+                    style={{ background: '#fff', minHeight: '59.5vh' }}
                     rowKey={row => row.id}
                     pagination
                     dataSource={gameName}

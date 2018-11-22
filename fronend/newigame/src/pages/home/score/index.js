@@ -3,13 +3,21 @@ import Scoringtable from '@/component/Scoringtable';
 import styles from './score.css';
 import { connect } from 'dva';
 import { lookup } from '@/utils/tools';
-
-
+import { notification } from 'antd';
+import router from 'umi/router';
 
 @connect(({ odooData }) => ({ odooData }))
 export default class Home extends Component {
     state = {
-        boardData: []
+        boardData: [],
+        isAdmin: this.props.isAdmin || false,
+        tableData: [],
+        loading: true,
+    }
+    changeAdmin = () => {
+        this.setState({
+            isAdmin: true,
+        })
     }
     componentDidMount() {
         const { dispatch, location: { query: { table_id } } } = this.props;
@@ -27,14 +35,35 @@ export default class Home extends Component {
                 const { odooData: { ogBoard } } = this.props;
                 const boardData = lookup(board_ids, ogBoard)
                 this.setState({
-                    boardData: boardData
+                    boardData: boardData,
+                    tableData: tableData[0],
+                    loading: false,
                 })
             })
         })
 
     }
+
+    //提交全部成绩
+    handleSbumitScore = () => {
+        this.props.dispatch({
+            type: "ogTable/write",
+            payload: { vals: { state: "done" } }
+        }).then(() => {
+            notification.config({
+                placement: "topLeft",
+            })
+            notification['success']({
+                message: '提交成功',
+                description: '返回登录页面'
+            })
+            localStorage.removeItem('tonken');
+            localStorage.removeItem('uid');
+            router.push('/User/login');
+        })
+    }
     writeSoringData = (vals) => {
-        const { dispatch, location: { query: table_id } } = this.props;
+        const { dispatch } = this.props;
         const { type } = vals;
         let valus;
         if (type === "pass") {
@@ -63,6 +92,9 @@ export default class Home extends Component {
                 payload: { id, declarer, contract, openlead, result }
             }).then(() => {
                 const { location: { query: { table_id } } } = this.props;
+                this.setState({
+                    loading: true,
+                })
                 dispatch({
                     type: 'ogTable/read',
                     payload: { id: parseInt(table_id) }
@@ -77,12 +109,16 @@ export default class Home extends Component {
                         const { odooData: { ogBoard } } = this.props;
                         const boardData = lookup(board_ids, ogBoard)
                         this.setState({
-                            boardData: boardData
+                            boardData: boardData,
+                            loading: false,
                         })
                     })
                 })
             })
         }
+        this.setState({
+            isAdmin: false,
+        })
     }
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.odooData.ogBoard) {
@@ -93,8 +129,14 @@ export default class Home extends Component {
     }
     render() {
         let scoringData = [];
-        const { boardData } = this.state;
-
+        const { boardData, isAdmin, tableData, loading } = this.state;
+        let name
+        if (tableData.round_id) {
+            let nameArr = tableData.name.split(',');
+            let roomType = nameArr[0] === "open" ? '开室' : '闭室';
+            let vsNumber = nameArr[2];
+            name = `${roomType} , ${vsNumber}`
+        }
         if (boardData && boardData.length > 0) {
             scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
             boardData.map(item => {
@@ -102,19 +144,20 @@ export default class Home extends Component {
                     item.declarer = null
                 }
                 if (!item.contract) {
-                    item.contract = '  ';
+                    item.contract = null;
                 }
                 if (!item.openlead) {
-                    item.openlead = '  ';
+                    item.openlead = null;
                 }
-                if (!item.result) {
-                    item.result = '= '
+                if (!item.result.toString()) {
+                    item.result = null;
                 } else {
                     const { result } = item;
                     if (result.toString().split('').length === 1 && result !== 0) {
                         item.result = `\+${item.result.toString()}`;
                     } else if (result.toString().split('').length === 1 && result === 0) {
-                        item.result = `=${item.result.toString()}`;
+                        // console.log(result)
+                        // item.result = `${item.result.toString()}`;
                     } else {
                         item.result = item.result.toString();
                     }
@@ -124,10 +167,14 @@ export default class Home extends Component {
         return (
             <div>
                 <div className={styles.headerTitle}>
-                    <h1 className={styles.headerTitleText}>计分表</h1>
+                    <h1 className={styles.headerTitleText}>计分表（{tableData.round_id ? `${tableData.round_id[1]},${name}` : ''}）</h1>
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable
+                        handleSbumitScore={this.handleSbumitScore}
+                        loading={loading}
+                        changeAdmin={this.changeAdmin}
+                        isAdmin={isAdmin}
                         writeSoringData={this.writeSoringData}
                         scoringData={scoringData}
                     />

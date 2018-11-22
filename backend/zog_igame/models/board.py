@@ -62,7 +62,7 @@ class Deal(models.Model):
 class Board(models.Model):
     _name = "og.board"
     _description = "Board"
-    _order = 'number'
+    _order = 'table_id,deal_id'
 
 
     state = fields.Selection([
@@ -77,7 +77,7 @@ class Board(models.Model):
         ('cancel', 'Cancelled')
     ], string='Status', default='bidding')
 
-    table_id = fields.Many2one('og.table', required=True, ondelete='restrict')
+    table_id = fields.Many2one('og.table', required=True, ondelete='cascade')
     round_id = fields.Many2one('og.round', related='table_id.round_id')
     phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
     game_id = fields.Many2one('og.game', related='phase_id.game_id')
@@ -135,11 +135,12 @@ class Board(models.Model):
     def _compute_contract2(self):
         for rec in self:
             ctrct = rec.contract
-            rec.contract_rank  = ctrct and int(ctrct[0]) or 0
-            trump = ctrct and ctrct[1] or None
+            nopass = ctrct and ctrct[0].isdigit()
+            rec.contract_rank  = nopass and int(ctrct[0]) or 0
+            trump = nopass and ctrct[1] or None
             rec.contract_trump =  trump == 'N' and 'NT' or trump 
-            rec.contract_risk = ctrct and ctrct[-2:]=='xx' and RDB or (
-                                ctrct and ctrct[-1:]== 'x' and DBL or '')
+            rec.contract_risk = nopass and ctrct[-2:]=='xx' and RDB or (
+                                nopass and ctrct[-1:]== 'x' and DBL or '')
                                 
             dclr = rec.declarer
             rec.dummy = dclr and partner(dclr) or None

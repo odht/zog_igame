@@ -4,189 +4,536 @@ import styles from './ScoringFrom.css';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const dealData = [
-    {
-        value: '1',
-        label: '1',
-        children: [
-            {
-                value: 'S',
-                label: 'S',
-            },
-            {
-                value: 'H',
-                label: 'H',
-            },
-            {
-                value: 'C',
-                label: 'C',
-            },
-            {
-                value: 'D',
-                label: 'D',
-            },
-            {
-                value: 'NT',
-                label: 'NT',
-            }
-        ]
+const dealData = [{
+    value: '1',
+    label: '1',
+    children: [{
+        value: 'S',
+        label: 'S',
+        children: [{
+            value: null,
+            label: '─',
+        }, {
+            value: 'x',
+            label: 'X',
+        }, {
+            value: 'xx',
+            label: 'XX',
+        }]
+    }, {
+        value: 'H',
+        label: 'H',
+        children: [{
+            value: null,
+            label: '─',
+        }, {
+            value: 'x',
+            label: 'X',
+        }, {
+            value: 'xx',
+            label: 'XX',
+        }]
     },
     {
-        value: '2',
-        label: '2',
-        children: [
-            {
-                value: 'S',
-                label: 'S',
-            },
-            {
-                value: 'H',
-                label: 'H',
-            },
-            {
-                value: 'C',
-                label: 'C',
-            },
-            {
-                value: 'D',
-                label: 'D',
-            },
-            {
-                value: 'NT',
-                label: 'NT',
-            }
-        ]
+        value: 'C',
+        label: 'C',
+        children: [{
+            value: null,
+            label: '─',
+        }, {
+            value: 'x',
+            label: 'X',
+        }, {
+            value: 'xx',
+            label: 'XX',
+        }]
     },
     {
-        value: '3',
-        label: '3',
-        children: [
-            {
-                value: 'S',
-                label: 'S',
-            },
-            {
-                value: 'H',
-                label: 'H',
-            },
-            {
-                value: 'C',
-                label: 'C',
-            },
-            {
-                value: 'D',
-                label: 'D',
-            },
-            {
-                value: 'NT',
-                label: 'NT',
-            }
-        ]
+        value: 'D',
+        label: 'D',
+        children: [{
+            value: null,
+            label: '─',
+        }, {
+            value: 'x',
+            label: 'X',
+        }, {
+            value: 'xx',
+            label: 'XX',
+        }]
     },
     {
-        value: '4',
-        label: '4',
-        children: [
-            {
-                value: 'S',
-                label: 'S',
-            },
-            {
-                value: 'H',
-                label: 'H',
-            },
-            {
-                value: 'C',
-                label: 'C',
-            },
-            {
-                value: 'D',
-                label: 'D',
-            },
-            {
-                value: 'NT',
-                label: 'NT',
-            }
-        ]
-    },
-    {
-        value: '5',
-        label: '5',
-        children: [
-            {
-                value: 'S',
-                label: 'S',
-            },
-            {
-                value: 'H',
-                label: 'H',
-            },
-            {
-                value: 'C',
-                label: 'C',
-            },
-            {
-                value: 'D',
-                label: 'D',
-            },
-            {
-                value: 'NT',
-                label: 'NT',
-            }
-        ]
-    },
-    {
-        value: '6',
-        label: '6',
-        children: [
-            {
-                value: 'S',
-                label: 'S',
-            },
-            {
-                value: 'H',
-                label: 'H',
-            },
-            {
-                value: 'C',
-                label: 'C',
-            },
-            {
-                value: 'D',
-                label: 'D',
-            },
-            {
-                value: 'NT',
-                label: 'NT',
-            }
-        ]
-    },
-    {
-        value: '7',
-        label: '7',
-        children: [
-            {
-                value: 'S',
-                label: 'S',
-            },
-            {
-                value: 'H',
-                label: 'H',
-            },
-            {
-                value: 'C',
-                label: 'C',
-            },
-            {
-                value: 'D',
-                label: 'D',
-            },
-            {
-                value: 'NT',
-                label: 'NT',
-            }
-        ]
+        value: 'NT',
+        label: 'NT',
+        children: [{
+            value: null,
+            label: '─',
+        }, {
+            value: 'x',
+            label: 'X',
+        }, {
+            value: 'xx',
+            label: 'XX',
+        }]
     }
+    ]
+},
+{
+    value: '2',
+    label: '2',
+    children: [
+        {
+            value: 'S',
+            label: 'S',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'H',
+            label: 'H',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'C',
+            label: 'C',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'D',
+            label: 'D',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'NT',
+            label: 'NT',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        }
+    ]
+},
+{
+    value: '3',
+    label: '3',
+    children: [
+        {
+            value: 'S',
+            label: 'S',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'H',
+            label: 'H',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'C',
+            label: 'C',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'D',
+            label: 'D',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'NT',
+            label: 'NT',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        }
+    ]
+},
+{
+    value: '4',
+    label: '4',
+    children: [
+        {
+            value: 'S',
+            label: 'S',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'H',
+            label: 'H',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'C',
+            label: 'C',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'D',
+            label: 'D',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'NT',
+            label: 'NT',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        }
+    ]
+},
+{
+    value: '5',
+    label: '5',
+    children: [
+        {
+            value: 'S',
+            label: 'S',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'H',
+            label: 'H',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'C',
+            label: 'C',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'D',
+            label: 'D',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'NT',
+            label: 'NT',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        }
+    ]
+},
+{
+    value: '6',
+    label: '6',
+    children: [
+        {
+            value: 'S',
+            label: 'S',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'H',
+            label: 'H',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'C',
+            label: 'C',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'D',
+            label: 'D',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'NT',
+            label: 'NT',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        }
+    ]
+},
+{
+    value: '7',
+    label: '7',
+    children: [
+        {
+            value: 'S',
+            label: 'S',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'H',
+            label: 'H',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'C',
+            label: 'C',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'D',
+            label: 'D',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        },
+        {
+            value: 'NT',
+            label: 'NT',
+            children: [{
+                value: null,
+                label: '─',
+            }, {
+                value: 'x',
+                label: 'X',
+            }, {
+                value: 'xx',
+                label: 'XX',
+            }]
+        }
+    ]
+}
 ];
 const leaderData = [
     {
@@ -577,8 +924,12 @@ class RecordNewForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             let id = null;
+            const { scoringData } = this.props;
+            if (scoringData) {
+                id = scoringData.id
+            }
             //根据　submitType 判断是创建还是修改
-            const { scoringData, submitType, scoringDataCraeate } = this.props;
+            // const { scoringData, submitType, scoringDataCraeate } = this.props;
             this.props.writeSoringData({ ...values, id, type: "pass" });
             this.props.form.resetFields();
             this.setState({ modalVisible: false });
@@ -612,12 +963,16 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('number', {
-                                initialValue: scoringData ? scoringData.number : '',
+                                initialValue: scoringData.number ? scoringData.number : '',
                                 rules: [
                                     { required: true, message: '请填写牌号!' },
                                 ],
                             })(
-                                <Select placeholder="请填写牌号" allowClear>
+                                <Select
+                                     disabled
+                                    dropdownMatchSelectWidth={true}
+                                    placeholder="请填写牌号"
+                                    allowClear>
                                     <Option value="1">1</Option>
                                     <Option value="2">2</Option>
                                     <Option value="3">3</Option>
@@ -644,7 +999,7 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('declarer', {
-                                initialValue: scoringData ? scoringData.declarer : '',
+                                initialValue: scoringData.declarer ? scoringData.declarer : '',
                                 rules: [
                                     { required: true, message: '请填写庄家!' },
                                 ],
@@ -664,10 +1019,22 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('contract', {
-                                initialValue: scoringData ? scoringData.contract.split('') : null,
+                                initialValue:
+                                    scoringData.contract ?
+                                        [
+                                            scoringData.contract.slice(0, 1),
+                                            scoringData.contract.slice(1, 2) === 'N' ?
+                                                scoringData.contract.slice(1, 3)
+                                                : scoringData.contract.slice(1, 2),
+                                            scoringData.contract.slice(2, 3) === 'T' ?
+                                                scoringData.contract.slice(3)
+                                                : scoringData.contract.slice(2)]
+                                        : null,
                                 rules: [{ type: 'array', required: true, message: '请填写定约!' }],
                             })(
-                                <Cascader style={{ textAlign: 'left' }} placeholder="请填写定约" options={dealData} />
+                                <Cascader
+                                    style={{ textAlign: 'left' }}
+                                    placeholder="请填写定约" options={dealData} />
                             )}
                         </FormItem>
                         {/* 首攻 */}
@@ -675,9 +1042,10 @@ class RecordNewForm extends React.Component {
                             {...formItemLayout}
                             label="首攻:"
                             hasFeedback
+
                         >
                             {getFieldDecorator('openlead', {
-                                initialValue: scoringData ? scoringData.openlead.split('') : null,
+                                initialValue: scoringData.openlead ? scoringData.openlead.split('') : null,
                                 rules: [{ type: 'array', required: true, message: '请填写首攻!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写首攻" options={leaderData} />
@@ -690,7 +1058,12 @@ class RecordNewForm extends React.Component {
                             hasFeedback
                         >
                             {getFieldDecorator('result', {
-                                initialValue: scoringData ? scoringData.result.split('') : null,
+                                initialValue: scoringData.result ?
+                                    [
+                                        scoringData.result === 0 ?
+                                            scoringData.result.split('') :
+                                            scoringData.result.split('')
+                                    ] : ['=', '='],
                                 rules: [{ type: 'array', required: true, message: '请填写结果!' }],
                             })(
                                 <Cascader style={{ textAlign: 'left' }} placeholder="请填写结果" options={resultData} />
@@ -710,7 +1083,7 @@ class RecordNewForm extends React.Component {
                                 style={{ margin: '0 auto', marginLeft: 20 }}
                                 onClick={this.handleVisible}
                             >
-                                Pass
+                                AllPass
                 </Button>
                         </FormItem>
                     </Form>

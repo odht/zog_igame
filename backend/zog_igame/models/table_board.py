@@ -52,7 +52,7 @@ class Table(models.Model):
         deals = table.deal_ids
         for deal in deals:
             board_vals = {'table_id': table.id,'deal_id':deal.id }
-            table.board_ids.create(cards)
+            table.board_ids.create(board_vals)
         
         return table
 
@@ -60,8 +60,11 @@ class Table(models.Model):
     state = fields.Selection([
         ('todo',  'Todo'),
         ('done',  'Done'),
-    ], string='Status', compute='_compute_state')
+    ], string='Status', default='todo'
+     #, compute='_compute_state' 
+    )
 
+    """ 
     @api.multi
     def _compute_state(self):
         for rec in self:
@@ -70,6 +73,7 @@ class Table(models.Model):
     def _get_state(self):
         bd = self.board_ids.filtered(lambda bd: bd.state not in ['done','cancel'])
         return bd and 'todo' or 'done'
+    """
 
     board_ids = fields.One2many('og.board', 'table_id', string='Boards')
     doing_board_id = fields.Many2one('og.board', compute='_compute_board' )
@@ -77,13 +81,12 @@ class Table(models.Model):
     @api.multi
     def _compute_board(self):
         for rec in self:
-            rec.board_id = rec._get_board()
-    
+            rec.doing_board_id = rec._get_board()
+
     def _get_board(self):
-        bd = self.board_ids.filtered(
+        board = self.board_ids.filtered(
             lambda bd: bd.state not in ['done','cancel']).sorted('sequence')
-        
-        if bd:
-            return bd[0]
-        
+
+        if board:
+            return board[0]
 

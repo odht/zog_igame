@@ -4,7 +4,7 @@ import React from 'react';
 import { Table } from 'antd';
 import { Link } from 'dva/router';
 import { lookup } from '@/utils/tools'
-const GradeList = ({ dataSource, gameData }) => {
+const GradeList = ({ dataSource, gameData, loading }) => {
     var datas
     if (dataSource) {        // dataSource.map((item, key) => {
         const ids = Object.keys(dataSource);
@@ -55,12 +55,18 @@ const GradeList = ({ dataSource, gameData }) => {
         }
     }]
     return (
-        <div style={{ width: '700px', margin: "0 auto" }}>
+        <div style={{ margin: "0 auto" }}>
             <Table
+                loading={loading}
                 rowKey={row => row.id}
                 columns={columns}
                 dataSource={datas}
                 bordered={true}
+                pagination={{
+                    showQuickJumper: true,
+                    showSizeChanger: true,
+                    pageSizeOptions: ['10', '15', '20'],
+                }}
             />
         </div>
     )
