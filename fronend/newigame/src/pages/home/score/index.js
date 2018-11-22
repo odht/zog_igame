@@ -46,9 +46,10 @@ export default class Home extends Component {
 
     //提交全部成绩
     handleSbumitScore = () => {
-        this.props.dispatch({
+        const { dispatch, location: { query: { table_id } } } = this.props;
+        dispatch({
             type: "ogTable/write",
-            payload: { vals: { state: "done" } }
+            payload: { id: parseInt(table_id),vals: { state: "done" } }
         }).then(() => {
             notification.config({
                 placement: "topLeft",
