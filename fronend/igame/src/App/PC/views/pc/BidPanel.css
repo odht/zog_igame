@@ -8,7 +8,7 @@
 }
 .bidpanel table{
     width:100%;
-    font-size:2vh;
+    font-size:3vh;
     border-collapse: collapse;
 }
 .bidpanel tr{
@@ -17,10 +17,10 @@
 }
 .bidpanel td {
     width:7vh;
-    height:3vh;
+    height:4.5vh;
 }
 .bidpanel button{
-    height: 2.7vh;
+    height: 3.7vh;
     width: 21vh;
     margin: 0.2vh;
     float: right;
@@ -33,8 +33,8 @@
     /* box-shadow: 2px 2px 1px #888888; */
 
 }
-.bidblock{    height:2.5vh;width: 19%;}
-.bidcard{    height:2.5vh;}
+.bidblock{    height:4.5vh;width: 19%;}
+.bidcard{    height:3.5vh;}
 .bidblock > div{
     width: 100%;
     height:100%;
