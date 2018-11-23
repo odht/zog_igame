@@ -1,0 +1,39 @@
+.footer {
+    border-top: 1px solid #EEE;
+    padding: 40px 0;
+    color: #888;
+    line-height: 1.6;
+    vertical-align: top;
+}
+.logo{
+    width: 500px;
+    height: 40px;
+    background: rgba(255, 255, 255, .2);
+    margin: 13px 26px 16px 0;
+    float: left;
+    background-image: url(../assets/clogo.png);
+    background-repeat: no-repeat;
+    background-position: 0px,0px;
+    
+    background-size: 650px;
+}
+.footer{
+    margin: 0px auto;
+}
+.link{
+	padding-top: 20px;
+}
+
+.footer ul{
+	list-style: none;
+}
+.footer ul li a{
+	color: #888;
+	font-size: 14px;
+}
+.copyright{
+	text-align: center;
+	height: 25px;
+	font-size: 11px;
+	color: #888;
+}

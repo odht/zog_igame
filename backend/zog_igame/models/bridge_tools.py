@@ -81,10 +81,16 @@ def rho(pos):
 def cmp_gt_call(first, second):
     r1, t1 = int(first[0]), first[1]
     r2, t2 = int(second[0]), second[1]
+    
     if r1 > r2:
         return True
+        
+    if r1 < r2:
+        return False
+        
     if 'CDHSN'.index(t1) > 'CDHSN'.index(t2):
         return True
+        
     return False
 
 def get_point(vul,rank,trump,risk,result):
@@ -97,6 +103,9 @@ def get_point(vul,rank,trump,risk,result):
     rank + 6 + result <= 13
     rank + 6 + result >= 0
     """
+    
+    if not trump:
+        return 0
 
     fn = result >=0 and _get_point_make or _get_point_down
     return fn(vul,rank,trump,risk,result)
@@ -147,4 +156,8 @@ def _get_point_down(vul,rank,trump,risk,result):
 
     return  -mm[risk][down-1]
 
-
+if __name__ == '__main__':
+    ret = cmp_gt_call('2S','5D')
+    print ( ret )
+     
+    

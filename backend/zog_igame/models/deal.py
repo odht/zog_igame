@@ -32,30 +32,31 @@ def _string2cards(name):
             ]
 
 class Deal(models.Model):
+    """
+    
+    """
     _name = "og.deal"
     _description = "Deal"
     _order = 'number'
-
-    round_id = fields.Many2one('og.game.round', string='Round')
-    game_id = fields.Many2one('og.game', related='round_id.game_id')
-
-    number = fields.Integer(default=1 ,required=True )
-    dealer = fields.Selection(POSITIONS, compute='_compute_name')
-    vulnerable = fields.Selection(VULNERABLES,
-                              compute='_compute_name')
-    name = fields.Char('Name', compute='_compute_name')
 
     @api.model
     def _default_cards(self):
         return get_random_deal()
 
-    card_str = fields.Char(compute ='_compute_cards',
-                            inverse='_inverse_cards',
-                            default=_default_cards, required=True, help='Full Deal')
+    number = fields.Integer(default=1 ,required=True )
+    dealer = fields.Selection(POSITIONS, compute='_compute_name')
+    vulnerable = fields.Selection(VULNERABLES, compute='_compute_name')
+    name = fields.Char('Name', compute='_compute_name')
 
+    card_str = fields.Char(compute ='_compute_cards', inverse='_inverse_cards',
+        default=_default_cards, required=True, 
+        help='Full Deal')
+
+    card_ids = fields.One2many('og.deal.card', 'deal_id', string='Cards',
+        help=""" Technical field. A deal have 52 card.
+            card_str is used to set or get all cards. """)
+        
     notes = fields.Text('Notes')
-    card_ids = fields.One2many('og.deal.card', 'deal_id', string='Cards')
-    board_ids = fields.One2many('og.board', 'deal_id', string='Boards')
 
     @api.multi
     def _compute_name(self):
@@ -68,6 +69,12 @@ class Deal(models.Model):
 
     @api.multi
     def _compute_cards(self):
+        """, the format is 
+        AKQ.AKQ.AKQ.AKQ2 JT9.JT9.JT92.JT9 876.8762.876.876 5432.543.543.543
+        4 hands splited by space order by NESW
+        4 suits splited by dot order by SHDC        
+        """
+        
         def fn2(suitcard):
             suitcard.sort(key=lambda r: 'AKQJT98765432'.index(r.rank) )
             return ''.join([c.rank for c in suitcard])
@@ -93,27 +100,30 @@ class Deal(models.Model):
 
     @api.multi
     def unlink(self):
-        if self.env['og.round'].search([['deal_ids','in', self.ids ]]):
-            return None
+        for rec in self:
+            if rec.env['og.round'].search([['deal_ids','in', rec.ids ]]):
+                return None
         
         return super(Deal, self).unlink()
 
 
 class DealCard(models.Model):
+    """
+    A deal have 52 card. Don't modify record in this model. 
+    """
     _name = "og.deal.card"
     _description = "Deal Card"
 
     deal_id = fields.Many2one('og.deal', required=True, ondelete='cascade')
-    name = fields.Selection(CARDS)
+    name = fields.Selection(CARDS, help='suit and rank')
     suit = fields.Selection(SUITS,compute='_compute_suit_rank')
     rank = fields.Selection(RANKS,compute='_compute_suit_rank')
-    pos  = fields.Selection(POSITIONS, related = 'position')
-    position  = fields.Selection(POSITIONS)
+    position  = fields.Selection(POSITIONS, help='the position dealed to with this card.')
+    pos  = fields.Selection(POSITIONS, related = 'position', help='no used.')
 
     @api.multi
     def _compute_suit_rank(self):
         for rec in self:
             rec.suit = rec.name[0]
             rec.rank = rec.name[1]
-
 

@@ -2,14 +2,16 @@
   "private": true,
   "scripts": {
     "start": "umi dev",
-    "start:no-mock": "cross-env MOCK=none umi dev",
     "build": "umi build",
+    "start:no-mock": "cross-env MOCK=none umi dev",
     "test": "umi test",
     "lint": "eslint --ext .js src mock tests",
     "precommit": "lint-staged"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
+    "cross-env": "^5.1.1",
+    "dva-model-extend": "^0.1.2",
     "eslint": "^5.4.0",
     "eslint-config-umi": "^0.1.5",
     "eslint-plugin-flowtype": "^2.50.0",
@@ -19,18 +21,18 @@
     "husky": "^0.14.3",
     "lint-staged": "^7.2.2",
     "umi": "^2.1.2",
-    "umi-plugin-react": "^1.1.1",
-
-    "cross-env": "^5.1.1",
-    "roadhog-api-doc": "^1.1.2",
-    "dva-odoo": "^0.2.0",
-    "dva-odoo-mock": "^0.2.0"
-
+    "umi-plugin-react": "^1.1.1"
   },
   "lint-staged": {
-    "*.{js,jsx}": ["eslint --fix", "git add"]
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "engines": {
     "node": ">=8.0.0"
+  },
+  "dependencies": {
+    "react-router-breadcrumbs-hoc": "^2.1.5"
   }
 }

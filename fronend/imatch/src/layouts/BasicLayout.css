@@ -1,0 +1,17 @@
+.footer {
+    border-top: 1px solid #EEE;
+    padding: 40px 0;
+    color: #888;
+    line-height: 1.6;
+    vertical-align: top;
+}
+.logo{
+    width: 170px;
+    height: 35px;
+    background: rgba(255, 255, 255, .2);
+    margin: 13px 26px 16px 0;
+    float: left;
+    background-image: url(../assets/57130611.jpg);
+    background-position: 0px,0px;
+    background-size: 350px;
+}

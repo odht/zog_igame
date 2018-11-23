@@ -3,8 +3,6 @@
 
 from odoo import api, fields, models
 
-from .tools import point2imp
-
 POSITIONS = [
         ('-',  'Neednot'),
         ('NS', 'NS'),
@@ -15,12 +13,51 @@ POSITIONS = [
         ('W', 'West'),
     ]
 
-class GameTeam(models.Model):
-    _name = "og.game.team"
-    _description = "Game Team"
-    _order = 'id desc'
-    _inherits = {'res.partner': 'partner_id'}
+class Game(models.Model):
+    _inherit = "og.game"
+    team_ids = fields.One2many('og.team', 'game_id', string='Teams',
+        help='all teams regitered in this game.')
+    
+class GamePhase(models.Model):
+    _inherit = "og.phase"
+    team_ids = fields.Many2many('og.team', help='all teams assigned in this phase.')
 
+class GameRound(models.Model):
+    _inherit = "og.round"
+    
+    team_ids = fields.Many2many('og.team', related = 'phase_id.team_ids' )
+    
+    team_info_ids = fields.One2many('og.team.round.info','round_id',
+        string='Teams Info', help='all teams score in this round.')
+
+class GameTeam(models.Model):
+    """
+    A team inherit from a partner.
+    A team have some players.
+    A team register in a game.
+    A team assigned to some phase.
+    A team play in same round, every round score in round info.
+    """
+    
+    _name = "og.team"
+    _description = "Game Team"
+    _order = 'game_id, number'
+    _inherits = {'res.partner': 'partner_id'}
+    
+    # name field inherit from res.partner
+    #name = fields.Char()
+
+    number = fields.Integer(help="The number of Team") 
+    partner_id = fields.Many2one('res.partner', required=True, ondelete='cascade')
+    game_id = fields.Many2one('og.game', string='Game', ondelete='cascade')
+    phase_ids = fields.Many2many('og.phase')
+    player_ids = fields.One2many('og.team.player', 'team_id', string='Players')
+    round_info_ids = fields.One2many('og.team.round.info', 'team_id', string='Rounds Info')
+
+    #_sql_constraints = [
+    #    ('name_game_uniq', 'unique (name,game_id)', 'The team name is unique in a game!')
+    #]
+    
     @api.model
     def create(self,vals):
         vals['is_company'] = True
@@ -33,40 +70,23 @@ class GameTeam(models.Model):
         ptn.unlink()
         return ret
 
-    partner_id = fields.Many2one('res.partner', required=True, ondelete='cascade')
-
-    game_id = fields.Many2one('og.game', string='Game', ondelete='cascade')
-    group_id = fields.Many2one('og.game.group')
-    number = fields.Integer('Number', default=1)
-
-    score = fields.Float(compute='_compute_score' )
-    score_manual = fields.Float(default=0 )
-    score_uom = fields.Selection(related='game_id.score_uom')
-    
-    #TBD rank 2018-10-23
-    #rank = fields.Integer()
-    #ns_rank = fields.Integer()
-    #ew_rank = fields.Integer()
-
-    player_ids = fields.One2many('og.game.team.player', 'team_id', string='Players')
-    roundinfo_ids = fields.One2many('og.game.team.round.info', 'team_id', string='Rounds Info')
-
-    @api.multi
-    def _compute_score(self):
-        for rec in self:
-            rec.score = rec.score_manual + sum( rec.roundinfo_ids.mapped('score') )
-
 
 class GameTeamPlayer(models.Model):
-    _name = "og.game.team.player"
-    _description = "Game Team Player"
+    _name = "og.team.player"
+    _description = "Team Player"
     _order = 'id desc'
 
     _inherits = {'res.partner': 'partner_id'}
 
-    team_id = fields.Many2one('og.game.team', string='Team', required=True, ondelete='cascade')
+    # name and user_ids field inherit from res.partner
+    #name = fields.Char()
+    #user_ids = fields.One2many()
+
+    team_id = fields.Many2one('og.team', string='Team', required=True, ondelete='cascade')
     partner_id = fields.Many2one('res.partner', string='Partner', required=True, 
         ondelete='restrict', domain=[['is_company','!=',True]])
+
+    default_user_id = fields.Many2one('res.users')
 
     role = fields.Selection([
         ('coach',      'Coach'),
@@ -74,78 +94,60 @@ class GameTeamPlayer(models.Model):
         ('player',     'Player')
     ], string='Role', default='player')
 
+    @api.model
+    def create(self,vals):
+        default_user_id = vals.get('default_user_id')
+        if not default_user_id:
+            partner_id = vals.get('partner_id')
+            if partner_id:
+                partner = self.partner_id.browse(partner_id)
+                if partner.user_ids:
+                    vals['default_user_id'] = partner.user_ids[0].id
+        
+        return super(GameTeamPlayer,self).create(vals)
+
+
+    """ 
+    @api.multi
+    def _check_player_in_one_team(self):
+        for rec in self:
+            if not rec.team_id.game_id:
+                continue
+            
+            players = rec.team_id.game_id.team_ids.mapped('player_ids').filtered(
+                lambda plr: plr.partner_id == rec.partner_id)
+            players = players.filtered( lambda plr: plr != rec)
+            
+            if players:
+                return False
+                
+        return True
+
+    _constraints = [
+        (_check_player_in_one_team, 'Player in one team', []),
+    ]
+    """
 
 class GameTeamRoundInfo(models.Model):
-    _name = "og.game.team.round.info"
+    """
+    the relation for team and round.
+    """
+    
+    _name = "og.team.round.info"
     _description = "Team Round Infomation"
-
+    _order = 'round_id, number,team_id'
 
     name = fields.Char()
-    team_id = fields.Many2one('og.game.team', string='Team', required=True, ondelete='restrict')
-    game_id = fields.Many2one('og.game', related='team_id.game_id')
+    round_id = fields.Many2one('og.round', string='Round', required=True, ondelete='cascade')
+    team_id = fields.Many2one('og.team', string='Team', required=True, ondelete='restrict')
 
-    #For Team Match
-    group_id = fields.Many2one('og.game.group', related='team_id.group_id')
-    round_id = fields.Many2one('og.game.round', string='Round', required=True, ondelete='restrict')
-    match_id = fields.Many2one('og.match', string='Match', ondelete='cascade')
+    game_id = fields.Many2one('og.game', related='team_id.game_id',store=True, readonly=True)
+    phase_id = fields.Many2one('og.phase', related='round_id.phase_id',store=True, readonly=True)
+    last_in_phase = fields.Boolean(related='round_id.last_in_phase',store=True, readonly=True)
 
-    #For Pair Match
-    #position = fields.Selection(related='team_id.position')
-    #table_id = fields.Many2one('og.table')
-    #deal_id = fields.Many2one('og.deal')
-    #board_id = fields.Many2one('og.board',compute='_compute_board')
-    #@api.multi
-    #def _compute_board(self):
-    #    for rec in self:
-    #        rec.board_id = rec.table_id.board_ids.filtered(
-    #            lambda b: b.deal_id == rec.deal_id )
+    number = fields.Integer('Number', default=1)
+    sequence = fields.Integer('Sequence', default=1)
 
-    score = fields.Float(compute='_compute_score')
-    score_manual = fields.Float(default=0)
-    score_uom = fields.Selection(related='team_id.score_uom')
-    #rank = fields.Integer()
-    #ns_rank = fields.Integer()
-    #ew_rank = fields.Integer()
-
-    @api.multi
-    def _compute_score(self):
-        def fn_team(rec):
-            p = rec.match_id.match_team_ids.filtered(
-                    lambda s: s.team_id == rec.team_id )
-            rec.score = rec.score_manual + {'IMP':p.vp,'MP':p.bam
-                                        }[rec.game_id.score_type]
-
-        def fn_pair(rec):
-            board_ids = rec.game_id.table_ids.mapped('board_ids').filtered(
-                lambda b: b.deal_id == rec.deal_id and b != rec.board_id )
-
-            def f_mp(b):
-                diff = rec.board_id.point - b.point
-                return diff != 0 and (diff>0 and 1 or -1) or 0
-
-            def fn_mp(bs):
-                return sum( [f_mp(b) for b in bs] ) / len(bs.ids) / 2 + 0.5
-
-            def f_imp(b):
-                diff = rec.board_id.point - b.point
-                return point2imp(diff)
-
-            def fn_imp(bs):
-                return sum( [f_imp(b) for b in bs] ) / len(bs.ids)
-
-            if board_ids:
-                st = rec.game_id.score_type
-                rec.score = {'IMP':fn_imp,'MP':fn_mp}[st](board_ids)
-
-
-        for rec in self:
-            g = rec.game_id
-            if g.game_type == 'bridge':
-                if g.match_type == 'team' :
-                    if g.org_type in ['swiss','circle']:
-                        fn_team(rec)
-                    else:
-                        pass # how to sum score
-                elif g.match_type == 'pair':
-                    fn_pair(rec)
-
+    #_sql_constraints = [
+    #    ('round_team_uniq', 'unique (round_id,team_id)', 'The team is unique in a round!'),
+    #]
