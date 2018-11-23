@@ -10,7 +10,7 @@ const routes = [
   { path: '/details/grade/graresult/round', breadcrumb: '桌' },
   { path: '/details/grade/graresult/teamMatch', breadcrumb: '队伍' },
   { path: '/details/grade/graresult/deal', breadcrumb: '牌' },
-  
+
 ];
 
 export default withBreadcrumbs(routes)(({ breadcrumbs, state }) => (
@@ -20,7 +20,7 @@ export default withBreadcrumbs(routes)(({ breadcrumbs, state }) => (
         <span key={breadcrumb.key}>
           <NavLink
             to={{
-              pathname: breadcrumb.props.match.url,
+              pathname: breadcrumb.props.match.url === '/' ? '/home' : breadcrumb.props.match.url,
               state: state,
             }}>
             {breadcrumb}

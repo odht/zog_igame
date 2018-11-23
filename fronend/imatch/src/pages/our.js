@@ -1,5 +1,5 @@
 import React from 'react';
-import our1 from '../../assets/our1.jpg';
+import our1 from '../assets/our1.jpg';
 import styles from './our.css';
 import { Card } from 'antd';
 
