@@ -3,6 +3,8 @@
 
 from odoo import api, fields, models
 
+import json
+
 from .bridge_tools import POSITIONS
 from .bridge_tools import SUITS,RANKS,CARDS
 from .bridge_tools import VULNERABLES
@@ -52,6 +54,8 @@ class Deal(models.Model):
         default=_default_cards, required=True, 
         help='Full Deal')
 
+    #cards = fields.Char(help='replace card_ids')
+    
     card_ids = fields.One2many('og.deal.card', 'deal_id', string='Cards',
         help=""" Technical field. A deal have 52 card.
             card_str is used to set or get all cards. """)
@@ -84,6 +88,12 @@ class Deal(models.Model):
                                    ]) for suit in 'SHDC' ])
 
         for rec in self:
+            #cards = json.loads(rec.cards)
+            
+            #rec.card_str =' '.join([fn1([c for c in rec.card_ids if c.pos==pos
+            #                         ]) for pos in 'NESW' ])
+            
+            
             rec.card_str =' '.join([fn1([c for c in rec.card_ids if c.pos==pos
                                      ]) for pos in 'NESW' ])
 
