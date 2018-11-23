@@ -51,7 +51,7 @@ const columns = [{
     render: (text) => {
         if (text == '0') {
             return ''
-        }else{
+        } else {
             return text;
         }
     }
@@ -62,7 +62,7 @@ const columns = [{
     render: (text) => {
         if (text == '0') {
             return ''
-        }else{
+        } else {
             return text;
         }
     }
@@ -73,24 +73,44 @@ const columns = [{
         dataIndex: 'host_imp',
         render: renderNumber,
         align: "center",
-        render: (text) => {
-            if (text == '0') {
-                return ''
-            }else{
-                return text;
+        render: (value, row, index) => {
+            const obj = {
+                children: value,
+                props: {},
+            };
+            if (index % 2 === 0) {
+                if (value == '0') {
+                    obj.props.rowSpan = 2;
+                    obj.children = ""
+                } else {
+                    obj.props.rowSpan = 2;
+                }
+            } else {
+                obj.props.rowSpan = 0;
             }
+            return obj;
         }
     }, {
         title: '客队',
         dataIndex: 'guest_imp',
         render: renderNumber,
         align: "center",
-        render: (text) => {
-            if (text == '0') {
-                return ''
-            }else{
-                return text;
+        render: (value, row, index) => {
+            const obj = {
+                children: value,
+                props: {},
+            };
+            if (index % 2 === 0) {
+                if (value == '0') {
+                    obj.props.rowSpan = 2;
+                    obj.children = ""
+                } else {
+                    obj.props.rowSpan = 2;
+                }
+            } else {
+                obj.props.rowSpan = 0;
             }
+            return obj;
         }
     }]
 }];
