@@ -103,7 +103,7 @@ const columns = [{
             if (index % 2 === 0) {
                 if (value == '0') {
                     obj.props.rowSpan = 2;
-                    obj.children = ""
+                    obj.childrenls = ""
                 } else {
                     obj.props.rowSpan = 2;
                 }
