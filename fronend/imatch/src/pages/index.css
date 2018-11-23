@@ -42,3 +42,7 @@
     align-items:center;
     justify-content:center;
 }
+.list{
+   text-align: left　!important;
+   text-align: justify;
+}
