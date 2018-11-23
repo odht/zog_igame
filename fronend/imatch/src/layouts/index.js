@@ -29,7 +29,6 @@ class HomeIndex extends Component {
   render() {
     const { location: { pathname } } = this.props;
     const router = '/' + pathname.split('/')[1];
-    console.log(router)
     const { sid } = this.state;
     if (sid) {
       if (router === '/details') {
