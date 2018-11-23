@@ -37,26 +37,61 @@ const columns = [{
     title: '结果',
     dataIndex: 'result',
     align: "center",
+    render: (text) => {
+        if (parseInt(text) > 0) {
+            return `+${text}`
+        } else {
+            return text
+        }
+    }
 }, {
     title: 'NS',
     dataIndex: 'ns_point',
     align: "center",
+    render: (text) => {
+        if (text == '0') {
+            return ''
+        }else{
+            return text;
+        }
+    }
 }, {
     title: 'EW',
     dataIndex: 'ew_point',
     align: "center",
+    render: (text) => {
+        if (text == '0') {
+            return ''
+        }else{
+            return text;
+        }
+    }
 }, {
     title: 'IMPs',
     children: [{
         title: '主队',
         dataIndex: 'host_imp',
-        // render: renderNumber,
+        render: renderNumber,
         align: "center",
+        render: (text) => {
+            if (text == '0') {
+                return ''
+            }else{
+                return text;
+            }
+        }
     }, {
         title: '客队',
         dataIndex: 'guest_imp',
-        // render: renderNumber,
+        render: renderNumber,
         align: "center",
+        render: (text) => {
+            if (text == '0') {
+                return ''
+            }else{
+                return text;
+            }
+        }
     }]
 }];
 const dataSource = [
