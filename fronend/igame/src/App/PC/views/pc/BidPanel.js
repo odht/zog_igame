@@ -160,7 +160,7 @@ class BidPanel extends Component {
           </table>
         </div>
         {bidblocks}
-        <BidCard name='PASS' active={this.state.bidcards[0].active}
+        <BidCard name='Pass' active={this.state.bidcards[0].active}
           onclick={clickable ? this.handleSelecte.bind(this, { name: 'Pass' }):this.unclickable}
         />
         <BidCard name='ALERT' active={this.state.bidcards[1].active}
@@ -172,7 +172,7 @@ class BidPanel extends Component {
         <BidCard name='XX' active={this.state.bidcards[3].active}
           onclick={clickable ?this.handleSelecte.bind(this, { name: 'xx' }):this.unclickable}
         />
-        <span style={{float: 'left',width: '8vh',backgroundColor: '#7a88e8',margin: '0.9%'}}>
+        <span style={{float: 'left',width: '13vh',backgroundColor: '#7a88e8',margin: '1%'}}>
           <BidCard name={name} active={1} 
             onclick={()=>{}}
           />
@@ -224,8 +224,8 @@ class BidBlock extends Component {
  */
 class BidCard extends Component {
   render() {
-    const bgcolor = { PASS: '#88FF88', X: '#FF8888', XX: '#FF3333', ALERT: '#8888FF' };
-    const width = { PASS: '7.8vh', X: '7vh', XX: '7vh', ALERT: '7vh' };
+    const bgcolor = { Pass: '#88FF88', X: '#FF8888', XX: '#FF3333', ALERT: '#8888FF' };
+    const width = { Pass: '13vh', X: '13vh', XX: '13vh', ALERT: '13vh' };
     const style = {
       backgroundColor: `${bgcolor[this.props.name]}`,
       width: `${width[this.props.name]}`,

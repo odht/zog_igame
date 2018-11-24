@@ -1,22 +1,21 @@
 .loginbox{
-    display: flex;
+    display: flex;	   
     flex-flow: column;
-    justify-content:center;
-    align-items: center;
-    /* 注意这里需要设置高度来查看垂直居中效果 */
-    height: 100%;
+    justify-content:center;	    
+    align-items: center;	    
+    height: 800px;	  
     background-image: url(../assets/Login.svg);
     background-repeat:no-repeat; 
     background-size:100% 100%;
     -moz-background-size:100% 100%;
-}
-.login{
-    width: 367px;
-    height: 350px;
-}
+}	
+.login{	
+    width: 367px;	   
+    height: 317px;	 
+}	
 .loginbutton{
-    margin-top:20px;
-    width: 100%;
+    margin-top:20px;	  
+    width: 100%;	   
 }
 .title{
     font-style:italic;
@@ -28,8 +27,7 @@
     font-size: 40px;
     letter-spacing: 30px;
 }
-
-.footer{
+ .footer{
     position: absolute;
     bottom: 0;
-}
+} 

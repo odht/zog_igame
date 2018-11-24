@@ -5,7 +5,8 @@ import { lookup } from '@/utils/tools'
 
 class TeamMatch extends Component {
   state = {
-    TeamRoundInfoData: []
+    TeamRoundInfoData: [],
+    loading: true,
   }
   componentDidMount() {
     const {
@@ -27,12 +28,13 @@ class TeamMatch extends Component {
         const TeamRoundInfoData = lookup(round_info_ids, ogTeamRoundInfo);
         this.setState({
           TeamRoundInfoData: TeamRoundInfoData,
+          loading: false,
         })
       })
     })
   }
   render() {
-    const { TeamRoundInfoData } = this.state;
+    const { TeamRoundInfoData, loading } = this.state;
 
     const TeamMatchColumns = [
       {
@@ -86,16 +88,24 @@ class TeamMatch extends Component {
         }],
       }, {
         title: '总分',
-        dataIndex: 'score'
+        dataIndex: 'score',
+        render: (text) => {
+          return text.toFixed(2);
+        }
       }
     ]
     return (
       <div>
         <Table
+          loading={loading}
           rowKey={row => row.id}
           columns={TeamMatchColumns}
           dataSource={TeamRoundInfoData}
-          pagination
+          pagination={{
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '15', '20'],
+          }}
         />
       </div>
     )

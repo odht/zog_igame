@@ -3,15 +3,16 @@ import Scoringtable from '@/component/Scoringtable';
 import styles from './score.css';
 import { connect } from 'dva';
 import { lookup } from '@/utils/tools';
-
-
+import { notification } from 'antd';
+import router from 'umi/router';
 
 @connect(({ odooData }) => ({ odooData }))
 export default class Home extends Component {
     state = {
         boardData: [],
         isAdmin: this.props.isAdmin || false,
-        round_id: [],
+        tableData: [],
+        loading: true,
     }
     changeAdmin = () => {
         this.setState({
@@ -35,11 +36,32 @@ export default class Home extends Component {
                 const boardData = lookup(board_ids, ogBoard)
                 this.setState({
                     boardData: boardData,
-                    round_id: tableData[0].round_id,
+                    tableData: tableData[0],
+                    loading: false,
                 })
             })
         })
 
+    }
+
+    //提交全部成绩
+    handleSbumitScore = () => {
+        const { dispatch, location: { query: { table_id } } } = this.props;
+        dispatch({
+            type: "ogTable/write",
+            payload: { id: parseInt(table_id),vals: { state: "done" } }
+        }).then(() => {
+            notification.config({
+                placement: "topLeft",
+            })
+            notification['success']({
+                message: '提交成功',
+                description: '返回登录页面'
+            })
+            localStorage.removeItem('tonken');
+            localStorage.removeItem('uid');
+            router.push('/User/login');
+        })
     }
     writeSoringData = (vals) => {
         const { dispatch } = this.props;
@@ -71,6 +93,9 @@ export default class Home extends Component {
                 payload: { id, declarer, contract, openlead, result }
             }).then(() => {
                 const { location: { query: { table_id } } } = this.props;
+                this.setState({
+                    loading: true,
+                })
                 dispatch({
                     type: 'ogTable/read',
                     payload: { id: parseInt(table_id) }
@@ -85,7 +110,8 @@ export default class Home extends Component {
                         const { odooData: { ogBoard } } = this.props;
                         const boardData = lookup(board_ids, ogBoard)
                         this.setState({
-                            boardData: boardData
+                            boardData: boardData,
+                            loading: false,
                         })
                     })
                 })
@@ -104,7 +130,11 @@ export default class Home extends Component {
     }
     render() {
         let scoringData = [];
-        const { boardData, isAdmin, round_id } = this.state;
+        const { boardData, isAdmin, tableData, loading } = this.state;
+        let name
+        if (tableData.round_id) {
+            name = tableData.name
+        }
         if (boardData && boardData.length > 0) {
             scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
             boardData.map(item => {
@@ -135,10 +165,12 @@ export default class Home extends Component {
         return (
             <div>
                 <div className={styles.headerTitle}>
-                    <h1 className={styles.headerTitleText}>计分表（{round_id && round_id.length > 0 ? round_id[1] : 'x'}）</h1>
+                    <h1 className={styles.headerTitleText}>计分表（{tableData.round_id ? name: ''}）</h1>
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable
+                        handleSbumitScore={this.handleSbumitScore}
+                        loading={loading}
                         changeAdmin={this.changeAdmin}
                         isAdmin={isAdmin}
                         writeSoringData={this.writeSoringData}

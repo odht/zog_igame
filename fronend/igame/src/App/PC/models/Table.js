@@ -35,10 +35,10 @@ class TableModel {
       scene: 0,     // 0 准备阶段 1 叫牌阶段 2 出牌阶段 3 claim 等待，4 claim 确认
       calldata: [], // todo 补充 calldata 4列（东西南北）若干行的数组参考 call 方法
       user: {
-        east: { ready: 0, name: '张三', face: '/imgs/face1.png', rank: '大师',directionNum:'' },
-        south: { ready: 0, name: '李四', face: '/imgs/face2.png', rank: '专家',directionNum:''},
-        west: { ready: 0, name: '王五', face: '/imgs/face1.png', rank: '王者',directionNum:'' },
-        north: { ready: 0, name: '赵六', face: '/imgs/face2.png', rank: '钻石',directionNum:'' }
+        east: { ready: 0, name: '张三', face: '/imgs/face1.png', rank: '大师',directionNum:'' ,playerDirection:'E'},
+        south: { ready: 0, name: '李四', face: '/imgs/face2.png', rank: '专家',directionNum:'',playerDirection:'S'},
+        west: { ready: 0, name: '王五', face: '/imgs/face1.png', rank: '王者',directionNum:'',playerDirection:'W' },
+        north: { ready: 0, name: '赵六', face: '/imgs/face2.png', rank: '钻石',directionNum:'',playerDirection:'N' }
       },
       lastTrick: false,  // 最后一墩牌是否显示
       debug: false,
@@ -170,6 +170,23 @@ class TableModel {
     let cards = this.state.cards[seatIndex]
     cards = this.resetCards(cards, seatIndex, true)
   }
+  failPlay=(card)=>{
+    window._CARD=this.state.cards[1];
+    console.log("1111111")
+    const playCard =card;
+    playCard.status='';
+    playCard.zIndex=0;
+    playCard.active=2;
+    
+    let [x, y] = [this.seat['south'][0].x, this.seat['south'][0].y]
+      x = x + this.height / 16 / 5;
+      y = y + this.height / 16 / 5; //
+      playCard['animation']['left'] = x;
+      playCard['animation']['top'] = y;
+      this.resetCards(this.state.cards[1],1);
+     
+    
+}
   /**
    * 清理桌面上的牌
    * 定位参考：

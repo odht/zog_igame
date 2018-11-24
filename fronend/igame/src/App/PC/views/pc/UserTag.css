@@ -28,3 +28,17 @@
 .UserTag img{
     height:100%;
 }
+@keyframes blink{
+    
+    0% {  box-shadow: 0 0 1px 1px rgba(255, 255, 0, 0.3)}
+    50% { box-shadow: 0 0 10px 10px rgba(255, 255, 0, 0.3) }
+    100% {  box-shadow: 0 0 1px 1px rgba(255, 255, 0, 0.3) }
+}
+.blink{
+    animation: blink 1s linear infinite; 
+    /* 其它浏览器兼容性前缀 */
+    -webkit-animation: blink 2s linear infinite;
+    -moz-animation: blink 2s linear infinite;
+    -ms-animation: blink 2s linear infinite;
+    -o-animation: blink 2s linear infinite;
+    }

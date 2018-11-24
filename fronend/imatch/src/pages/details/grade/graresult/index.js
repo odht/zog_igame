@@ -36,6 +36,9 @@ const columnRank = [{
 
 
 class Graresult extends Component {
+    state = {
+        loading: true,
+    }
     timer = null
     getData(props) {
         const {
@@ -53,6 +56,10 @@ class Graresult extends Component {
         dispatch({
             type: 'ogDeal/read',
             payload: { id: deal_ids }
+        }).then(() => {
+            this.setState({
+                loading: false
+            })
         })
     }
     componentDidMount() {
@@ -84,6 +91,7 @@ class Graresult extends Component {
             location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id } } },
             location: { state },
         } = this.props;
+        const { loading } = this.state;
         // 牌组 
         const matchData = lookup(match_ids, ogMatch)
         const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo).sort((prestate, nextstate) => {
@@ -93,7 +101,7 @@ class Graresult extends Component {
         const dealData = dealData0.map(item => {
             return (
                 <Link
-                    style={{ padding: 3}}
+                    style={{ padding: 3 }}
                     key={item.id}
                     to={{
                         pathname: '/details/grade/graresult/deal',
@@ -113,6 +121,7 @@ class Graresult extends Component {
                     <Row type='flex' justify='center'>
                         <Col xs={24} xl={16}  >
                             <ResultDataTable
+                                loading={loading}
                                 matchData={matchData}
                                 state={state}
                             />
@@ -133,6 +142,7 @@ class Graresult extends Component {
                         <Col xs={24} xl={8}>
                             {
                                 <Table
+                                    loading={loading}
                                     rowKey={record => record.id}
                                     size='xs'
                                     columns={columnRank}

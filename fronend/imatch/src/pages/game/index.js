@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styles from './game.css';
 import { connect } from 'dva'
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
@@ -14,7 +13,7 @@ const columns = [
 				<Link
 					to={{
 						pathname: '/details/dhome',
-						state:{gameData:record}
+						state: { gameData: record }
 					}}
 				// target="_black"
 				>
@@ -42,12 +41,18 @@ const columns = [
 		width: 150,
 	},]
 class TeamList extends Component {
-
+	state = {
+		loading: true,
+	}
 	componentDidMount() {
 		const { dispatch } = this.props;
 		dispatch({
 			type: 'ogGame/search',
 			payload: {}
+		}).then(() => {
+			this.setState({
+				loading: false,
+			})
 		})
 	}
 	getdata = (model) => {//获取数据
@@ -58,13 +63,19 @@ class TeamList extends Component {
 	}
 	render() {
 		const dataSource = this.getdata('ogGame') || []
+		const { loading } = this.state;
 		return (
 			<div >
 				<Table
+					loading={loading}
 					rowKey={row => row.id}
 					columns={columns}
 					dataSource={dataSource}
-					pagination={{ pageSize: 5 }}
+					pagination={{
+						showQuickJumper: true,
+						showSizeChanger: true,
+						pageSizeOptions: ['10', '15', '20'],
+					}}
 					scroll={{ y: 300 }} />
 			</div>)
 	}

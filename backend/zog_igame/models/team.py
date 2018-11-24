@@ -54,9 +54,9 @@ class GameTeam(models.Model):
     player_ids = fields.One2many('og.team.player', 'team_id', string='Players')
     round_info_ids = fields.One2many('og.team.round.info', 'team_id', string='Rounds Info')
 
-    _sql_constraints = [
-        ('name_game_uniq', 'unique (name,game_id)', 'The team name is unique in a game!')
-    ]
+    #_sql_constraints = [
+    #    ('name_game_uniq', 'unique (name,game_id)', 'The team name is unique in a game!')
+    #]
     
     @api.model
     def create(self,vals):
@@ -148,6 +148,6 @@ class GameTeamRoundInfo(models.Model):
     number = fields.Integer('Number', default=1)
     sequence = fields.Integer('Sequence', default=1)
 
-    _sql_constraints = [
-        ('round_team_uniq', 'unique (round_id,team_id)', 'The team is unique in a round!'),
-    ]
+    #_sql_constraints = [
+    #    ('round_team_uniq', 'unique (round_id,team_id)', 'The team is unique in a round!'),
+    #]
