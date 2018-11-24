@@ -30,7 +30,6 @@ class HomeIndex extends Component {
     const { location: { pathname } } = this.props;
     const router = '/' + pathname.split('/')[1];
     const { sid } = this.state;
-
     if (sid) {
       if (router === '/details') {
         return (
@@ -43,13 +42,15 @@ class HomeIndex extends Component {
       if (router === '/user') {
         return <UserLayout {...this.props}>{this.props.children}</UserLayout>
       }
-      if (router === '/home') {
-        return <HomeLayout {...this.props}>{this.props.children}</HomeLayout>
+      if (router === '/home' || router === '/game') {
+        return (
+          <LocaleProvider locale={zhCN}>
+            <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
+          </LocaleProvider>
+        );
       }
       return (
-        <LocaleProvider locale={zhCN}>
-          <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
-        </LocaleProvider>
+        <HomeLayout {...this.props}>{this.props.children}</HomeLayout>
       )
     } else {
       return <div>正在加载</div>

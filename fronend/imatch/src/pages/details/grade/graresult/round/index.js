@@ -1,6 +1,5 @@
 import { Component } from "react";
-import { Card, Row, Col, Table } from "antd";
-import { Link } from "dva/router";
+import { Card, Row, Col, Table, Button } from "antd";
 import { connect } from 'dva';
 import styles from './index.css';
 import { lookup } from '@/utils/tools'
@@ -38,26 +37,81 @@ const columns = [{
     title: '结果',
     dataIndex: 'result',
     align: "center",
+    render: (text) => {
+        if (parseInt(text) > 0) {
+            return `+${text}`
+        } else {
+            return text
+        }
+    }
 }, {
     title: 'NS',
     dataIndex: 'ns_point',
     align: "center",
+    render: (text) => {
+        if (text == '0') {
+            return ''
+        } else {
+            return text;
+        }
+    }
 }, {
     title: 'EW',
     dataIndex: 'ew_point',
     align: "center",
+    render: (text) => {
+        if (text == '0') {
+            return ''
+        } else {
+            return text;
+        }
+    }
 }, {
     title: 'IMPs',
     children: [{
         title: '主队',
         dataIndex: 'host_imp',
-        // render: renderNumber,
+        render: renderNumber,
         align: "center",
+        render: (value, row, index) => {
+            const obj = {
+                children: value,
+                props: {},
+            };
+            if (index % 2 === 0) {
+                if (value == '0') {
+                    obj.props.rowSpan = 2;
+                    obj.children = ""
+                } else {
+                    obj.props.rowSpan = 2;
+                }
+            } else {
+                obj.props.rowSpan = 0;
+            }
+            return obj;
+        }
     }, {
         title: '客队',
         dataIndex: 'guest_imp',
-        // render: renderNumber,
+        render: renderNumber,
         align: "center",
+        render: (value, row, index) => {
+            const obj = {
+                children: value,
+                props: {},
+            };
+            if (index % 2 === 0) {
+                if (value == '0') {
+                    obj.props.rowSpan = 2;
+                    obj.childrenls = ""
+                } else {
+                    obj.props.rowSpan = 2;
+                }
+            } else {
+                obj.props.rowSpan = 0;
+            }
+            return obj;
+        }
     }]
 }];
 const dataSource = [
@@ -73,7 +127,9 @@ class Round extends Component {
     state = {
         loading: true,
     }
+    printText = React.createRef();
     componentDidMount() {
+
         const {
             location: { state: { matchData } },
         } = this.props
@@ -97,6 +153,13 @@ class Round extends Component {
                 loading: false,
             })
         })
+    }
+    handlerPrintScore() {
+
+        var newstr = document.getElementById('print').innerHTML;
+        document.body.innerHTML = newstr;
+        window.print();
+        return false;
     }
     render() {
         const {
@@ -203,75 +266,84 @@ class Round extends Component {
         const lineSource = lineArray.sort((a, b) => {
             return b.id - a.id && a.number - b.number;
         })
-
         return (
             <div style={{ width: "800px", margin: "0 auto" }}>
-                <h2 style={{ textAlign: "center", marginTop: 15 }}>{match_name}：{match_round}</h2>
-                <div style={{ textAlign: "center", 'fontSize': 20, marginBottom: 10 }}>{matchVs}</div>
-                <Row type="flex" justify="end">
-                    <Col span={10} >
-                        <Card
-                            title="开室"
-                            bordered={true}
-                            style={{ width: 330 }}
-                            headStyle={{ background: "green", textAlign: "center" }}
-                        >
-                            <div className={styles.header}>
-                                <div className={styles.table}>
-                                    <div className={styles.tableN}>{openN}</div>
-                                    <div className={styles.tableW}>{openW}</div>
-                                    <div className={styles.tableNWES}>
-                                        <div className={styles.tableN}>N</div>
-                                        <div className={styles.tableW}>W</div>
-                                        <div className={styles.tableE}>E</div>
-                                        <div className={styles.tableS}>S</div>
+                <div className={styles.butbox}>
+                    <Button
+                        type="primary"
+                        onClick={this.handlerPrintScore}
+                        className={styles.printButton}>
+                        打印成绩
+                  </Button>
+                </div>
+                <div id="print" >
+                    <h2 style={{ textAlign: "center", marginTop: 15 }}>{match_name}：{match_round}</h2>
+                    <div style={{ textAlign: "center", 'fontSize': 20, marginBottom: 10 }}>{matchVs}</div>
+                    <Row type="flex" justify="end">
+                        <Col span={10} >
+                            <Card
+                                title="开室"
+                                bordered={true}
+                                style={{ width: 330 }}
+                                headStyle={{ background: "green", textAlign: "center" }}
+                            >
+                                <div className={styles.header}>
+                                    <div className={styles.table}>
+                                        <div className={styles.tableN}>{openN}</div>
+                                        <div className={styles.tableW}>{openW}</div>
+                                        <div className={styles.tableNWES}>
+                                            <div className={styles.tableN}>N</div>
+                                            <div className={styles.tableW}>W</div>
+                                            <div className={styles.tableE}>E</div>
+                                            <div className={styles.tableS}>S</div>
+                                        </div>
+                                        <div className={styles.tableE}>{openE}</div>
+                                        <div className={styles.tableS}>{openS}</div>
                                     </div>
-                                    <div className={styles.tableE}>{openE}</div>
-                                    <div className={styles.tableS}>{openS}</div>
                                 </div>
-                            </div>
-                        </Card>
-                    </Col>
-                    <Col span={4}></Col>
-                    <Col span={10}>
-                        <Card
-                            title="闭室"
-                            bordered={true}
-                            style={{ width: 334 }}
-                            headStyle={{ background: "green", textAlign: "center" }}
-                        >
-                            <div className={styles.header}>
-                                <div className={styles.table}>
-                                    <div className={styles.tableN}>{closeN}</div>
-                                    <div className={styles.tableW}>{closeW}</div>
-                                    <div className={styles.tableNWES}>
-                                        <div className={styles.tableN}>N</div>
-                                        <div className={styles.tableW}>W</div>
-                                        <div className={styles.tableE}>E</div>
-                                        <div className={styles.tableS}>S</div>
+                            </Card>
+                        </Col>
+                        <Col span={4}></Col>
+                        <Col span={10}>
+                            <Card
+                                title="闭室"
+                                bordered={true}
+                                style={{ width: 334 }}
+                                headStyle={{ background: "green", textAlign: "center" }}
+                            >
+                                <div className={styles.header}>
+                                    <div className={styles.table}>
+                                        <div className={styles.tableN}>{closeN}</div>
+                                        <div className={styles.tableW}>{closeW}</div>
+                                        <div className={styles.tableNWES}>
+                                            <div className={styles.tableN}>N</div>
+                                            <div className={styles.tableW}>W</div>
+                                            <div className={styles.tableE}>E</div>
+                                            <div className={styles.tableS}>S</div>
+                                        </div>
+                                        <div className={styles.tableE}>{closeE}</div>
+                                        <div className={styles.tableS}>{closeS}</div>
                                     </div>
-                                    <div className={styles.tableE}>{closeE}</div>
-                                    <div className={styles.tableS}>{closeS}</div>
                                 </div>
-                            </div>
-                        </Card>
-                    </Col>
-                </Row>
+                            </Card>
+                        </Col>
+                    </Row>
 
-                <Table
-                    loading={loading}
-                    style={{ marginTop: 10 }}
-                    rowKey={row => row.id}
-                    bordered
-                    columns={columns}
-                    pagination={false}
-                    dataSource={lineSource}
-                    size='xs'
-                />
-                <Row >
-                    <Col className={styles.IMPS} span={6} >IMPs</Col><Col className={styles.IMPSr} span={18} >{IMPS}</Col>
-                    <Col span={6} className={styles.vps}>VPs</Col><Col className={styles.vpsr} span={18}>{Vps}</Col>
-                </Row>
+                    <Table
+                        loading={loading}
+                        style={{ marginTop: 10 }}
+                        rowKey={row => row.id}
+                        bordered
+                        columns={columns}
+                        pagination={false}
+                        dataSource={lineSource}
+                        size='xs'
+                    />
+                    <Row >
+                        <Col className={styles.IMPS} span={6} >IMPs</Col><Col className={styles.IMPSr} span={18} >{IMPS}</Col>
+                        <Col span={6} className={styles.vps}>VPs</Col><Col className={styles.vpsr} span={18}>{Vps}</Col>
+                    </Row>
+                </div>
             </div>
         )
     }

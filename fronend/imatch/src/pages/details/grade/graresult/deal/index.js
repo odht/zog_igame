@@ -50,7 +50,7 @@ class Deal extends Component {
           // const match_ids = Array.from(new Set(BoardData.map(item => item.match_id[0])))
           const match_ids = BoardData.map(item => item.match_id[0]);
           const a = BoardData.filter((item) => item.state != 'done');
-          if (a.length == 0) {
+          if (a.length == 0 && BoardData.length > 0) {
             this.setState({
               isDone: false,
             })

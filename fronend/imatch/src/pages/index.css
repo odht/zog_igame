@@ -1,0 +1,48 @@
+
+.ant-carousel .slick-slide {
+    text-align: center;
+    height: 160px;
+    line-height: 160px;
+    background: #364d79;
+    overflow: hidden;
+  }
+  
+.ant-carousel .slick-slide h3 {
+    color: #fff;
+  }
+.carousuel{
+      max-width: 1100px;
+      margin: 0 auto;
+      max-height: 500px;
+      /* background: red; */
+  }
+.carousuel img{
+      width: 100%;
+      max-height: 500px;
+      min-height: 400px;
+  }
+.news {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-top: 40px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    border-bottom: 1px solid rgb(116, 187, 245);
+}
+
+.entry{
+    text-align: center;
+}
+.box{
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.list{
+   text-align: left　!important;
+   text-align: justify;
+}
