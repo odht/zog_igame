@@ -20,6 +20,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             title: "完成",
             dataIndex: "deal_ids",
             render: (text, record) => {
+                console.log(record)
                 return `${record.deal_ids.length}`
             }
         }, {

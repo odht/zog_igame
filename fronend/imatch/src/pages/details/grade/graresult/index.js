@@ -95,7 +95,7 @@ class Graresult extends Component {
         // 牌组 
         const matchData = lookup(match_ids, ogMatch)
         const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo).sort((prestate, nextstate) => {
-            return nextstate.score - prestate.score;
+            return nextstate.score_close - prestate.score_close;
         });
         const dealData0 = lookup(deal_ids, ogDeal);
         const dealData = dealData0.map(item => {
