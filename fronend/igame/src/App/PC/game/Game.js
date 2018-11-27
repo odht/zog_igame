@@ -51,7 +51,7 @@ class Game extends Component {
             //alert('请不要点击鼠标右键！');
             return false;
         }
-
+        //plus.device.setWakelock( true );
         document.onkeydown = function (e) { // 屏蔽f5,f12 keycode == 116,123
             e = window.event || e;
             var keycode = e.keyCode || e.which;

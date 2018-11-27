@@ -60,6 +60,7 @@ class Table extends Component {
         super(props);
         this.width = window.screen.width;
         this.height = window.screen.height;
+        //this.height = window.innerHeight;
         this.css = {
             table: {
                 width: this.width,
