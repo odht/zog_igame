@@ -87,16 +87,6 @@ const columns = [{
   render: renderNumber,
 }]
 
-
-
-
-// 嵌套
-
-
-
-
-
-
 class Deal extends Component {
   state = {
     dealData: {},
