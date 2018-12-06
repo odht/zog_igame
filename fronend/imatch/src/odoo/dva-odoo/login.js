@@ -3,7 +3,7 @@
    1 how to save data,
    3 call userinfo?
 */
-
+import odoo from '@/odoo-rpc/odoo';
 
 const loginApi = (odooService) => {
   const login = async (params) => {
@@ -38,7 +38,9 @@ export default odooService => {
           /* check login result, save login info: sid, uid */
           localStorage.setItem('userInfo',data)
           yield put({ type: 'save', payload: { ...data } });
-          const { uid: id } = data;
+          const { sid,uid } = data;
+          odoo._rpc.sid = sid;
+          odoo._rpc.uid = uid;
         } else {
           // ? how to update state?
           // console.log('11',response)
