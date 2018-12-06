@@ -88,7 +88,7 @@ class Graresult extends Component {
         // 比赛对战数据
         const {
             odooData: { ogMatch, ogTeamRoundInfo, ogDeal },
-            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id } } },
+            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id, id } } },
             location: { state },
         } = this.props;
         const { loading } = this.state;
@@ -105,7 +105,7 @@ class Graresult extends Component {
                     key={item.id}
                     to={{
                         pathname: '/details/grade/graresult/deal',
-                        query: { deal_id: item.id },
+                        query: { deal_id: item.id, round_id: id },
                         state,
                     }}>{item.number}
                 </Link>
