@@ -33,6 +33,9 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "react-router-breadcrumbs-hoc": "^2.1.5"
+    "global": "^4.3.2",
+    "react-router-breadcrumbs-hoc": "^2.1.5",
+    "server": "^1.0.18",
+    "tyarn": "^0.1.0"
   }
 }

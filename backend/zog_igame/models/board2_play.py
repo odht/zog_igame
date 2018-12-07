@@ -137,8 +137,8 @@ class Board(models.Model):
         return 0
 
     @api.multi
-    def claim_ok(self,pos, ok=None):
-        """ claim ok, not ok """
+    def claim_ack(self,pos, ack=None):
+        """ claim ack, not ack """
         if self.state not in ['claiming','claiming.LHO','claiming.RHO']:
             return -3, 'state not in claiming'
         
@@ -155,7 +155,7 @@ class Board(models.Model):
         if pos not in [lho(dclr), rho(dclr)]:
             return -5, 'not pos'
         
-        if not ok:
+        if not ack:
             self.state = 'playing'
         
         opp = {lho(dclr):'LHO', rho(dclr):'RHO'}[pos]
@@ -165,7 +165,7 @@ class Board(models.Model):
             return 0
             
         if opp == self.state.split(',')[1]:
-            return -6, 'claim ok again'
+            return -6, 'claim ack again'
 
         self.state = 'done'
         self.result = self._get_result()
@@ -173,7 +173,7 @@ class Board(models.Model):
         return 0
 
     @api.multi
-    def undo(self):
+    def undo(self, player, ):
         #self.refresh()
         if self.claimer:
             return self._undo_claim()

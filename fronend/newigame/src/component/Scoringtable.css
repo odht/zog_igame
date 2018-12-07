@@ -1,0 +1,16 @@
+.submitA{
+    display: inline-block;
+}
+.submitButton{
+    margin: 1% 0;
+    float:right;
+    margin-right: 30px;
+}
+.isOk{
+    width: 100px;
+    padding: 5px 20px;
+    margin: 15px auto;
+}
+.isOkBox{
+    text-align: center;
+}

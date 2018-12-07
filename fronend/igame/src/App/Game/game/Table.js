@@ -24,7 +24,7 @@ class Table extends Component {
     state = {
         cards: null, // 考虑这里不用 cards 只用必要的数字 ,方位按照Table.seats
         scene: 0,    // 0 准备阶段 1 叫牌阶段 2 出牌阶段 3 claim 等待，4 claim 确认
-        calldata:[],
+        calldata:[], // 表示叫过的牌
         bidCard: null,
         user: { east: null, south: null, west: null, north: null },
         // ready:null,
@@ -70,7 +70,7 @@ class Table extends Component {
                 top: this.width * 0.15,
                 // top: this.width * 0.32,
                 left: this.width * 0.2,
-                width: this.width * 0.6,
+                width: this.width * 0.5,
                 height: this.width * 0.6
             },
             header: {
@@ -174,7 +174,6 @@ class Table extends Component {
     /* 完成挂载后，要计算 各个位置的坐标。 */
     componentDidMount() {
         // this.timing('south',0,()=>{},true)
-        console.log(timer)
         clearInterval(timer);
         Models.get_matches(this.sucGetMatch,this.failGetMatch)  //查询桌号
     }
@@ -194,9 +193,14 @@ class Table extends Component {
             Toast.info('您当前没有比赛，请稍后再试',2)
         }
     }
-
+/**
+ * 参数data是一个数组，长度可能是3,4
+ * 如果是重新连接，长度就是4，[,公共频道号,牌号列表,私有频道号,]
+ * 否则就是3，[公共频道号,牌号列表,私有频道号,]，其中牌号列表是数组
+ * 
+ */
     sucChannel=(data)=>{    //查询公共频道号,board_id,私有频道号,  [2, Array(8), 5]
-        const boardData = data.slice(-3);
+        const boardData = data.slice(-3); console.log(data),console.log(boardData)
         if(data.length===3){this.props.setHiddenState(true); this.setBoardId(boardData) }
         clearInterval(timer);
         if(data.length===4){ 
@@ -215,7 +219,8 @@ class Table extends Component {
     }
     
     setBoardId=(data,board_id)=>{
-        this.my_channel_id = data[2];
+        this.my_channel_id = data[2]; 
+        // if 中的语句是多余的，因为此时this.board_id_list没有经过赋值，if语句永远不会执行
         if(this.board_id_list){
             this.channel_id = data[0];
             this.board_id = this.board_id_list[this.board_id_list.indexOf(this.board_id)+1];
@@ -224,11 +229,11 @@ class Table extends Component {
             this.channel_id = data[0];
             this.board_id = board_id||data[1][0];
         }
-        Models.init_board(this.sucInit,this.failInit,this.board_id,this.channel_id);    //初始化牌桌
+        Models.init_board(this.sucInit,this.failInit,this.board_id,this.channel_id);    //初始化牌桌，第三个参数表示牌号
     }
 
     sucInit=(data)=>{
-        console.log(data)
+        console.log(data.cards)
     // [cards:"AQ93.T9632.T7.73 6.K7.K984.AQJ964 K42.AQ5.AJ3.KT85 JT875.J84.Q652.2",dealer:'E',players:[["111 1111 1111", "S", 7],["222 2222 2222", "N", 8],["333 3333 3333", "E", 9],["444 4444 4444", "W", 10]],vulnerable:"NS"]
         this.originData = data; 
         data.players.map(item=>{    //存储‘我’的方位
@@ -261,18 +266,18 @@ class Table extends Component {
         if(data.length && data.slice(-1)[0]['id']!==this.pollingId && data[data.length-1].message.body.indexOf('data-oe-id')===-1){
             //准备遍历消息
             this.dealMsg(data);
-        }
+        } console.log(this.state.toResult)
         if(!this.state.toResult){
             Models.polling(this.sucPolling,this.failPolling,this.pollingId)
         }
     }
     failPolling=()=>{console.log('fail polling')}
 
-    dealMsg = (data) =>{
+    dealMsg = (data) =>{ console.log(this.state.cards) 
         this.pollingId=data.slice(-1)[0]['id']
         let body = data[data.length-1].message.body;    //"<p>{'board_id': 44, 'number': 1, 'name': u'1S', 'pos': u'S'}</p>"
         if(body.substring(3,body.length-4)==='all ready'){
-            this.splitCards(this.originData)
+            this.splitCards(this.originData) ;console.log(body)
         }else if(body.substring(3,body.length-4)==='claim agreed'){
                 this.setState({scene:2});
                 this.addChatMsg('系统消息','庄家claim成功，正在为您计算本副牌成绩...')
@@ -331,7 +336,7 @@ class Table extends Component {
                 
                 let index = this.state.userdir.indexOf(body.pos)
                 this.dealOneSeatCards(playSeatCard,index,true)
-                
+                console.log(this.state.cards)
                 this.setState({
                     cards: this.state.cards,
                     ew_win:body.ew_win,
@@ -539,6 +544,7 @@ class Table extends Component {
         //deals. [XXXXXXXXXXXXX,QJ98.A5.J853.QT4,XXXXXXXXXXXXX,XXXXXXXXXXXXX]
         deals.forEach((item, index1) => {
             const suit = item.split('.')
+            // s 表示每一种花色的牌，是一个字符串，牌的数字大小
             suit.forEach((s, index2) => {           // index2 四个花色  s 'QJ98' 牌点字串
                 //cards[index1][index2] = [];
                 for (var i = 0; i < s.length; i++) {
@@ -549,8 +555,8 @@ class Table extends Component {
                         key: index++,
                         seat: Table.seats[index1],       // 这张牌是那个方位的
                         //table: this,
-                        size: this.csize,                // 牌的大小
-                        card: s[i] + suits[index2],
+                        size: this.csize,                // 牌的形状大小
+                        card: s[i] + suits[index2],      //牌的大小和花色
                         position: { x: this.width / 2, y: this.width * 2 }     // 考虑一个默认位置。
                     })
                 }
@@ -565,7 +571,9 @@ class Table extends Component {
         const index = Table.seats.indexOf(seat)
         return Table.seats[(index + offset) % 4-1]||Table.seats[(index + offset) % 4+3]
     }
-    //从未打出去的牌中验证打牌规则  可提出公共部分？？？？？？
+    /**
+     * 给可以打的牌添加打牌事件，不能打的牌添加空函数事件
+     */
     playRules=(nextplayer,suit,number)=>{   
         this.state.cards.map(item=>{
             console.log('...........................')
@@ -605,7 +613,9 @@ class Table extends Component {
         }
         this.setState({cards:this.state.cards})
     }
- 
+ /**
+  * body = {board_id:牌号, number:叫牌次数, name:叫牌内容, pos:叫牌者的方位}
+  */
     validatePass=(body)=>{
         this.call(body.pos,body.name)   //展示叫牌人及叫品
         this.setState({
@@ -659,16 +669,22 @@ class Table extends Component {
         if(pos==='S')this.setState({userdir:['E','S','W','N',]})
         if(pos==='W')this.setState({userdir:['S','W','N','E']})
     }
-
+/**
+ * data:[cards:"AQ93.T9632.T7.73 6.K7.K984.AQJ964 K42.AQ5.AJ3.KT85 JT875.J84.Q652.2",dealer:'E',players:[["111 1111 1111", "S", 7],["222 2222 2222", "N", 8],["333 3333 3333", "E", 9],["444 4444 4444", "W", 10]],vulnerable:"NS"]
+ */
     splitCards=(data)=>{
         console.log(data)
+        //保存四家牌数据
         this.cards = data.cards.split(' ');
         this.dealer=data.dealer;
         this.counterTime();
         console.log(Table.seats[this.state.userdir.indexOf(data.dealer)])
+        //保存本家的牌的真实数据，其余三家用'X'表示牌的数据，四家牌的数据用空格分开
         this.deals = 'XXX.XX.XXXX.XXXX '+ data.cards.split(' ')[Table.dir.indexOf(this.myseat)] +' XXX.XX.XXXX.XXXX XXX.XX.XXXX.XXXX';
+        //二维数组，数组元素是josn对象，josn对象有每一张牌的信息，全部放在state的cards中
         this.state.cards = this.initCards()
         this.deal();
+        //状态变成叫牌阶段
         this.setState({scene:1,next:Table.dirCN[Table.dir.indexOf(data.dealer)]})  
         this.timing(null,0,()=>{},true);
         console.log('next'+ this.state.next)
@@ -709,7 +725,7 @@ class Table extends Component {
         if(lastState.state==='biding'){     //叫牌阶段断线
             this.splitCards(this.originData)
             if(lastState.bidder){
-                // let nextBidder = Table.seats[this.state.userdir.indexOf(lastState.bidder)]
+                //设置该谁叫牌
                 this.setState({next:Table.dirCN[Table.dir.indexOf(lastState.bidder)]})
                 console.log('next' + this.state.next)
                 this.timing(null,0,()=>{},true);
@@ -875,7 +891,7 @@ class Table extends Component {
             if(!bool){
                 this.dealOneCard(item1,x,y,rotate,offset)
                 if ('02'.indexOf(index) !== -1) y = y + this.csize * 0.15;
-                else x = x + this.csize * 0.39;
+                else x = x + this.csize * 0.39;//每张牌之间的间隔
             }
         });
     }
@@ -958,7 +974,7 @@ class Table extends Component {
         })
     }
     /**
-     * 出牌动作
+     * 出牌动作，修改牌的位置信息
      */
     playCard = (item) => {
         item['animation']['left'] = this.seat[item.seat][1].x;
@@ -1177,7 +1193,9 @@ class Table extends Component {
             }
         })
         // this.deals = 'XXX.XX.XXXX.XXXX '+ mycards.join('.') + ('X').repeat(mycardslength) +' XXX.XX.XXXX.XXXX XXX.XX.XXXX.XXXX';
+       
         this.deals = 'XXX.XX.XXXX.XXXX '+ mycards.join('.') + addXX.join('') +' XXX.XX.XXXX.XXXX XXX.XX.XXXX.XXXX';
+        console.log(this.deals)
         this.state.cards = this.initCards()
         this.deal();
     }
@@ -1256,7 +1274,9 @@ class Table extends Component {
             else{this.clearBoard()}
         }
     }
- 
+ /**
+  * 将自己打过的牌移动到对应的区域
+  */
     filterMyCards=()=>{
         this.state.cards[this.state.userdir.indexOf(this.myseat)].map(item=>{
             if(item.card.split('')[0]==='X'){

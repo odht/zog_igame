@@ -11,13 +11,14 @@ export const details = [
         name: "成绩",
         path: '/grade',
         child: [],
-    }, {
-        name: "数据",
-        path: "/data",
-        child: [],
-    }, {
-        name: "新闻",
-        path: "/news",
-        child: [],
     }
+    // , {
+    //     name: "数据",
+    //     path: "/data",
+    //     child: [],
+    // }, {
+    //     name: "新闻",
+    //     path: "/news",
+    //     child: [],
+    // }
 ]

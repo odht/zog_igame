@@ -1,0 +1,38 @@
+.images{
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.about{
+    border-top: 2px solid rgb(116, 187, 245);
+    padding: 40px 0;
+    height: 200px;
+    text-align: center;
+}
+.abouttop{
+    color: #3e93f5;
+    font-size: 45px;
+    font-weight: 700;
+}
+.aboutbottom{
+    font-size: 20px;
+}
+.company{
+    font-size: 16px;
+    text-indent: 2em;
+    text-align: justify;
+}
+.contact {
+    font-size: 17px;
+    line-height: 40px;
+}
+.contact>span{
+    font-size: 15px;
+    display: inline-block;
+    width: 80px;
+    margin-right: 10px;
+    text-align: right;
+}

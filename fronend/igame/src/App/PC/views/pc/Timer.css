@@ -1,0 +1,15 @@
+.timername{
+    height:30%;
+    background-color: aliceblue;
+    text-align: center;
+}
+.timer > div{
+    text-align: center;
+    line-height: 5vh;
+    height:5vh;
+    width:30%;
+    margin:8% 1.66%;
+    float:left;
+    background-color: aliceblue;
+    border-radius:1vh;
+}

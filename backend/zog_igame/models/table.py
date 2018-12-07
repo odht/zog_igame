@@ -18,8 +18,9 @@ POSITIONS = [
 class Table(models.Model):
     _name = "og.table"
     _description = "Table"
-    _order = 'number'
+    _order = 'match_id,room_type, number'
 
+    """ 
     @api.model
     def create(self,vals):
         table = super(Table,self).create(vals)
@@ -27,23 +28,33 @@ class Table(models.Model):
             table.name = table.room_type + ',' + table.match_id.name
 
         return table
+    """
 
     _sql_constraints = [
         ('match_open_close_uniq', 'unique (room_type,match_id)', 'The match have one open table and one close table !')
     ]
     
-    name = fields.Char('Name' )
+    name = fields.Char('Name', compute='_compute_name' )
+    
+    @api.multi
+    def _compute_name(self):
+        for rec in self:
+            rec.name = rec.room_type + ',' + str(rec.match_id.number) + ',' + rec.match_id.name
+    
+    
     number = fields.Integer(default=1 )
     room_type = fields.Selection([('open','Open' ), ('close','Close')], default='open')
 
     match_id = fields.Many2one('og.match', string='Match', ondelete='restrict')
     round_id = fields.Many2one('og.round', related='match_id.round_id')
+    schedule_id = fields.Many2one('og.schedule', related='round_id.schedule_id')
     phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
     game_id = fields.Many2one('og.game', related='phase_id.game_id')
 
+    schedule_number = fields.Integer( string='Schedule Number', related='schedule_id.number' )
+
     date_from = fields.Datetime(related='round_id.date_from')
     date_thru = fields.Datetime(related='round_id.date_thru')
-    state = fields.Selection(related='round_id.state')
 
     deal_ids  = fields.Many2many('og.deal', string='Deals', related='round_id.deal_ids' )
 
@@ -68,14 +79,18 @@ class Table(models.Model):
 
 
     # 4 player in table
-    east_id = fields.Many2one('og.team.player', 
-                compute='_compute_player', inverse='_inverse_player_east')
-    west_id = fields.Many2one('og.team.player',
-                compute='_compute_player', inverse='_inverse_player_west')
-    north_id = fields.Many2one('og.team.player',
-                compute='_compute_player', inverse='_inverse_player_north')
-    south_id = fields.Many2one('og.team.player',
-                compute='_compute_player', inverse='_inverse_player_south')
+    east_id = fields.Many2one('og.team.player', compute='_compute_player'
+        #, inverse='_inverse_player_east'
+        )
+    west_id = fields.Many2one('og.team.player', compute='_compute_player'
+        #, inverse='_inverse_player_west'
+        )
+    north_id = fields.Many2one('og.team.player', compute='_compute_player'
+        #, inverse='_inverse_player_north'
+        )
+    south_id = fields.Many2one('og.team.player', compute='_compute_player'
+        #, inverse='_inverse_player_south'
+        )
                 
     table_player_ids = fields.One2many('og.table.player','table_id',help='Technical field')
     player_ids = fields.Many2many('og.team.player', compute='_compute_player')
@@ -92,19 +107,20 @@ class Table(models.Model):
             rec.south_id = _get('S')
             rec.player_ids = rec.table_player_ids.mapped('player_id')
 
-    #@api.onchange('east_id', 'west_id', 'north_id', 'south_id')
+    """ 
+    @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_east(self):
         self._inverse_player('E')
 
-    #@api.onchange('east_id', 'west_id', 'north_id', 'south_id')
+    @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_west(self):
         self._inverse_player('W')
 
-    #@api.onchange('east_id', 'west_id', 'north_id', 'south_id')
+    @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_north(self):
         self._inverse_player('N')
 
-    #@api.onchange('east_id', 'west_id', 'north_id', 'south_id')
+    @api.onchange('east_id', 'west_id', 'north_id', 'south_id')
     def _inverse_player_south(self):
         self._inverse_player('S')
 
@@ -126,6 +142,7 @@ class Table(models.Model):
 
                 table_player.create(vals)
 
+    """
 
 class TablePlayer(models.Model):
     """
@@ -158,6 +175,8 @@ class Partner(models.Model):
 
     todo_table_ids = fields.One2many('og.table', compute='_get_table')
     done_table_ids = fields.One2many('og.table', compute='_get_table')
+
+    doing_table_ids = fields.One2many('og.table', compute='_get_table')
     
     @api.multi
     def _get_table(self):
@@ -166,7 +185,17 @@ class Partner(models.Model):
             table_ids = rec.team_player_ids.mapped('table_player_ids').mapped('table_id')
             
             rec.todo_table_ids = table_ids.filtered(
-                    lambda tbl: tbl.state in ['todo','doing']).sorted('date_from')
+                    lambda tbl: tbl.state in ['todo','doing']).sorted('schedule_number')
                     
             rec.done_table_ids = table_ids.filtered(
                     lambda tbl: tbl.state == 'done').sorted('date_from')
+            
+            for game in rec.todo_table_ids.mapped('game_id'):
+                doings = rec.todo_table_ids.filtered(
+                    lambda tbl: tbl.game_id == game).sorted('schedule_number')
+                if doings:
+                    rec.doing_table_ids += doings[0]
+            
+            
+
+

@@ -4,76 +4,251 @@ import club from '@/assets/svg/club.svg';
 import diamond from '@/assets/svg/diamond.svg';
 import heart from '@/assets/svg/heart.svg';
 import spade from '@/assets/svg/spade.svg';
-import direction from '@/assets/direction.png';
-import one from '@/assets/one.png';
-import { Table, Row, Col ,Icon} from "antd";
-import { Link } from "react-router-dom";
+import { Table } from "antd";
 import { connect } from "dva";
-import { lookup } from '@/utils/tools'
+
+
+// 引入odoo-rpc
+import odoo from '@/odoo-rpc/odoo';
+
+const renderNumber = (value, row, index) => {
+  const obj = {
+    children: value,
+    props: {},
+  };
+  if (index % 2 === 0) {
+    obj.props.rowSpan = 2;
+  } else {
+    obj.props.rowSpan = 0;
+  }
+  return obj;
+};
+
+const columns = [{
+  title: '桌号',
+  dataIndex: 'number',
+  render: renderNumber,
+}, {
+  title: '主队',
+  dataIndex: 'ply1',
+  colSpan: 2,
+  // render: (text, row) => {
+  //   return text.length > 1 ? `${row.ply1[2]}  ${row.ply1[1]}` : `${row.ply1[0]}`
+  // }
+}, {
+  dataIndex: 'ply2',
+  colSpan: 0,
+  // render: (text, row) => {
+  //   return text.length > 1 ? `${row.ply2[2]}  ${row.ply2[1]}` : `${row.ply2[0]}`
+  // }
+},
+{
+  title: "客队",
+  dataIndex: 'ply3',
+  colSpan: 2,
+  // render: (text, row) => {
+  // return text.length > 1 ? `${row.ply3[2]}  ${row.ply3[1]}` : `${row.ply3[0]}`
+  // }
+}, {
+  dataIndex: 'ply4',
+  colSpan: 0,
+  // render: (text, row) => {
+  // return text
+  // return text.length > 1 ? `${row.ply4[2]}  ${row.ply4[1]}` : `${row.ply4[0]}`
+  // }
+}, {
+  dataIndex: 'room_type'
+}, {
+  title: "庄家",
+  dataIndex: 'declarer',
+}, {
+  title: "定约",
+  dataIndex: 'contract',
+}, {
+  title: '结果',
+  dataIndex: 'result',
+}, {
+  title: 'NS',
+  dataIndex: 'ns_point',
+}, {
+  title: 'EW',
+  dataIndex: 'ew_point',
+}, {
+  title: 'Datum',
+}, {
+  title: 'ximp',
+}, {
+  title: '主队IMP',
+  dataIndex: 'host_imp',
+  render: renderNumber,
+}, {
+  title: '客队IMP',
+  dataIndex: 'guest_imp',
+  render: renderNumber,
+}]
 
 class Deal extends Component {
   state = {
-    card_str: [],
-    BoardData: [],
+    dealData: {},
+    loading: true,
+    isDone: true,
+    roundData: {},
+  }
+
+  // 获取
+  handleDeal = async (match_ids) => {
+    const fields = {
+      card_str: null,
+      number: null,
+      dealer: null,
+      game: null,
+      schedule_id: { id: null, name: null },
+      phase: null,
+      round: null,
+      board_ids: {
+        state: null,
+        number: null,
+        contract: null,  // 定约
+        declarer: null,   //庄家
+        result: null,     //结果
+        ns_point: null, //南北得分,
+        ew_point: null, //东西得分
+        table_id: {
+          id: null,
+          room_type: null, // 开闭室
+          south_id: { id: null, name: null }, //玩家
+          north_id: { id: null, name: null },
+          east_id: { id: null, name: null },
+          west_id: { id: null, name: null },
+          round_id: { id: null, name: null },
+        },
+        match_id: {
+          phase_id: { id: null, name: null },
+          id: null,
+          name: null,
+          number: null, //桌
+          game_id: null,   //
+          guest_vp: null,
+          host_vp: null,
+          host_imp: null,
+          guest_imp: null,
+          phase: null,
+        },
+      }
+
+    }
+    const id = parseInt(match_ids);
+    const Deal = odoo.env('og.deal');
+    const ptns = await Deal.browse(id, fields);
+    const dealData = ptns.look(fields);
+    const { card_str } = dealData;
+    const { board_ids } = dealData;
+    const bidding = board_ids.filter((item) => item.state != 'done');
+    if (bidding.length == 0 ) {
+      this.setState({
+        isDone: false,
+      })
+    }
+    this.setState({
+      dealData,
+      card_str,
+    })
+  }
+
+  // 获取round
+  handleGetRound = async (round_id) => {
+    const fields = {
+      id: null,
+      name: null,
+      game_id: { id: null, name: null },
+      phase_id: { id: null, name: null },
+    }
+    const id = parseInt(round_id);
+    const round = odoo.env('og.round');
+    const rod = await round.browse(id, fields);
+    const roundData = rod.look(fields);
+    this.setState({
+      roundData,
+    })
   }
   componentDidMount() {
     const {
-      dispatch,
-      location: { query: { deal_id } }
+      location: { query: { deal_id, round_id } }
     } = this.props;
-    dispatch({
-      type: 'ogDeal/read',
-      payload: { id: parseInt(deal_id) }
-    }).then(() => {
-      const { odooData: { ogDeal } } = this.props;
-      const card_strData = lookup(deal_id, ogDeal);
-      const board_ids = card_strData[0].board_ids;
-      if (card_strData.length > 0) {
-        this.setState({
-          card_str: card_strData[0].card_str,
-        })
-        dispatch({
-          type: 'ogBoard/read',
-          payload: { id: board_ids }
-        }).then(() => {
-          const { odooData: { ogBoard } } = this.props;
-          const BoardData = lookup(board_ids, ogBoard)
-          this.setState({
-            BoardData: BoardData,
-          })
-        })
-      }
-
-    })
-  }
-  shouldComponentUpdate(props, state) {
-    const { BoardData, card_str } = state;
-    if (BoardData.length > 0 && card_str.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    this.handleDeal(deal_id)
+    this.handleGetRound(round_id)
   }
   render() {
-    
-    const { card_str, BoardData } = this.state;
-    //发牌人 比赛名称 排位　第几轮
+    const { dealData, card_str, isDone, roundData = {} } = this.state;
+
+    const { phase_id = {}, name, game_id = {} } = roundData;
+    const { name: phase } = phase_id;
+    const { name: game } = game_id;
+    // const { phase_id: { name: phase }, name, game_id: { name: game } } = roundData;
     let dealer = '';
-    let game = '';
-    let phase = '';
-    let round = '';
-    if (BoardData.length > 0) {
-      dealer = BoardData[0].dealer;
-      game = BoardData[0].game_id[1];
-      phase = BoardData[0].phase_id[1];
-      round = BoardData[0].round_id[1];
+    let BoardData = []
+    if (dealData) {
+      const { board_ids = [] } = dealData;
+      dealer = dealData.dealer;
+      board_ids.map(board => {
+        const {
+          contract,
+          declarer,
+          ew_point,
+          ns_point,
+          result,
+          table_id: {
+            south_id,
+            north_id,
+            east_id,
+            west_id,
+            room_type,
+          },
+          match_id: {
+            guest_imp,
+            guest_vp,
+            host_imp,
+            host_vp,
+            id,
+            name,
+            number, } } = board;
+        // 处理主队客队队员
+        const [ply1, ply2, ply3, ply4] = room_type === 'open' ?
+          [[north_id.name || '', 'N'], [south_id.name || '', 'S'], [east_id.name || '', 'E'], [west_id.name || '', 'W']]
+          : [[east_id.name || '', 'E'], [west_id.name || '', 'W'], [north_id.name || '', 'N'], [south_id.name || '', 'S']]
+        BoardData.push({
+          ply1,
+          ply2,
+          ply3,
+          ply4,
+          contract,
+          declarer,
+          ew_point,
+          ns_point,
+          result,
+          guest_imp,
+          guest_vp,
+          host_imp,
+          host_vp,
+          id,
+          name,
+          number,
+          room_type
+        });
+      })
+      BoardData.sort((arr1, arr2) => {
+        return arr1.number - arr2.number
+      }).sort((room1, room2) => {
+        return room1.room_type - room2.room_type
+      })
     }
+
     //　牌排列
     let n_card_str = [];
     let w_card_str = [];
     let e_card_str = [];
     let s_card_str = [];
-    if (card_str.length > 0) {
+    if (card_str) {
       const card_strArray = card_str.split(' ');
       const card_nwes_strArray = card_strArray.map(item => {
         return item.split('.');
@@ -83,116 +258,69 @@ class Deal extends Component {
       e_card_str = card_nwes_strArray[2];
       s_card_str = card_nwes_strArray[3];
     }
-    const cardsvg=(index)=>{
+    const cardsvg = (index) => {
       let src
       switch (index) {
         case 0:
-          src=spade;
+          src = spade;
           break;
         case 1:
-          src=heart;
+          src = heart;
           break;
         case 2:
-          src=diamond;
+          src = diamond;
           break
         case 3:
-          src=club ;
-          break       
-        default: 
-          src=spade
+          src = club;
+          break
+        default:
+          src = spade
           break;
       }
-      console.log(index);
-      
-    return <img src={src} alt={index} className={styles.icons}></img>
+
+      return <img src={src} alt={index} className={styles.icons}></img>
     }
     const cardList = (cardArray) => {
       if (cardArray.length > 0) {
-        console.log(cardArray);
-        
-        return cardArray.map((item,index) => {
+        return cardArray.map((item, index) => {
           return (
-            <div key={item} className={styles.flex}>
+            <div key={index} className={styles.flex}>
               {cardsvg(index)}
-              <p  className={styles.cardText}>{item}</p>
+              <p className={styles.cardText}>{item}</p>
             </div>
-          
-        )})
+
+          )
+        })
       } else {
         return ''
       }
     }
-    const columns = [{
-      title: '桌号',
-      dataIndex: 'table_id',
-      render: (text, record) => {
-        return `${record.table_id[0]}`
-      }
-    }, {
-      title: '主队',
-      // children: [{
-      //   dataIndex: ""
-      // }, {
-      //   dataIndex: ""
-      // }]
-      // colSpan: 2,
-    }, {
-      title: "客队",
-      // children: [{
-      //   dataIndex: '',
-      // }, {
-      //   dataIndex: '',
-      // }]
-      // colSpan: 2,
-    }, {
-      dataIndex: '',
-    }, {
-      title: "庄家",
-      dataIndex: 'declarer',
-    }, {
-      title: "定约",
-      dataIndex: 'contract',
-    }, {
-      title: '结果',
-      dataIndex: 'result',
-    }, {
-      title: 'NS',
-      dataIndex: 'ns_point',
-    }, {
-      title: 'EW',
-      dataIndex: 'ew_point',
-    }, {
-      title: 'Datum',
-    }, {
-      title: 'ximp',
-    }, {
-      title: '主队IMP',
-      dataIndex: 'host_imp',
-    }, {
-      title: '客队IMP',
-      dataIndex: 'guest_imp',
-    }]
     return (
       <div>
         <div className={styles.matchText}>
           <h1>
             <span className={styles.matchTextGame}>{game}</span>
             <span className={styles.matchTextPhase}>{phase}</span>
-            <span className={styles.matchTextRound}>{round}</span>
+            <span className={styles.matchTextRound}>{name}</span>
           </h1>
         </div>
         <div className={styles.header}>
           <div className={styles.table}>
-            <div className={styles.tableN}>{cardList(n_card_str)}</div>
-            <div className={styles.tableW}>{cardList(w_card_str)}</div>
+            <div className={styles.tableN}> {isDone ? '' : cardList(n_card_str)}</div>
+            <div className={styles.tableW}>{isDone ? '' : cardList(w_card_str)}</div>
+
+            <div className={styles.tableN}></div>
+            <div className={styles.tableW}></div>
             <div className={styles.tableNWES}>
               <div className={styles.tableN}>N</div>
               <div className={styles.tableW}>W</div>
               <div className={styles.tableE}>E</div>
               <div className={styles.tableS}>S</div>
             </div>
-            <div className={styles.tableE}>{cardList(e_card_str)}</div>
-            <div className={styles.tableS}>{cardList(s_card_str)}</div>
+            <div className={styles.tableE}>{isDone ? '' : cardList(e_card_str)}</div>
+            <div className={styles.tableS}>{isDone ? '' : cardList(s_card_str)}</div>
+            <div className={styles.tableE}></div>
+            <div className={styles.tableS}></div>
           </div>
           <div className={styles.datum}>
             <p>发牌人：{dealer}</p>
@@ -200,12 +328,12 @@ class Deal extends Component {
           </div>
         </div>
         <Table
+          bordered
           rowKey={row => row.id}
           dataSource={BoardData}
           columns={columns}
         />
-
-      </div>
+      </div >
     )
   }
 }

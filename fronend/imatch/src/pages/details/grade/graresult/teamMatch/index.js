@@ -1,44 +1,87 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
 import { connect } from 'dva';
-import { lookup } from '@/utils/tools'
-
+import { lookup,turnData } from '@/utils/tools'
+import odoo from '@/odoo-rpc/odoo';
 class TeamMatch extends Component {
   state = {
-    TeamRoundInfoData: []
+    TeamRoundInfoData: [],
+    loading: true,
+  }
+  getData = async (ids) => {
+    const fieldsTeam = {
+      name: null,
+      // player_ids: { id: null, name: null },
+      round_info_ids: {
+        id: null,
+        name: null,
+        imp: null,
+        imp_opp: null,
+        number: null,
+        phase_ids: { id: null, name: null },
+        opp_team_id: { id: null, name: null },
+        score: null,
+        score_close: null,
+        score_manual: null,
+        score_uom: null,
+        vp: null,
+        vp_opp: null,
+        game_id: { id: null, name: null },
+        team_id: { id: null, name: null },
+        match_id: { id: null, name: null },
+        round_id: { id: null, name: null },
+      },
+    }
+    const id = parseInt(ids,10);
+    const Team = odoo.env('og.team');
+    const ptns = await Team.browse(id, fieldsTeam);
+    const dealData = ptns.look(fieldsTeam);
+    const dataSource = turnData(dealData.round_info_ids)
+    console.log(dataSource);
+    await this.setState({
+      TeamRoundInfoData: dataSource,
+      loading: false,
+    })
   }
   componentDidMount() {
     const {
       dispatch,
       location: { query: { team_id } },
     } = this.props;
-    dispatch({
-      type: 'ogTeam/read',
-      payload: { id: parseInt(team_id) }
-    }).then(() => {
-      const { odooData: { ogTeam } } = this.props;
-      const TeamData = lookup(team_id, ogTeam);
-      const round_info_ids = TeamData[0].round_info_ids;
-      dispatch({
-        type: "ogTeamRoundInfo/read",
-        payload: { id: round_info_ids }
-      }).then(() => {
-        const { odooData: { ogTeamRoundInfo } } = this.props;
-        const TeamRoundInfoData = lookup(round_info_ids, ogTeamRoundInfo);
-        this.setState({
-          TeamRoundInfoData: TeamRoundInfoData,
-        })
-      })
-    })
+    this.getData(team_id)
+
+
+    // dispatch({
+    //   type: 'ogTeam/read',
+    //   payload: { id: parseInt(team_id) }
+    // }).then(() => {
+    //   const { odooData: { ogTeam } } = this.props;
+    //   const TeamData = lookup(team_id, ogTeam);
+    //   const round_info_ids = TeamData[0].round_info_ids;
+    //   dispatch({
+    //     type: "ogTeamRoundInfo/read",
+    //     payload: { id: round_info_ids }
+    //   }).then(() => {
+    //     const { odooData: { ogTeamRoundInfo } } = this.props;
+    //     const TeamRoundInfoData = lookup(round_info_ids, ogTeamRoundInfo);
+    //     console.log(TeamRoundInfoData);
+
+    //     this.setState({
+    //       TeamRoundInfoData: TeamRoundInfoData,
+    //       loading: false,
+    //     })
+    //   })
+    // })
   }
   render() {
-    const { TeamRoundInfoData } = this.state;
+    const { TeamRoundInfoData, loading } = this.state;
+
     const TeamMatchColumns = [
       {
         title: '轮次',
         dataIndex: 'round_id',
         render: (text, record) => {
-          return `${record.round_id[0]}`
+          return `${record.round_id[1]}`
         }
       }, {
         title: '对阵方',
@@ -49,8 +92,15 @@ class TeamMatch extends Component {
       }, {
         title: 'IMPs',
         children: [{
-          title: TeamRoundInfoData.length > 0 ? `${TeamRoundInfoData[0].team_id[1]}` : '',
-          dataIndex: 'imp'
+          title: () => {
+            if (TeamRoundInfoData.length > 0 && TeamRoundInfoData[0].team_id.length > 0) {
+              return TeamRoundInfoData[0].team_id[1]
+            } else {
+              ''
+            }
+          },
+          dataIndex: 'imp',
+
         }, {
           title: '对手',
           dataIndex: 'imp_opp',
@@ -58,25 +108,44 @@ class TeamMatch extends Component {
       }, {
         title: 'VPs',
         children: [{
-          title: TeamRoundInfoData.length > 0 ? `${TeamRoundInfoData[0].team_id[1]}` : '',
+          title: () => {
+            if (TeamRoundInfoData.length > 0 && TeamRoundInfoData[0].team_id.length > 0) {
+              return TeamRoundInfoData[0].team_id[1]
+            } else {
+              ''
+            }
+          },
           dataIndex: 'vp',
+          render: (text) => {
+            return text.toFixed(2);
+          }
         }, {
           title: '对手',
           dataIndex: 'vp_opp',
+          render: (text) => {
+            return text.toFixed(2);
+          }
         }],
       }, {
         title: '总分',
-        dataIndex: 'score'
+        dataIndex: 'score',
+        render: (text) => {
+          return text.toFixed(2);
+        }
       }
     ]
     return (
       <div>
-        <div><h2>石家庄</h2></div>
         <Table
+          loading={loading}
           rowKey={row => row.id}
           columns={TeamMatchColumns}
           dataSource={TeamRoundInfoData}
-          pagination
+          pagination={{
+            showQuickJumper: true,
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '15', '20'],
+          }}
         />
       </div>
     )

@@ -62,7 +62,7 @@ class Deal(models.Model):
 class Board(models.Model):
     _name = "og.board"
     _description = "Board"
-    _order = 'number'
+    _order = 'table_id,deal_id'
 
 
     state = fields.Selection([
@@ -77,7 +77,7 @@ class Board(models.Model):
         ('cancel', 'Cancelled')
     ], string='Status', default='bidding')
 
-    table_id = fields.Many2one('og.table', required=True, ondelete='restrict')
+    table_id = fields.Many2one('og.table', required=True, ondelete='cascade')
     round_id = fields.Many2one('og.round', related='table_id.round_id')
     phase_id = fields.Many2one('og.phase', related='round_id.phase_id')
     game_id = fields.Many2one('og.game', related='phase_id.game_id')
@@ -98,6 +98,8 @@ class Board(models.Model):
     name   = fields.Char('Name', related='deal_id.name' )
     
     number = fields.Integer(related='deal_id.number' )
+    sequence = fields.Integer(help="sort to play")
+
     dealer = fields.Selection(related='deal_id.dealer' )
     vulnerable = fields.Selection(related='deal_id.vulnerable' )
 
@@ -130,15 +132,15 @@ class Board(models.Model):
     dummy      = fields.Selection(POSITIONS,compute='_compute_contract2')
             
     @api.multi
-    @api.depends('declarer','contract')
     def _compute_contract2(self):
         for rec in self:
             ctrct = rec.contract
-            rec.contract_rank  = ctrct and int(ctrct[0]) or 0
-            trump = ctrct and ctrct[1] or None
+            nopass = ctrct and ctrct[0].isdigit()
+            rec.contract_rank  = nopass and int(ctrct[0]) or 0
+            trump = nopass and ctrct[1] or None
             rec.contract_trump =  trump == 'N' and 'NT' or trump 
-            rec.contract_risk = ctrct and ctrct[-2:]=='xx' and RDB or (
-                                ctrct and ctrct[-1:]== 'x' and DBL or '')
+            rec.contract_risk = nopass and ctrct[-2:]=='xx' and RDB or (
+                                nopass and ctrct[-1:]== 'x' and DBL or '')
                                 
             dclr = rec.declarer
             rec.dummy = dclr and partner(dclr) or None
@@ -170,12 +172,11 @@ class Board(models.Model):
         for rec in self:
             rec.result2 = fn(rec)
 
-    point = fields.Integer(compute='_compute_point',store=True, readonly=True)
-    ns_point = fields.Integer(compute='_compute_point',store=True, readonly=True)
-    ew_point = fields.Integer(compute='_compute_point',store=True, readonly=True)
+    point = fields.Integer(compute='_compute_point' )
+    ns_point = fields.Integer(compute='_compute_point' )
+    ew_point = fields.Integer(compute='_compute_point' )
 
     @api.multi
-    @api.depends('contract','declarer', 'result')
     def _compute_point(self):
         for rec in self:
             rec.point, rec.ns_point, rec.ew_point = rec._get_point()
@@ -183,9 +184,16 @@ class Board(models.Model):
     def _get_point(self):
         if self.state != 'done':
             return 0, 0, 0
+
+        if not self.declarer:
+            return 0, 0, 0
+            
+        if not self.contract_trump:
+            return 0, 0, 0
         
         if self.contract == PASS:
             return 0, 0, 0
+
 
 
         vs = {  'BO': lambda d: 1,
@@ -218,8 +226,13 @@ class Board(models.Model):
         nvs = vals.copy()
         if nvs.get('card_ids'):
             del nvs['card_ids']
+        
+        sequence = vals.get('sequence')
 
         board = super(Board,self).create(nvs)
+        
+        if not sequence:
+            board.sequence = board.number
 
         for dc in board.deal_id.card_ids:
             cards = {'board_id': board.id,'deal_card_id':dc.id }
