@@ -48,7 +48,7 @@ const checkOdooError = data => {
   return null
 };
 
-const DELAY_TIME = 10000 // ms
+const DELAY_TIME = 100000 // ms
 
 const jsonrpc = (url, params)=>{
 

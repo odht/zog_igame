@@ -24,8 +24,8 @@ export function turnData(data) {
 		if (!isOnlyObj(data)) {//只能根据键的多少来判断是否需要转换为数组。
 			for (let attr in data) {
 				if (Array.isArray(data[attr])) {
-					data[attr].forEach((item) => {
-						turnData(item);
+					data[attr].forEach((item, index) => {
+						data[attr][index] = turnData(item);
 					})
 				} else if (isPureObj(data[attr])) {
 					if (Object.keys(data[attr]).length <= 2) {
@@ -35,8 +35,10 @@ export function turnData(data) {
 					}
 				}
 			}
-		} else if (Object.keys(data).length <= 2) {
+		} else if (Object.keys(data).length <= 2 && Object.keys(data).length !== 1) {
 			data = Object.values(data);
+		} else if (Object.keys(data).length === 1) {
+			data = Object.values(data)[0]
 		}
 	}
 	return data
