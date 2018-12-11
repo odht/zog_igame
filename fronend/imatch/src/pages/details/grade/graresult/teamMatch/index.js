@@ -13,31 +13,29 @@ class TeamMatch extends Component {
       name: null,
       // player_ids: { id: null, name: null },
       round_info_ids: {
-        id: null,
+        // id: null,
         name: null,
         imp: null,
         imp_opp: null,
-        number: null,
-        phase_ids: { id: null, name: null },
+        // number: null,
+        // phase_ids: { id: null, name: null },
         opp_team_id: { id: null, name: null },
         score: null,
-        score_close: null,
-        score_manual: null,
-        score_uom: null,
+        // score_close: null,
+        // score_manual: null,
+        // score_uom: null,
         vp: null,
         vp_opp: null,
-        game_id: { id: null, name: null },
+        // game_id: { id: null, name: null },
         team_id: { id: null, name: null },
-        match_id: { id: null, name: null },
+        // match_id: { id: null, name: null },
         round_id: { id: null, name: null },
       },
     }
     const id = parseInt(ids,10);
     const Team = odoo.env('og.team');
-    const ptns = await Team.browse(id, fieldsTeam);
-    const dealData = ptns.look(fieldsTeam);
+    const dealData = await Team.read(id,fieldsTeam);
     const dataSource = turnData(dealData.round_info_ids)
-    console.log(dataSource);
     await this.setState({
       TeamRoundInfoData: dataSource,
       loading: false,
@@ -45,33 +43,9 @@ class TeamMatch extends Component {
   }
   componentDidMount() {
     const {
-      dispatch,
       location: { query: { team_id } },
     } = this.props;
     this.getData(team_id)
-
-
-    // dispatch({
-    //   type: 'ogTeam/read',
-    //   payload: { id: parseInt(team_id) }
-    // }).then(() => {
-    //   const { odooData: { ogTeam } } = this.props;
-    //   const TeamData = lookup(team_id, ogTeam);
-    //   const round_info_ids = TeamData[0].round_info_ids;
-    //   dispatch({
-    //     type: "ogTeamRoundInfo/read",
-    //     payload: { id: round_info_ids }
-    //   }).then(() => {
-    //     const { odooData: { ogTeamRoundInfo } } = this.props;
-    //     const TeamRoundInfoData = lookup(round_info_ids, ogTeamRoundInfo);
-    //     console.log(TeamRoundInfoData);
-
-    //     this.setState({
-    //       TeamRoundInfoData: TeamRoundInfoData,
-    //       loading: false,
-    //     })
-    //   })
-    // })
   }
   render() {
     const { TeamRoundInfoData, loading } = this.state;
@@ -151,5 +125,5 @@ class TeamMatch extends Component {
     )
   }
 }
-
-export default connect(({ odooData, ogTeam }) => ({ odooData, ogTeam }))(TeamMatch);
+// export default connect(({ odooData, ogTeam }) => ({ odooData, ogTeam }))(TeamMatch);
+export default TeamMatch;

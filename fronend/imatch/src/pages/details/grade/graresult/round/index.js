@@ -1,8 +1,9 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import { Card, Row, Col, Table, Button } from "antd";
 import { connect } from 'dva';
 import styles from './index.css';
-import { lookup } from '@/utils/tools'
+import { lookup,turnData } from '@/utils/tools'
+import odoo from '@/odoo-rpc/odoo';
 const renderNumber = (value, row, index) => {
     const obj = {
         children: value,
@@ -125,34 +126,37 @@ const dataSource = [
 ]
 class Round extends Component {
     state = {
+        dealData:{},
+        lineData:{},
+        tableData:{},
         loading: true,
     }
     printText = React.createRef();
     componentDidMount() {
+        this.getdata()
+        // const {
+        //     location: { state: { matchData } },
+        // } = this.props
+        // const {
+        //     dispatch,
+        // } = this.props;
 
-        const {
-            location: { state: { matchData } },
-        } = this.props
-        const {
-            dispatch,
-        } = this.props;
-
-        dispatch({
-            type: 'ogDeal/read',
-            payload: { id: matchData.deal_ids }
-        })
-        dispatch({
-            type: 'ogTable/read',
-            payload: { id: [matchData.open_table_id[0], matchData.close_table_id[0]] }
-        })
-        dispatch({
-            type: 'ogMatchLine/read',
-            payload: { id: matchData.line_ids },
-        }).then(() => {
-            this.setState({
-                loading: false,
-            })
-        })
+        // dispatch({
+        //     type: 'ogDeal/read',
+        //     payload: { id: matchData.deal_ids }
+        // })
+        // dispatch({
+        //     type: 'ogTable/read',
+        //     payload: { id: [matchData.open_table_id[0], matchData.close_table_id[0]] }
+        // })
+        // dispatch({
+        //     type: 'ogMatchLine/read',
+        //     payload: { id: matchData.line_ids },
+        // }).then(() => {
+        //     // this.setState({
+        //     //     loading: false,
+        //     // })
+        // })
     }
     handlerPrintScore() {
 
@@ -161,21 +165,74 @@ class Round extends Component {
         window.print();
         return false;
     }
+    getdata =async () => {
+        const {
+            location: { state: { matchData } },
+        } = this.props
+        const tableFields = {
+            north_id: null,
+            west_id: null,
+            east_id: null,
+            south_id: null,
+        }
+        const matchLineFields = {
+            open_declarer: null,
+            close_declarer: null,
+            open_contract: null,
+            close_contract: null,
+            open_result: null,
+            close_result: null,
+            open_ns_point: null,
+            close_ns_point: null,
+            open_ew_point: null,
+            close_ew_point: null,
+            host_imp: null,
+            guest_imp: null,
+            open_board_id: null,
+            close_board_id: null,
+        }
+        const dealFields={
+            number:null
+        }
+        const {deal_ids,line_ids}=matchData;
+        const table_ids=[matchData.open_table_id[0], matchData.close_table_id[0]];
+
+        const MatchLine = odoo.env('og.match.line');
+        let lineData = await MatchLine.read(line_ids,matchLineFields);
+
+        const Deal=odoo.env('og.deal');
+        let dealData=await Deal.read(deal_ids,dealFields);
+       
+        const Tables=odoo.env('og.table');
+        let tableData=await Tables.read(table_ids,tableFields);
+
+        
+        turnData(lineData);
+        turnData(dealData);
+        turnData(tableData);
+
+        await this.setState({
+            lineData,
+            dealData,
+            tableData,
+            loading:false
+        })
+    }
     render() {
         const {
             location: { state: { matchData } },
-            odooData: { ogTable, ogMatchLine, ogDeal },
         } = this.props
-        const { loading } = this.state;
-        const dealData = lookup(matchData.deal_ids, ogDeal);
+
+        const { loading,dealData,tableData,lineData } = this.state;
+        // const dealData = lookup(matchData.deal_ids, ogDeal);
         // 开id, 闭室id
-        const tableData = lookup([matchData.open_table_id[0], matchData.close_table_id[0]], ogTable);
+        // const tableData = lookup([matchData.open_table_id[0], matchData.close_table_id[0]], ogTable);
         // 开室 N W E S 人
         let openN, openW, openE, openS;
         // 闭室 N W E S人
         let closeN, closeW, closeE, closeS;
         // 结分表
-        const lineData = lookup(matchData.line_ids, ogMatchLine);
+        // const lineData = lookup(matchData.line_ids, ogMatchLine);
         // 牌号 房间 庄家 定约 结果 NS EW IMPS 主队 客队
         // let number, room_type, declarer, contract, result, NS, EW, IMPS_host, IMPS_Guest;
         // opme_room  close_room;
@@ -349,4 +406,4 @@ class Round extends Component {
     }
 }
 
-export default connect(({ odooData, ogMatch }) => ({ odooData, ogMatch }))(Round)
+export default Round
