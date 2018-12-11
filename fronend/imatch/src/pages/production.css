@@ -1,0 +1,15 @@
+.news {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-top: 40px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    border-bottom: 1px solid rgb(116, 187, 245);
+}
+.pdctPic{
+    /* background-color: gray; */
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+}

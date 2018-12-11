@@ -10,10 +10,10 @@ import GlobalSider from '../component/GlobalSider';
 import router from 'umi/router';
 import * as routes from '../common/routes';
 import styles from './HomLayout.css'
-const { Header, Content, Sider } = Layout;
-const { homeRoutes } = routes;
 import c1 from '../assets/c1.jpg';
 import c2 from '../assets/c2.jpg';
+const { Header, Content, Sider } = Layout;
+const { homeRoutes } = routes;
 //面包屑
 
 class BasicLayout extends Component {

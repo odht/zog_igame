@@ -8,7 +8,8 @@ import styles from './index.css';
 import { Row, Col, Table } from 'antd';
 import { Link } from 'dva/router';
 import { connect } from 'dva';
-import { lookup } from '@/utils/tools'
+import { lookup ,turnData} from '@/utils/tools';
+import odoo from '@/odoo-rpc/odoo';
 
 const columnRank = [{
     title: '赛队排名',
@@ -38,79 +39,136 @@ const columnRank = [{
 class Graresult extends Component {
     state = {
         loading: true,
+        matchData:null,
+        dealData:null,
+        teamInfodealData:null,
     }
     timer = null
-    getData(props) {
-        const {
-            dispatch,
-            location: { state: { roundData: { deal_ids, match_ids, team_info_ids } } }
-        } = props;
-        dispatch({
-            type: "ogMatch/read",
-            payload: { id: match_ids }
-        })
-        dispatch({
-            type: 'ogTeamRoundInfo/read',
-            payload: { id: team_info_ids }
-        })
-        dispatch({
-            type: 'ogDeal/read',
-            payload: { id: deal_ids }
-        }).then(() => {
-            this.setState({
-                loading: false
-            })
-        })
+    turnArray=(data)=>{
+        return data.map((item)=>Object.values(item)[0])
     }
     componentDidMount() {
-        this.getdatas()
-    }
-    getdatas = () => {
-        this.getData(this.props)
-        this.timer = setInterval(() => {
-            this.getData(this.props)
-        }, 180000)
+        this.getNewData()
     }
     componentWillUnmount() {
         clearInterval(this.timer);
     }
-
-
-    shouldComponentUpdate(props, state) {
-        const { odooData: { ogTeamRoundInfo } } = props;
-        if (ogTeamRoundInfo) {
-            return true;
-        } else {
-            return false;
+    // shouldComponentUpdate(props, state) {
+    //     // const { odooData: { team_info_ids } } = props;
+    //     // if (team_info_ids) {
+    //     //     return true;
+    //     // } else {
+    //     //     console.log('nonononono');
+            
+    //     //     return false;
+    //     // }
+    // }
+    getNewData=async ()=>{
+        const {
+            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id, id } } },
+            location: { state },
+        } = this.props;
+        const matchFileds={
+            close_table_id:{id:null,name:null},
+            date_from:null,
+            date_thru:null,
+            deal_ids:{id:null},
+            game_id:{id:null,name:null},
+            guest_id:{id:null,name:null},
+            guest_imp:null,
+            guest_vp:null,
+            host_id:{id:null,name:null},
+            host_imp:null,
+            host_vp:null,
+            imp_manual:null,
+            line_ids:{id:null},
+            name:null,
+            number:null,
+            open_table_id:{id:null,name:null},
+            phase_id:{id:null,name:null},
+            round_id:{id:null,name:null},
+            vp_manual:null,
         }
+        const dealFields={
+            // card_str:null,
+            // dealer:null,
+            // game_id:{id:null,name:null},
+            // name:null,
+            number:null,
+            // schedule_id:{id:null,name:null},
+            // vulnerable:null,
+            // board_ids:{id:null},
+        }
+        const teamInfoFields={
+            // id: null,
+            // name: null,
+            // imp: null,
+            // last_in_phase: null,
+            // imp_opp: null,
+            number: null,
+            // phase_id: { id: null, name: null },
+            // opp_team_id: { id: null, name: null },
+            // score: null,
+            score_close: null,
+            // score_manual: null,
+            // score_uom: null,
+            // vp: null,
+            // vp_opp: null,
+            // game_id: { id: null, name: null },
+            team_id: { id: null, name: null },
+            // match_id: { id: null, name: null },
+            // round_id: { id: null, name: null },
+        }
+        const Match = odoo.env('og.match');     
+        let matchData =await Match.read(match_ids,matchFileds);
+
+        const Deal=odoo.env('og.deal');
+        let dealData=await Deal.read(deal_ids,dealFields);
+       
+        const TeamInfo=odoo.env('og.team.round.info');
+        let teamRoundInfoData=await TeamInfo.read(team_info_ids,teamInfoFields);
+        
+        turnData(matchData);
+        turnData(dealData);
+        turnData(teamRoundInfoData);
+         const dealLinkData=dealData.map(item => {
+                return (
+                    <Link
+                        style={{ padding: 3 }}
+                        key={item.id}
+                        to={{
+                            pathname: '/details/grade/graresult/deal',
+                            query: { deal_id: item.id, round_id: id },
+                            state,
+                        }}>{item.number}
+                    </Link>
+                )
+            })
+            console.log(dealData);
+            
+        await this.setState((pre,props)=>{  
+            return{
+            matchData,
+            dealData:dealLinkData,
+            teamRoundInfoData,
+            loading:false
+            }
+        })
+        console.log(matchData,dealData,teamRoundInfoData);
+        
     }
     render() {
         // 比赛对战数据
         const {
-            odooData: { ogMatch, ogTeamRoundInfo, ogDeal },
-            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id } } },
+            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id, id } } },
             location: { state },
         } = this.props;
         const { loading } = this.state;
         // 牌组 
-        const matchData = lookup(match_ids, ogMatch)
-        const teamRoundInfoData = lookup(team_info_ids, ogTeamRoundInfo).sort((prestate, nextstate) => {
-            return nextstate.score - prestate.score;
-        });
-        const dealData0 = lookup(deal_ids, ogDeal);
-        const dealData = dealData0.map(item => {
-            return (
-                <Link
-                    style={{ padding: 3 }}
-                    key={item.id}
-                    to={{
-                        pathname: '/details/grade/graresult/deal',
-                        query: { deal_id: item.id },
-                        state,
-                    }}>{item.number}
-                </Link>
-            )
-        })
+        
+        const {matchData,teamRoundInfoData,dealData}=this.state
+        console.log(teamRoundInfoData,dealData);
+        
         return (
             <div>
                 <div className={styles.title} >
@@ -160,4 +218,4 @@ class Graresult extends Component {
     }
 }
 
-export default connect(({ odooData, ogGame }) => ({ odooData, ogGame }))(Graresult);
+export default Graresult;
