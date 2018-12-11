@@ -26,6 +26,17 @@ def get_random_deal():
 
     return ' '.join( [  fn(index) for index in range(4)  ] )
 
+def _cards2string(cards):
+        def fn2(suitcard):
+            suitcard.sort(key=lambda r: 'AKQJT98765432'.index(r.name[1]) )
+            return ''.join([c.name[1] for c in suitcard])
+
+        def fn1(hand):
+            return '.'.join([ fn2([c for c in hand if c.name[0]==suit
+                                   ]) for suit in 'SHDC' ])
+
+        return ' '.join([ fn1([c for in cards if c.position==pos]) for pos in 'NESW'])
+
 def _string2cards(name):
     return [ ('SHDC'[j] + rank, 'NESW'[i]) 
               for i, hand  in enumerate( name.split(' ')) 
@@ -54,11 +65,12 @@ class Deal(models.Model):
         default=_default_cards, required=True, 
         help='Full Deal')
 
-    #cards = fields.Char(help='replace card_ids')
+    cards = fields.Char(help="""Technical field. A deal have 52 card.
+            card_str is used to set or get all cards.""")
     
-    card_ids = fields.One2many('og.deal.card', 'deal_id', string='Cards',
-        help=""" Technical field. A deal have 52 card.
-            card_str is used to set or get all cards. """)
+    #card_ids = fields.One2many('og.deal.card', 'deal_id', string='Cards',
+    #    help=""" Technical field. A deal have 52 card.
+    #        card_str is used to set or get all cards. """)
         
     notes = fields.Text('Notes')
 
@@ -79,35 +91,43 @@ class Deal(models.Model):
         4 suits splited by dot order by SHDC        
         """
         
-        def fn2(suitcard):
-            suitcard.sort(key=lambda r: 'AKQJT98765432'.index(r.rank) )
-            return ''.join([c.rank for c in suitcard])
+        #def fn2(suitcard):
+        #    suitcard.sort(key=lambda r: 'AKQJT98765432'.index(r.rank) )
+        #    return ''.join([c.rank for c in suitcard])
 
-        def fn1(hand):
-            return '.'.join([ fn2([c for c in hand if c.suit==suit
-                                   ]) for suit in 'SHDC' ])
+        #def fn1(hand):
+        #    return '.'.join([ fn2([c for c in hand if c.suit==suit
+        #                           ]) for suit in 'SHDC' ])
 
         for rec in self:
-            #cards = json.loads(rec.cards)
+            cards = json.loads(rec.cards)
+            rec.card_str = _cards2string(cards)
             
             #rec.card_str =' '.join([fn1([c for c in rec.card_ids if c.pos==pos
             #                         ]) for pos in 'NESW' ])
-            
-            
-            rec.card_str =' '.join([fn1([c for c in rec.card_ids if c.pos==pos
-                                     ]) for pos in 'NESW' ])
+
+    def _set_cards(self):
+        cards = _string2cards(self.card_str)
+        cards = [{'name':name, position: pos } for name, pos in cards]
+        self.cards = json.dumps(cards)
 
     @api.multi
     def _inverse_cards(self):
         for rec in self:
-            for cd in _string2cards(rec.card_str):
-                card = rec.card_ids.filtered(lambda c: c.name==cd[0])
+            rec._set_cards()
+
+    """
+    def _set_cards2(self):
+            for cd in _string2cards(self.card_str):
+                card = self.card_ids.filtered(lambda c: c.name==cd[0])
                 if card:
                     card.pos = cd[1]
                 else:
                     card.create({'name':cd[0],'pos':cd[1],
-                                 'deal_id': rec.id })
+                                 'deal_id': self.id })
 
+    """
+    
     @api.multi
     def unlink(self):
         for rec in self:
@@ -116,11 +136,9 @@ class Deal(models.Model):
         
         return super(Deal, self).unlink()
 
-
+"""
 class DealCard(models.Model):
-    """
     A deal have 52 card. Don't modify record in this model. 
-    """
     _name = "og.deal.card"
     _description = "Deal Card"
 
@@ -137,3 +155,4 @@ class DealCard(models.Model):
             rec.suit = rec.name[0]
             rec.rank = rec.name[1]
 
+"""

@@ -13,6 +13,32 @@ from .bridge_tools import SUITS,RANKS,CARDS
 from .bridge_tools import partner, lho
 from .bridge_tools import get_point
 
+def get_winner( cur_trick, trump ):
+        ct = cur_trick
+
+        if len(ct)<4:
+            return None
+
+        def cmp_gt_card( first, second, trump):
+            def index(rank):
+                return '23456789TJQKA'.index(rank)
+
+            if first.name[0] == second.name[0]:
+                return index(first.name[1]) > index(second.name[1])
+            else: 
+                return first.name[0] == trump
+
+        wincard = ct[0]
+        for card in ct[1:]:
+            ret = cmp_gt_card(card, wincard, trump)
+            if ret:
+                wincard = card
+
+        return wincard.pos
+
+
+
+
 class Board(models.Model):
     _inherit = "og.board"
 
@@ -40,10 +66,27 @@ class Board(models.Model):
 
     def _get_tricks(self):
         """All Played Cards """
+        cards = json.loads(self.cards)
+        cs = [card for card in cards if card.number]
+        
+        def fn(card):
+            num = card.number
+            return num and (num-1)//4 + 1 or 0
+        
+        ts = list( set([ fn(c) for c in cs] ) )
+        ts.sort()
+        return [ [c for c in cs if fn(c)==t]  for t in ts]
+        
+
+    """
+
+    def _get_tricks2(self):
+        #All Played Cards
         cs = self.card_ids.filtered(lambda c: c.number)
         ts = list( set([ c.trickno for c in cs] ) )
         ts.sort()
         return [ cs.filtered(lambda c: c.trickno==t) for t in ts]
+    """
 
     @api.multi
     def get_tricks(self):
@@ -62,7 +105,6 @@ class Board(models.Model):
             rec.current_trick  = fn(ts and ts[-1] or [])
             rec.tricks = [ fn(trick) for trick in ts]
             
-
     @api.multi
     def _compute_player(self):
         def fn(rec):
@@ -77,7 +119,9 @@ class Board(models.Model):
                 ct.sort(key=lambda c: c.number)
                 return lho(ct[-1].pos)
             else:
-                return ct.get_winner(rec.contract_trump)
+                #return ct.get_winner(rec.contract_trump)
+                return get_winner(ct, rec.contract_trump)
+                
 
         for rec in self:
             if rec.state == 'bidding':
@@ -104,7 +148,8 @@ class Board(models.Model):
         ts = self._get_tricks()
 
         def fn(trick):
-            w = trick.get_winner(self.contract_trump)
+            #w = trick.get_winner(self.contract_trump)
+            w = get_winner(trick, rec.contract_trump)
             if not w:
                 return 0, 0
             return w in 'NS' and (1,0) or (0,1)

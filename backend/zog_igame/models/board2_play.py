@@ -3,6 +3,8 @@
 
 from odoo import api, fields, models
 
+import json
+
 from .bridge_tools import PASS
 from .bridge_tools import partner, lho, rho
 
@@ -16,6 +18,71 @@ class Board(models.Model):
 
     @api.multi
     def play(self,pos,card):
+        self.ensure_one()
+        
+        cards = json.loads( self.cards )
+        
+        ret, ccdd = self._check_play(pos, card, cards)
+        if ret:
+            return ret, ccdd
+
+        ccdd.number = 1 + max(map(lambda card: card.number, cards))
+        self.cards = json.dumps( cards )
+        
+        if not self.openlead:
+            self.openlead = self._get_openlead()
+        
+        if self.state in ['openlead']:
+            self.state = 'playing'
+        
+        if self.trick_count>=13:
+            self.state = 'done'
+            self.result = self._get_result()
+        
+        return 0
+
+    def _check_play(self, pos, card, cards):
+        if self.state not in ['openlead', 'playing']:
+            return -11, 'state is not playing or openlead'
+
+        if not ( self.contract and self.declarer):
+            return (-1,'bidding, not Play ')
+
+        if self.trick_count>=13:
+            return (-2,'Play End')
+
+        if pos==self.dummy:
+            return (-3,'Dummy cant play')
+
+        if pos==self.declarer and self.player==self.dummy:
+            pos = self.dummy
+
+        if self.player != pos:
+            return (-4,'Wrong Player')
+
+        ts = self._get_tricks()
+        ct = ts and ts[-1] or []
+        #ct = [c for c in ct]
+        ct.sort(key=lambda c: c.number)
+        
+        suit = ct and len(ct)<4 and ct[0].name[0] or None
+
+        if suit and suit != card[0]:
+            if [ c for c in cards 
+                 if c.name[0]==suit and c.position==pos and not c.number ]:
+                return (-5,'Wrong suit' )
+
+        cs = [ c for c in cards 
+                 if c.name==card and c.position==pos and not c.number ]
+        
+        if not cs:
+            return (-5, 'No card')
+
+        return (0, cs[0])
+
+    """
+    @api.multi
+    def play3(self,pos,card):
         self.ensure_one()
         
         ret, ccdd = self._check_play(pos, card)
@@ -36,7 +103,7 @@ class Board(models.Model):
         
         return 0
 
-    def _check_play(self, pos, card):
+    def _check_play3(self, pos, card):
         if self.state not in ['openlead', 'playing']:
             return -11, 'state is not playing or openlead'
 
@@ -75,6 +142,7 @@ class Board(models.Model):
             return (-5, 'No card')
 
         return (0, cs[0])
+    """
 
     def _get_openlead(self):
             ts = self._get_tricks()
@@ -157,14 +225,15 @@ class Board(models.Model):
         
         if not ack:
             self.state = 'playing'
+            return 0
         
         opp = {lho(dclr):'LHO', rho(dclr):'RHO'}[pos]
         
         if self.state in ['claiming']:
-            self.state = 'claiming,' + opp
+            self.state = 'claiming.' + opp
             return 0
             
-        if opp == self.state.split(',')[1]:
+        if opp == self.state.split('.')[1]:
             return -6, 'claim ack again'
 
         self.state = 'done'
@@ -172,9 +241,9 @@ class Board(models.Model):
         
         return 0
 
+    # TBD ,  with state.
     @api.multi
     def undo(self, player, ):
-        #self.refresh()
         if self.claimer:
             return self._undo_claim()
 
@@ -193,12 +262,12 @@ class Board(models.Model):
         return 1
 
     def _undo_play(self):
-        cs = [c for c in self.card_ids if c.number]
+        cards = json.loads( self.cards )
+        cs = [c for c in cards if c.number]
         if not cs:
             return 0
         cs.sort(key=lambda c: c.number)
         cs[-1].number = 0
-        #self.refresh()
         return 1
 
     def _undo_bid(self):
@@ -210,11 +279,39 @@ class Board(models.Model):
         #self.refresh()
         return 1
 
-
     @api.multi
     @api.returns('self')
     def get_random_card(self):
         import random
+
+        cards = json.loads( self.cards )
+
+
+        pos = self.player
+        ts = self._get_tricks()
+        ct = ts and ts[-1] or []
+        ct = [c for c in ct]
+        ct.sort(key=lambda c: c.number)
+        suit = ct and len(ct)<4 and ct[0].name[0] or None
+
+        cards = [card for card in cards if card.position == pos and not card.number]
+        cs = [c for c in cards if c.name[0] == suit ]
+
+        if cs:
+            card = cs[ random.randint(0,len(cs)-1 )]
+        else:
+            cs  = cards
+            card = cs and cs[ random.randint(0,len(cs)-1) 
+                            ] or self.env['og.board.card']
+
+        return card
+
+    """
+    @api.multi
+    @api.returns('self')
+    def get_random_card3(self):
+        import random
+
 
         pos = self.player
         ts = self._get_tricks()
@@ -236,7 +333,8 @@ class Board(models.Model):
                             ] or self.env['og.board.card']
 
         return card
-
+    """
+    
     @api.multi
     def get_random_claim(self):
         ps = [ p for p in 'NESW' if p != self.dummy ]
