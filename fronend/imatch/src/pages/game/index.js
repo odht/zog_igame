@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'dva'
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
-import { lookup } from '@/utils/tools'
+import { lookup,turnData } from '@/utils/tools';
+import odoo from '@/odoo-rpc/odoo';
+
 const columns = [
 	{
 		title: '赛事名称',
@@ -42,28 +44,31 @@ const columns = [
 	},]
 class TeamList extends Component {
 	state = {
+		dataSource:[],
 		loading: true,
 	}
 	componentDidMount() {
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'ogGame/search',
-			payload: {}
-		}).then(() => {
-			this.setState({
-				loading: false,
-			})
+		this.getData()
+	}
+	getData= async ()=>{
+		const Game=odoo.env('og.game');
+		const domain=[['id','>=',0]];
+		const fields={
+			id:null,
+			name:null,
+			team_ids:{id:null}
+		}
+		let dataSource=await Game.search_read(domain,fields);
+		turnData(dataSource)
+		await this.setState({
+			dataSource,
+			loading:false
 		})
 	}
-	getdata = (model) => {//获取数据
-		const { ids } = this.props[model];
-		const data = this.props.odooData[model];
-		const dataSource = lookup(ids, data);
-		return dataSource
-	}
+
 	render() {
-		const dataSource = this.getdata('ogGame') || []
-		const { loading } = this.state;
+		const { loading,dataSource } = this.state;
+		
 		return (
 			<div >
 				<Table
@@ -82,4 +87,4 @@ class TeamList extends Component {
 }
 
 
-export default connect(({ odooData, ogGame }) => ({ odooData, ogGame }))(TeamList)
+export default TeamList

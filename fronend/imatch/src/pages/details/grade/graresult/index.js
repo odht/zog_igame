@@ -47,54 +47,22 @@ class Graresult extends Component {
     turnArray=(data)=>{
         return data.map((item)=>Object.values(item)[0])
     }
-    getData(props) {
-        // const {
-        //     dispatch,
-        //     location: { state: { roundData: { deal_ids, match_ids, team_info_ids } } }
-        // } = props;
-        // console.log(deal_ids, match_ids, team_info_ids);
-        
-        // dispatch({
-        //     type: "ogMatch/read",
-        //     payload: { id: match_ids }
-        // })
-        // dispatch({
-        //     type: 'ogTeamRoundInfo/read',
-        //     payload: { id: team_info_ids }
-        // })
-        // dispatch({
-        //     type: 'ogDeal/read',
-        //     payload: { id: deal_ids }
-        // }).then(() => {
-        //     // this.setState({
-        //     //     loading: false
-        //     // })
-        // })
-    }
     componentDidMount() {
-        
-        // this.getdatas()
         this.getNewData()
     }
-    // getdatas = () => {
-    //     this.getData(this.props)
-    //     // this.timer = setInterval(() => {
-    //     //     this.getData(this.props)
-    //     // }, 180000)
-    // }
     componentWillUnmount() {
         clearInterval(this.timer);
     }
-
-
-    shouldComponentUpdate(props, state) {
-        const { odooData: { ogTeamRoundInfo } } = props;
-        if (ogTeamRoundInfo) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // shouldComponentUpdate(props, state) {
+    //     // const { odooData: { team_info_ids } } = props;
+    //     // if (team_info_ids) {
+    //     //     return true;
+    //     // } else {
+    //     //     console.log('nonononono');
+            
+    //     //     return false;
+    //     // }
+    // }
     getNewData=async ()=>{
         const {
             location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id, id } } },
@@ -122,45 +90,44 @@ class Graresult extends Component {
             vp_manual:null,
         }
         const dealFields={
-            card_str:null,
-            dealer:null,
-            game_id:{id:null,name:null},
-            name:null,
+            // card_str:null,
+            // dealer:null,
+            // game_id:{id:null,name:null},
+            // name:null,
             number:null,
-            schedule_id:{id:null,name:null},
-            vulnerable:null,
-            board_ids:{id:null},
+            // schedule_id:{id:null,name:null},
+            // vulnerable:null,
+            // board_ids:{id:null},
         }
         const teamInfoFields={
-            id: null,
-            name: null,
-            imp: null,
-            last_in_phase: null,
-            imp_opp: null,
+            // id: null,
+            // name: null,
+            // imp: null,
+            // last_in_phase: null,
+            // imp_opp: null,
             number: null,
-            phase_id: { id: null, name: null },
-            opp_team_id: { id: null, name: null },
-            score: null,
+            // phase_id: { id: null, name: null },
+            // opp_team_id: { id: null, name: null },
+            // score: null,
             score_close: null,
-            score_manual: null,
-            score_uom: null,
-            vp: null,
-            vp_opp: null,
-            game_id: { id: null, name: null },
+            // score_manual: null,
+            // score_uom: null,
+            // vp: null,
+            // vp_opp: null,
+            // game_id: { id: null, name: null },
             team_id: { id: null, name: null },
-            match_id: { id: null, name: null },
-            round_id: { id: null, name: null },
+            // match_id: { id: null, name: null },
+            // round_id: { id: null, name: null },
         }
-        const Match = odoo.env('og.match');
-        const ptns = await Match.browse(match_ids, matchFileds);
-        let matchData = ptns.look(matchFileds);
+        const Match = odoo.env('og.match');     
+        let matchData =await Match.read(match_ids,matchFileds);
+
         const Deal=odoo.env('og.deal');
-        const dealptn=await Deal.browse(deal_ids,dealFields);
-        let dealData=dealptn.look(dealFields);
+        let dealData=await Deal.read(deal_ids,dealFields);
        
         const TeamInfo=odoo.env('og.team.round.info');
-        const TeamInfoptn=await TeamInfo.browse(team_info_ids,teamInfoFields);
-        let teamRoundInfoData=TeamInfoptn.look(teamInfoFields);
+        let teamRoundInfoData=await TeamInfo.read(team_info_ids,teamInfoFields);
+        
         turnData(matchData);
         turnData(dealData);
         turnData(teamRoundInfoData);
@@ -179,11 +146,13 @@ class Graresult extends Component {
             })
             console.log(dealData);
             
-        await this.setState({
+        await this.setState((pre,props)=>{  
+            return{
             matchData,
             dealData:dealLinkData,
             teamRoundInfoData,
             loading:false
+            }
         })
         console.log(matchData,dealData,teamRoundInfoData);
         
@@ -191,7 +160,6 @@ class Graresult extends Component {
     render() {
         // 比赛对战数据
         const {
-            odooData: { ogMatch, ogTeamRoundInfo, ogDeal },
             location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id, id } } },
             location: { state },
         } = this.props;
@@ -250,4 +218,4 @@ class Graresult extends Component {
     }
 }
 
-export default connect(({ odooData, ogGame }) => ({ odooData, ogGame }))(Graresult);
+export default Graresult;

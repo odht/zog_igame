@@ -4,26 +4,33 @@ import Banner from '@/component/Banner'
 import styles from './index.css';
 import { Link } from 'dva/router';
 import { connect } from 'dva';
-import { lookup } from '@/utils/tools';
+import { lookup, turnData } from '@/utils/tools';
+import odoo from '@/odoo-rpc/odoo';
 
-@connect(({ odooData, ogGame }) => ({ odooData, ogGame }))
 class HomePage extends Component {
+  state = {
+    dataSource: []
+  }
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'ogGame/search',
-      payload: {}
+   this.getData()
+  }
+  getData = async () => {
+    const Game = odoo.env('og.game');
+    const domain = [['id', '>=', 0]];
+    const fields = {
+      id: null,
+      name: null,
+      team_ids: { id: null }
+    }
+    let dataSource = await Game.search_read(domain, fields);
+    turnData(dataSource)
+    await this.setState({
+      dataSource,
+      loading: false
     })
   }
-
-  getdata = (model) => {//获取数据
-    const { ids } = this.props[model];
-    const data = this.props.odooData[model];
-    const dataSource = lookup(ids, data);
-    return dataSource
-  }
   render() {
-    const dataSource = this.getdata('ogGame') || []
+    const { dataSource } = this.state
     return (
       <div style={{ marginTop: '20px' }}>
         <div >

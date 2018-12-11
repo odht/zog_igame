@@ -339,4 +339,4 @@ class Deal extends Component {
 }
 
 
-export default connect(({ odooData }) => ({ odooData }))(Deal)
+export default Deal
