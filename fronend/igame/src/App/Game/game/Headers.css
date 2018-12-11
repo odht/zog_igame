@@ -28,13 +28,13 @@
 .seats > .s1{
     width:100%;
     height:20%;
-    background-color: #eeeeee;
+    background-color: #15f71c;
 }
 .seats > .s2{
     margin-top:2%;
     width:20%;
     height:57%;
-    background-color: #eeeeee;
+    background-color: #15f71c;
 }
 .seats > .s{
     margin-top:2%;
@@ -47,13 +47,13 @@
     /* margin-left:60%; */
     width:20%;
     height:57%;
-    background-color: #eeeeee;
+    background-color: #15f71c;
 }
 .seats > .s4{
     margin-top:2%;
     width:100%;
     height:20%;
-    background-color: #eeeeee;
+    background-color: #15f71c;
 }
 
  
@@ -61,6 +61,7 @@
     width:100%;
     height:100%;
     background-color: #0099cc;
+    color: black;
 }
 .tricks > div {float:left;text-align: center}
 .tricks > .s1{

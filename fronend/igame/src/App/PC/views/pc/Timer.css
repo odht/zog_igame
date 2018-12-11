@@ -2,6 +2,7 @@
     height:30%;
     background-color: aliceblue;
     text-align: center;
+    color: black;
 }
 .timer > div{
     text-align: center;
@@ -12,4 +13,5 @@
     float:left;
     background-color: aliceblue;
     border-radius:1vh;
+    color: black;
 }

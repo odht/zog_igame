@@ -29,10 +29,13 @@
     return cards.map((card, index) => {
       if (card.active == 2) {
         ps = layout.shift();
-        card['animation'][pos] = ps;
-        card['animation']['duration'] = 600;
-        if (resetDelay) card['animation']['delay'] = ps;
-        //if (resetDelay) card['animation']['delay'] = 0;
+        if(pos==='top'){
+          
+        }else{
+          card['animation'][pos] = ps;
+          card['animation']['duration'] = 600;
+          if (resetDelay) card['animation']['delay'] = ps;
+        }
       }
       return card;
     })

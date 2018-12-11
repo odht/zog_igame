@@ -160,7 +160,9 @@
     position: absolute;
     background-color:rgba(0, 0, 66, 0.2);
     opacity:0.8;
-    border:1px solid #eeee99
+    border:1px solid #eeee99;
+    top: 40vh !important;
+    left: 40vh !important;
 }
 .result > div,img {
     float:left;

@@ -1,10 +1,26 @@
 
+.UserTag:nth-child(2){
+    right:0%;   width:28%;    top:70vh;   
+}
+.UserTag:nth-child(3){
+    bottom:0px;   width:100%;    left:0%;
+}
+.UserTag:nth-child(4){
+    left: 0%;
+    width: 100%;
+    top: 15%; 
+}
+.UserTag:nth-child(1){
+    width:28%;    left:0%; top: 70vh;
+}
 .UserTag{
+    position: absolute;
     display: inline-block;
-    margin:auto;
-    height:100%;
-    width:auto;
+    margin: auto;
+    height: 5%;
     text-align: left;
+    z-index: 1000;
+    background-color: red;
 }
 .UserTag > div{
     margin-left:0.5vw;

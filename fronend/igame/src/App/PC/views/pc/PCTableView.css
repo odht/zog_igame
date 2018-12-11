@@ -236,39 +236,7 @@ button.disable{
 .seat       在里面显示为换色，这两个div 可以省略一个。
 .user
 */
-.board > .userTag{
-    position: absolute;
-    /* background-color: #eeeeee; */
-    height:10%;
-}
-.board .seat {
-    text-align:center;
-    /* background-color: #ffff55; */
-}
-.board > .userTag:nth-child(1) > .seat{
-         height:100%;
-}
-.board > .userTag:nth-child(2) > .seat{
-    height:100%;      
-}
-.board > .userTag:nth-child(3) > .seat{
-         height:100%; 
-}
-.board > .userTag:nth-child(4) > .seat{
-    height:100%;      
-}
-.board > .userTag:nth-child(2){
-    right:-35%;   width:80%;    top:45%;   transform: rotate(-90deg)
-}
-.board > .userTag:nth-child(3){
-    bottom:0px;   width:100%;    left:0%;
-}
-.board > .userTag:nth-child(4){
-    left:-35%;    width:80%;    top:45%;    transform: rotate(90deg)
-}
-.board > .userTag:nth-child(1){
-    width:100%;    left:0%;
-}
+
 .result {
     position: absolute;
     background-color:rgba(0, 0, 66, 0.2);
@@ -276,8 +244,8 @@ button.disable{
     border:1px solid #eeee99;
     width:60vh;
     height: 20vh;
-    top: 60vh;
-    left: 20vh;
+    top: 40vh;
+    left: 40vh;
     z-index: 1000;
     text-align: center;
     font-size: 6vh;
@@ -294,5 +262,7 @@ button.disable{
     width:75%
 }
 .result > button {
-    margin:0
+    margin:0;
+    width:20vh;
+    height: 6vh;
 }

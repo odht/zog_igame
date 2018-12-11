@@ -173,6 +173,7 @@ class Table extends Component {
         this.cards['E'] = data.cards.split(' ')[1];
         this.cards['S'] = data.cards.split(' ')[2];
         this.cards['W'] = data.cards.split(' ')[3];
+        this.allCards=data.cards;
         this.dealer=data.dealer;
         this.playerCards= []
         data.players.forEach(item=>{    //存储‘我’的方位
@@ -185,10 +186,14 @@ class Table extends Component {
                 this.state.user.north.directionNum=playerDirections.north
             }
         })
-        this.state.user.east.name = 'E' + data.players.filter(item=>{if(item[1]==='E')return item})[0][0] ,
-        this.state.user.south.name ='S' + data.players.filter(item=>{if(item[1]==='S')return item})[0][0],
-        this.state.user.west.name ='W' + data.players.filter(item=>{if(item[1]==='W')return item})[0][0],
-        this.state.user.north.name ='N' + data.players.filter(item=>{if(item[1]==='N')return item})[0][0],
+        // this.state.user.east.name = 'E' + data.players.filter(item=>{if(item[1]==='E')return item})[0][0] ,
+        // this.state.user.south.name ='S' + data.players.filter(item=>{if(item[1]==='S')return item})[0][0],
+        // this.state.user.west.name ='W' + data.players.filter(item=>{if(item[1]==='W')return item})[0][0],
+        // this.state.user.north.name ='N' + data.players.filter(item=>{if(item[1]==='N')return item})[0][0],
+        this.state.user.east.name = '东：' + "宏鸿" ,
+        this.state.user.south.name ='南：' + "叶孤城",
+        this.state.user.west.name ='西：' + "路在脚下",
+        this.state.user.north.name ='北：' + "退隐江湖",
         this.setState();
         this.transfer(this.myseat);
        
@@ -641,6 +646,7 @@ class Table extends Component {
     splitCards=()=>{
         //保存本家的牌的真实数据，其余三家用'X'表示牌的数据，四家牌的数据用空格分开
         this.deals = 'XXX.XX.XXXX.XXXX '+ this.cards[this.myseat] +' XXX.XX.XXXX.XXXX XXX.XX.XXXX.XXXX';
+        // this.deals=this.allCards;
         //二维数组，数组元素是josn对象，josn对象有每一张牌的信息，全部放在state的cards中
         TableModel.state.cards = this.initCards();
         window._Card=TableModel.state.cards;
@@ -816,7 +822,7 @@ class Table extends Component {
         })
        
         this.deals = 'XXX.XX.XXXX.XXXX '+ mycards.join('.') + addXX.join('') +' XXX.XX.XXXX.XXXX XXX.XX.XXXX.XXXX';
-       
+        // this.deals=this.allCards;
         TableModel.state.cards = this.initCards()
         this.deal();
     }
@@ -1041,7 +1047,8 @@ failClaim1=()=>{console.log('fail claim')}
      * @param {card} item
      */
     play = (item) => { 
-        return ()=>{console.log("测试点击")
+        return ()=>{
+            if(TableModel.board.length===4){return false};
             if (item.active == 2) {
                 TableModel.preplay(item);
                 this.setState({ cards: TableModel.state.cards });
@@ -1229,7 +1236,7 @@ failClaim1=()=>{console.log('fail claim')}
         data.ew_points?result = data.result+'  EW '+data.ew_points:result = data.result+'  NS '+data.ns_points;
         const re = <div className='result'>
             <img src='/cards/medal.svg' width="20%" />
-            <div style={{lineHeight:this.width * 0.12+'px',}}>{result}</div>
+            <div style={{lineHeight:this.width * 0.11+'px',}}>{result}</div>
             <button onClick={this.hideResult}>下一局</button>
         </div>;
         ReactDOM.unmountComponentAtNode(document.querySelector('#result'));

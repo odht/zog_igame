@@ -238,7 +238,7 @@ class TableModel {
           left: x,
           delay: (item1.key % 13) * 80,
           duration: 300,
-          rotate: rotate,
+          // rotate: rotate,
           transformOrigin: `${offset}px ${offset}px`
         }
         //cards[index][index1][index2].rotate = rotate;
@@ -315,18 +315,69 @@ class TableModel {
    * Array.shift() 从开头弹出一个值
    */
   resetCards(cards, seatIndex, resetDelay = false) {
+    let S = 0,H=0,C=0,D=0;
+    let RS = 700,RH=700,RC=700,RD=700;
     const pos = [0, 2].indexOf(seatIndex) == -1 ? 'left' : 'top';
     let length = 0;
     let ps = 0;
     cards.forEach(card => card.status !== 'played' && length++)
     const layout = flexLayout(this.height, length, 2)
+    console.log(cards);
     return cards.map((card, index) => {
       if (card.status != 'played') {
         ps = layout.shift();
-        card['animation'][pos] = ps;
-        card['animation']['duration'] = 600;
-        if (resetDelay) card['animation']['delay'] = ps;
-        //if (resetDelay) card['animation']['delay'] = 0;
+        if(pos==='top'){
+          if(card.seat==='west'){
+            if(card.card.indexOf('S') != -1){
+              card['animation'][pos] = 300;
+              S+=20;
+              card['animation']['left'] =S ;
+             } 
+             if(card.card.indexOf('H') != -1){
+              card['animation'][pos] = 350;
+              H+=20;
+              card['animation']['left'] =H ;
+             }  
+             if(card.card.indexOf('D') != -1){
+              card['animation'][pos] = 400;
+              C+=20;
+              card['animation']['left'] =C ;
+             }  
+             if(card.card.indexOf('C') != -1) {
+              card['animation'][pos] = 450;
+              D+=20;
+              card['animation']['left'] =D ;
+             }
+          }else{
+            if(card.card.indexOf('S') != -1){
+              card['animation'][pos] = 300;
+              RS+=20;
+              card['animation']['left'] =RS ;
+             } 
+             if(card.card.indexOf('H') != -1){
+              card['animation'][pos] = 350;
+              RH+=20;
+              card['animation']['left'] =RH ;
+             }  
+             if(card.card.indexOf('D') != -1){
+              card['animation'][pos] = 400;
+              RC+=20;
+              card['animation']['left'] =RC ;
+             }  
+             if(card.card.indexOf('C') != -1) {
+              card['animation'][pos] = 450;
+              RD+=20;
+              card['animation']['left'] =RD ;
+             } 
+          }
+        
+         card['animation']['duration'] = 600;
+          if (resetDelay) card['animation']['delay'] = ps;
+        }else{
+          card['animation'][pos] = ps;
+          card['animation']['duration'] = 600;
+          if (resetDelay) card['animation']['delay'] = ps;
+        }
       }
       return card;
     })

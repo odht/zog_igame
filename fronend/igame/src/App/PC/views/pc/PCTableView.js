@@ -98,11 +98,9 @@ const userTags = [];
     if(item.directionNum === i){
       const blink = item.playerDirection === table.state.next ? true : false;
       console.log(item.name)
-        var userTag = (<div className='userTag'>
-                      <div className='seat'>
+        var userTag = (
                         <UserTag user={item} table={table} blink={blink}/>
-                      </div>
-                    </div>)
+                    )
         userTags.push(userTag)  
     }
     
@@ -120,7 +118,7 @@ const userTags = [];
       <div id='table' className='table'>
         <div id='header' className='header'>
           <div className='re imps'><Imps /></div>
-          <div className='re seats'><Seats nth={table.nth} myseat={table.myseat} dealer={table.dealer} vulnerable={table.originData?table.originData.vulnerable:''}/></div>
+          <div onClick={table.openDebug} className='re seats'><Seats nth={table.nth} myseat={table.myseat} dealer={table.dealer} vulnerable={table.originData?table.originData.vulnerable:''}/></div>
           <div onClick={table.lastTrick.bind(table)} className='re tricks'>
             <Tricks 
             contract={table.state.contract}
@@ -171,8 +169,11 @@ const userTags = [];
           <div id='south' className='down' ref={table.ref.south}></div>
           <div id='north' className='up' ref={table.ref.north}></div>
           <div id='board' className='board' ref={table.ref.board}>
-            {userTags}
+            
             {table.state.scene == 0 ? <Prepare stat={stat} ready={table.handleReady} readyState={table.state.ready} /> : null}
+          </div>
+          <div>
+          {userTags}
           </div>
           {cards}
         </div>
