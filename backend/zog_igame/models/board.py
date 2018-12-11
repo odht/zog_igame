@@ -127,7 +127,7 @@ class Board(models.Model):
     def _compute_hands(self):
         def fn(cards_str, pos):
             cards = json.loads(cards_str)
-            return [card.name for card in cards if card.pos == pos and card.number == 0]
+            return [card['name'] for card in cards if card['position'] == pos and card['number'] == 0]
             
             
         for rec in self:
@@ -270,7 +270,7 @@ class Board(models.Model):
             
         sequence = vals.get('sequence')
 
-        board = super(Board,self).create(nvs)
+        board = super(Board,self).create(vals)
         
         if not sequence:
             board.sequence = board.number
@@ -281,7 +281,7 @@ class Board(models.Model):
             card['number'] = 0
             return card
         
-        board.cards = josn.dumps([ fn(card) for card in cards ])
+        board.cards = json.dumps([ fn(card) for card in cards ])
         
         return board
 

@@ -26,7 +26,7 @@ class Board(models.Model):
         if ret:
             return ret, ccdd
 
-        ccdd.number = 1 + max(map(lambda card: card.number, cards))
+        ccdd['number'] = 1 + max(map(lambda card: card['number'], cards))
         self.cards = json.dumps( cards )
         
         if not self.openlead:
@@ -63,17 +63,17 @@ class Board(models.Model):
         ts = self._get_tricks()
         ct = ts and ts[-1] or []
         #ct = [c for c in ct]
-        ct.sort(key=lambda c: c.number)
+        ct.sort(key=lambda c: c['number'])
         
-        suit = ct and len(ct)<4 and ct[0].name[0] or None
+        suit = ct and len(ct)<4 and ct[0]['name'][0] or None
 
         if suit and suit != card[0]:
             if [ c for c in cards 
-                 if c.name[0]==suit and c.position==pos and not c.number ]:
+                 if c['name'][0]==suit and c['position']==pos and not c['number'] ]:
                 return (-5,'Wrong suit' )
 
         cs = [ c for c in cards 
-                 if c.name==card and c.position==pos and not c.number ]
+                 if c['name']==card and c['position']==pos and not c['number'] ]
         
         if not cs:
             return (-5, 'No card')
@@ -147,9 +147,9 @@ class Board(models.Model):
     def _get_openlead(self):
             ts = self._get_tricks()
             t1 = ts and ts[0] or []
-            t1 = [c for c in t1]
-            t1.sort(key=lambda c: c.number)
-            return t1 and t1[0].name or None
+            #t1 = [c for c in t1]
+            t1.sort(key=lambda c: c['number'])
+            return t1 and t1[0]['name'] or None
 
     def _get_result(self):
             if not self.contract or self.contract == PASS or self.trick_count<13:
@@ -263,11 +263,11 @@ class Board(models.Model):
 
     def _undo_play(self):
         cards = json.loads( self.cards )
-        cs = [c for c in cards if c.number]
+        cs = [c for c in cards if c['number']]
         if not cs:
             return 0
-        cs.sort(key=lambda c: c.number)
-        cs[-1].number = 0
+        cs.sort(key=lambda c: c['number'])
+        cs[-1]['number'] = 0
         return 1
 
     def _undo_bid(self):
@@ -291,11 +291,11 @@ class Board(models.Model):
         ts = self._get_tricks()
         ct = ts and ts[-1] or []
         ct = [c for c in ct]
-        ct.sort(key=lambda c: c.number)
-        suit = ct and len(ct)<4 and ct[0].name[0] or None
+        ct.sort(key=lambda c: c['number'])
+        suit = ct and len(ct)<4 and ct[0]['name'][0] or None
 
-        cards = [card for card in cards if card.position == pos and not card.number]
-        cs = [c for c in cards if c.name[0] == suit ]
+        cards = [card for card in cards if card['position'] == pos and not card['number']]
+        cs = [c for c in cards if c['name'][0] == suit ]
 
         if cs:
             card = cs[ random.randint(0,len(cs)-1 )]
@@ -355,9 +355,9 @@ class Board(models.Model):
         random.shuffle(r2 )
         if r2[0]:
             card = self.get_random_card()
-            pos = card.pos
+            pos = card['position']
             pos = pos==self.dummy and self.declarer or pos
-            return 1, pos, card.name
+            return 1, pos, card['name']
         else:
             pos, claim = self.get_random_claim()
             return 0, pos, claim

@@ -28,14 +28,14 @@ def get_random_deal():
 
 def _cards2string(cards):
         def fn2(suitcard):
-            suitcard.sort(key=lambda r: 'AKQJT98765432'.index(r.name[1]) )
-            return ''.join([c.name[1] for c in suitcard])
+            suitcard.sort(key=lambda r: 'AKQJT98765432'.index(r['name'][1]) )
+            return ''.join([c['name'][1] for c in suitcard])
 
         def fn1(hand):
-            return '.'.join([ fn2([c for c in hand if c.name[0]==suit
+            return '.'.join([ fn2([c for c in hand if c['name'][0]==suit
                                    ]) for suit in 'SHDC' ])
 
-        return ' '.join([ fn1([c for in cards if c.position==pos]) for pos in 'NESW'])
+        return ' '.join([ fn1([c for c in cards if c['position']==pos]) for pos in 'NESW'])
 
 def _string2cards(name):
     return [ ('SHDC'[j] + rank, 'NESW'[i]) 
@@ -108,7 +108,7 @@ class Deal(models.Model):
 
     def _set_cards(self):
         cards = _string2cards(self.card_str)
-        cards = [{'name':name, position: pos } for name, pos in cards]
+        cards = [{'name':name, 'position': pos } for name, pos in cards]
         self.cards = json.dumps(cards)
 
     @api.multi

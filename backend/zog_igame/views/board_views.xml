@@ -53,6 +53,8 @@
             </field>
         </record>
 
+<!-- 
+
         <record id="view_board_card_tree" model="ir.ui.view">
             <field name="name">board card</field>
             <field name="model">og.board.card</field>
@@ -67,5 +69,6 @@
             </field>
         </record>
 
+-->
 
 </odoo>

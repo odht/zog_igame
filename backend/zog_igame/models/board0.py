@@ -23,10 +23,10 @@ def get_winner( cur_trick, trump ):
             def index(rank):
                 return '23456789TJQKA'.index(rank)
 
-            if first.name[0] == second.name[0]:
-                return index(first.name[1]) > index(second.name[1])
+            if first['name'][0] == second['name'][0]:
+                return index(first['name'][1]) > index(second['name'][1])
             else: 
-                return first.name[0] == trump
+                return first['name'][0] == trump
 
         wincard = ct[0]
         for card in ct[1:]:
@@ -34,7 +34,7 @@ def get_winner( cur_trick, trump ):
             if ret:
                 wincard = card
 
-        return wincard.pos
+        return wincard['position']
 
 
 
@@ -67,10 +67,10 @@ class Board(models.Model):
     def _get_tricks(self):
         """All Played Cards """
         cards = json.loads(self.cards)
-        cs = [card for card in cards if card.number]
+        cs = [card for card in cards if card['number']]
         
         def fn(card):
-            num = card.number
+            num = card['number']
             return num and (num-1)//4 + 1 or 0
         
         ts = list( set([ fn(c) for c in cs] ) )
@@ -95,8 +95,8 @@ class Board(models.Model):
     @api.multi
     def _compute_trick(self):
         def fn(trick):
-            num = trick and 'WNES'.index( trick[0].pos ) or 0
-            trick = [None for i in range(num)] + [ t.name for t in trick]
+            num = trick and 'WNES'.index( trick[0]['position'] ) or 0
+            trick = [None for i in range(num)] + [ t['name'] for t in trick]
             return json.dumps(trick)
         
         for rec in self:
@@ -116,8 +116,8 @@ class Board(models.Model):
                 return dclr and lho(dclr) or None
             elif len(ct)<4:
                 ct = [c for c in ct]
-                ct.sort(key=lambda c: c.number)
-                return lho(ct[-1].pos)
+                ct.sort(key=lambda c: c['number'])
+                return lho(ct[-1]['position'])
             else:
                 #return ct.get_winner(rec.contract_trump)
                 return get_winner(ct, rec.contract_trump)
