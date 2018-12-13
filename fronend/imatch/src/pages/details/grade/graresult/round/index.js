@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Card, Row, Col, Table, Button } from "antd";
 import { connect } from 'dva';
 import styles from './index.css';
-import { lookup,turnData } from '@/utils/tools'
+import { deepCopy,turnData } from '@/utils/tools'
 import odoo from '@/odoo-rpc/odoo';
 const renderNumber = (value, row, index) => {
     const obj = {
@@ -198,18 +198,17 @@ class Round extends Component {
         const table_ids=[matchData.open_table_id[0], matchData.close_table_id[0]];
 
         const MatchLine = odoo.env('og.match.line');
-        let lineData = await MatchLine.read(line_ids,matchLineFields);
+        const originLineData = await MatchLine.read(line_ids,matchLineFields);
 
         const Deal=odoo.env('og.deal');
-        let dealData=await Deal.read(deal_ids,dealFields);
+        const originDealData=await Deal.read(deal_ids,dealFields);
        
         const Tables=odoo.env('og.table');
-        let tableData=await Tables.read(table_ids,tableFields);
+        const originTableData=await Tables.read(table_ids,tableFields);
 
-        
-        turnData(lineData);
-        turnData(dealData);
-        turnData(tableData);
+        const lineData=turnData(deepCopy(originLineData))
+        const dealData=turnData(deepCopy(originDealData))
+        const tableData=turnData(deepCopy(originTableData))
 
         await this.setState({
             lineData,

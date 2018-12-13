@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
 import { connect } from 'dva';
-import { lookup,turnData } from '@/utils/tools'
+import { deepCopy,turnData } from '@/utils/tools'
 import odoo from '@/odoo-rpc/odoo';
 class TeamMatch extends Component {
   state = {
@@ -35,7 +35,7 @@ class TeamMatch extends Component {
     const id = parseInt(ids,10);
     const Team = odoo.env('og.team');
     const dealData = await Team.read(id,fieldsTeam);
-    const dataSource = turnData(dealData.round_info_ids)
+    const dataSource = turnData(deepCopy(dealData.round_info_ids))
     await this.setState({
       TeamRoundInfoData: dataSource,
       loading: false,

@@ -4,7 +4,7 @@ import Banner from '@/component/Banner'
 import styles from './index.css';
 import { Link } from 'dva/router';
 import { connect } from 'dva';
-import { lookup, turnData } from '@/utils/tools';
+import { deepCopy, turnData } from '@/utils/tools';
 import odoo from '@/odoo-rpc/odoo';
 
 class HomePage extends Component {
@@ -22,8 +22,8 @@ class HomePage extends Component {
       name: null,
       team_ids: { id: null }
     }
-    let dataSource = await Game.search_read(domain, fields);
-    turnData(dataSource)
+    const originDataSource = await Game.search_read(domain, fields);
+    const dataSource= turnData(deepCopy(originDataSource))
     await this.setState({
       dataSource,
       loading: false

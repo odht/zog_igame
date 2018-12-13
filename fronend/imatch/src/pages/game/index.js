@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva'
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
-import { lookup,turnData } from '@/utils/tools';
+import { deepCopy,turnData } from '@/utils/tools';
 import odoo from '@/odoo-rpc/odoo';
 
 const columns = [
@@ -58,8 +58,8 @@ class TeamList extends Component {
 			name:null,
 			team_ids:{id:null}
 		}
-		let dataSource=await Game.search_read(domain,fields);
-		turnData(dataSource)
+		const originDataSource=await Game.search_read(domain,fields);
+		const dataSource= turnData(deepCopy(originDataSource))
 		await this.setState({
 			dataSource,
 			loading:false
