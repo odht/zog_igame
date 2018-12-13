@@ -59,3 +59,24 @@ function isOnlyObj(object) {//判断是不是最简单的对象(没有嵌套)
 function isPureObj(object) {//判断是不是纯对象，而不是数组或者存在其他原型的对象。
 	return Object.prototype.toString.call(object) === '[object Object]'
 }
+function typeOf(obj) {
+	return Object.prototype.toString.call(obj)
+}
+export function deepCopy(obj) {
+	let copy
+	if (typeOf(obj) === '[object Object]') {
+		copy = {}
+		for (let key in obj) {
+			copy[key] = deepCopy(obj[key])
+		}
+	} else if (typeOf(obj) === '[object Function]') {
+		copy = obj.bind()
+	} else if (typeOf(obj) === '[object Array]') {
+		copy = obj.map((item) => {
+			return deepCopy(item)
+		})
+	} else {
+		copy = obj
+	}
+	return copy
+}

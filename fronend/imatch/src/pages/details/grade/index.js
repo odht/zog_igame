@@ -6,7 +6,7 @@ import { connect } from 'dva'
 import styles from './index.css';
 import GradeList from '../../../component/GradeList';
 import odoo from '@/odoo-rpc/odoo';
-import { lookup, turnData } from '@/utils/tools'
+import { deepCopy, turnData } from '@/utils/tools'
 class grade extends Component {
     state = {
         roundData: null,
@@ -53,12 +53,12 @@ class grade extends Component {
         const ptns = await Game.browse(id, fieldsTeam);
         const gameData = ptns.look(fieldsTeam);
         console.log(gameData);
-        let roundData = gameData.round_ids;
+        const originRoundData = gameData.round_ids;
 
-        turnData(roundData);//不稳定的转换函数，用于修改成符合视图渲染的数据
+        const roundData=turnData(deepCopy(originRoundData));//不稳定的转换函数，用于修改成符合视图渲染的数据
 
         await this.setState({
-            roundData: gameData.round_ids,
+            roundData: roundData,
             loading: false,
         })
     }
