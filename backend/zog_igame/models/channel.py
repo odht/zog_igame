@@ -49,7 +49,7 @@ class Board(models.Model):
     
         for channel in self.table_id.channel_ids:
             channel.message_post(subject = 'og.board',
-                body = json.dumps(message),subtype='zog_igame.mt_og_board' )
+                body = json.dumps(message)  )
 
     @api.multi
     def bid(self, pos, call):
