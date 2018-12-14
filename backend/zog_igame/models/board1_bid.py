@@ -145,6 +145,8 @@ class Board(models.Model):
         rank = rank_list[0]
 
         suit = 'CDHSN'[random.randint(0,4)]
+        
+        suit = (suit=='N') and 'NT' or suit
 
         risk_list = [         '' for i in range(0,6)
                     ] + [ 'Pass' for i in range(0,6)
