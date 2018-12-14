@@ -26,6 +26,7 @@ Have a nice time to play game.
         'views/table_views.xml',
         'views/board_views.xml',
         'views/channel_views.xml',
+        #'data/mail_data.xml',
     ],
     'demo': [
         #
