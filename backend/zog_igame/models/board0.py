@@ -47,6 +47,7 @@ class Board(models.Model):
     auction  = fields.Char(compute='_compute_call')
     
     @api.multi
+    @api.depends('call_ids')
     def _compute_call(self):
         for rec in self:
             cs = rec.call_ids
@@ -68,6 +69,7 @@ class Board(models.Model):
         """All Played Cards """
         cards = json.loads(self.cards)
         cs = [card for card in cards if card['number']]
+        cs.sort(key=lambda card: card['number'])
         
         def fn(card):
             num = card['number']
@@ -93,6 +95,7 @@ class Board(models.Model):
         return self._get_tricks()
 
     @api.multi
+    @api.depends('cards')
     def _compute_trick(self):
         def fn(trick):
             num = trick and 'WNES'.index( trick[0]['position'] ) or 0
@@ -106,6 +109,7 @@ class Board(models.Model):
             rec.tricks = [ fn(trick) for trick in ts]
             
     @api.multi
+    @api.depends('cards','state','declarer','contract','call_ids')
     def _compute_player(self):
         def fn(rec):
             ts = rec._get_tricks()
@@ -138,6 +142,7 @@ class Board(models.Model):
     ew_win = fields.Integer(compute='_compute_win')
 
     @api.multi
+    @api.depends('cards')
     def _compute_win(self):
         for rec in self:
             ns, ew = rec._get_win()
@@ -149,7 +154,7 @@ class Board(models.Model):
 
         def fn(trick):
             #w = trick.get_winner(self.contract_trump)
-            w = get_winner(trick, rec.contract_trump)
+            w = get_winner(trick, self.contract_trump)
             if not w:
                 return 0, 0
             return w in 'NS' and (1,0) or (0,1)
@@ -167,6 +172,7 @@ class Board(models.Model):
     ew_claim  = fields.Integer(compute='_compute_claim')
 
     @api.multi
+    @api.depends('cards','claimer','claim_result')
     def _compute_claim(self):
         for rec in self:
             ns, ew = rec._get_claim()
@@ -189,6 +195,7 @@ class Board(models.Model):
     trick_count = fields.Integer(compute='_compute_trick_cnt')
 
     @api.multi
+    @api.depends('cards','ns_win','ew_win')
     def _compute_trick_cnt(self):
         for rec in self:
             cnt = rec.ns_win + rec.ew_win

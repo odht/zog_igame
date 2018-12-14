@@ -124,6 +124,7 @@ class Board(models.Model):
     """
     
     @api.multi
+    @api.depends('cards')
     def _compute_hands(self):
         def fn(cards_str, pos):
             cards = json.loads(cards_str)
@@ -150,6 +151,7 @@ class Board(models.Model):
     dummy      = fields.Selection(POSITIONS,compute='_compute_contract2')
             
     @api.multi
+    @api.depends('contract','declarer')
     def _compute_contract2(self):
         for rec in self:
             ctrct = rec.contract
@@ -171,6 +173,7 @@ class Board(models.Model):
     result2 = fields.Char(compute='_compute_result2')
 
     @api.multi
+    @api.depends('state','contract','declarer')
     def _compute_result2(self):
         def fn(rec):
             if rec.state not in ['done']:
@@ -195,6 +198,7 @@ class Board(models.Model):
     ew_point = fields.Integer(compute='_compute_point' )
 
     @api.multi
+    @api.depends('state','contract','declarer','result')
     def _compute_point(self):
         for rec in self:
             rec.point, rec.ns_point, rec.ew_point = rec._get_point()

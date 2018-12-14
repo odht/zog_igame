@@ -35,6 +35,7 @@ class Board(models.Model):
         if self.state in ['openlead']:
             self.state = 'playing'
         
+        #if not [ cd for cd in filter(lambda cd: cd['number']==0, cards)]:
         if self.trick_count>=13:
             self.state = 'done'
             self.result = self._get_result()
@@ -152,6 +153,9 @@ class Board(models.Model):
             return t1 and t1[0]['name'] or None
 
     def _get_result(self):
+            
+            
+            
             if not self.contract or self.contract == PASS or self.trick_count<13:
                 return 0
 
@@ -185,8 +189,8 @@ class Board(models.Model):
         if self.state not in ['playing']:
             return -11, 'state is not playing'
 
-        if self.claimer:
-            return (-1,'Claim again.')
+        #if self.claimer:
+        #    return (-1,'Claim again.')
             
         if pos != self.declarer:
             return (-1,'Claimed by Decalrer please.')
@@ -225,6 +229,7 @@ class Board(models.Model):
         
         if not ack:
             self.state = 'playing'
+            self.claim_result = 0
             return 0
         
         opp = {lho(dclr):'LHO', rho(dclr):'RHO'}[pos]

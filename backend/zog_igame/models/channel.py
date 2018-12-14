@@ -14,6 +14,7 @@ class Table(models.Model):
 class Board(models.Model):
     _inherit = "og.board"
     
+    # TBD  re compute
     def _get_info(self):
         return {
             'id': self.id,
