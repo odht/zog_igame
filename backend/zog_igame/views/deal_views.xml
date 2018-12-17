@@ -38,6 +38,7 @@
             </field>
         </record>
 
+<!-- 
         <record id="view_deal_card_tree" model="ir.ui.view">
             <field name="name">deal.card</field>
             <field name="model">og.deal.card</field>
@@ -51,6 +52,6 @@
             </field>
         </record>
 
-
+-->
 
 </odoo>

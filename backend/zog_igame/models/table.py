@@ -185,10 +185,12 @@ class Partner(models.Model):
             table_ids = rec.team_player_ids.mapped('table_player_ids').mapped('table_id')
             
             rec.todo_table_ids = table_ids.filtered(
-                    lambda tbl: tbl.state in ['todo','doing']).sorted('schedule_number')
+                    lambda tbl: tbl.state in [
+                           'open', 'todo','doing','done'
+                       ]).sorted('schedule_number')
                     
             rec.done_table_ids = table_ids.filtered(
-                    lambda tbl: tbl.state == 'done').sorted('date_from')
+                    lambda tbl: tbl.state == 'close').sorted('date_from')
             
             for game in rec.todo_table_ids.mapped('game_id'):
                 doings = rec.todo_table_ids.filtered(

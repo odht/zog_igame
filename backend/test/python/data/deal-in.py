@@ -1,5 +1,6 @@
 # coding: utf-8 -*- coding: UTF-8 -*-
-from rpc import get_user, search_one, find
+from rpc import get_user
+from tools import search_one, find
 
 
 def read_deal(file_name):

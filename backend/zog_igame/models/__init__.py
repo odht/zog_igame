@@ -9,7 +9,7 @@ from . import table
 from . import board
 from . import board0
 from . import board_call
-from . import board_card
+#from . import board_card
 
 from . import table_board
 from . import match_table
