@@ -48,8 +48,8 @@ class Board(models.Model):
         }
     
         for channel in self.table_id.channel_ids:
-            channel.message_post(subject = 'og.board',
-                body = json.dumps(message)  )
+            if channel.mail_channel_id.channel_type == 'og_game_board':
+                channel.message_post(subject = 'og.board', body = json.dumps(message)  )
 
     @api.multi
     def bid(self, pos, call):
@@ -181,6 +181,7 @@ class GameChannel(models.Model):
         channel_vals = {
             'name' : name,
             'public':'private',
+            'channel_type': 'og_game_board',
             'channel_last_seen_partner_ids': [
                 [ 0,0,{'partner_id':ptn}] for ptn in partner_ids ]
         }
@@ -194,3 +195,11 @@ class GameChannel(models.Model):
 
         return super(GameChannel,self).create(vals)
 
+class MailChannel(models.Model):
+    """ Chat Session
+        Reprensenting a conversation between users.
+        It extends the base method for anonymous usage.
+    """
+
+    _inherit = 'mail.channel'
+    channel_type = fields.Selection(selection_add=[('og_game_board', 'Game Board')])
