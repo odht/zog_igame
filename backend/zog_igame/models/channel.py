@@ -14,6 +14,7 @@ class Table(models.Model):
 class Board(models.Model):
     _inherit = "og.board"
     
+    # TBD  re compute
     def _get_info(self):
         return {
             'id': self.id,
@@ -47,8 +48,8 @@ class Board(models.Model):
         }
     
         for channel in self.table_id.channel_ids:
-            channel.message_post(subject = 'og.board',
-                body = json.dumps(message) )
+            if channel.mail_channel_id.channel_type == 'og_game_board':
+                channel.message_post(subject = 'og.board', body = json.dumps(message)  )
 
     @api.multi
     def bid(self, pos, call):
@@ -118,7 +119,7 @@ class GameChannel(models.Model):
 
                              ], default='all')
 
-
+    """
     def _transposition(self, body ):
         board_id = body['id']
         board = self.env['og.board'].browse(board_id)
@@ -143,14 +144,20 @@ class GameChannel(models.Model):
         #return json.dumps(body)
         
         return {'subject':subject, 'body':body}
-
+    """
 
     @api.multi
     @api.returns('self', lambda value: value.id)
-    def message_post(self, body='', subject=None ):
+    def message_post(self, body='', subject=None, message_type=None, subtype=None):
+        if not message_type:
+            message_type='comment'
+            
+        if not subtype:
+            subtype='mail.mt_comment'
+            
         self = self.sudo()
         return self.mail_channel_id.message_post(body=body, subject=subject,
-                      message_type='comment', subtype='mail.mt_comment')
+                      message_type=message_type, subtype=subtype)
 
 
     @api.multi
@@ -174,6 +181,7 @@ class GameChannel(models.Model):
         channel_vals = {
             'name' : name,
             'public':'private',
+            'channel_type': 'og_game_board',
             'channel_last_seen_partner_ids': [
                 [ 0,0,{'partner_id':ptn}] for ptn in partner_ids ]
         }
@@ -187,3 +195,11 @@ class GameChannel(models.Model):
 
         return super(GameChannel,self).create(vals)
 
+class MailChannel(models.Model):
+    """ Chat Session
+        Reprensenting a conversation between users.
+        It extends the base method for anonymous usage.
+    """
+
+    _inherit = 'mail.channel'
+    channel_type = fields.Selection(selection_add=[('og_game_board', 'Game Board')])

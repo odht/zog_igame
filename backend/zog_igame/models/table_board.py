@@ -58,22 +58,13 @@ class Table(models.Model):
 
     
     state = fields.Selection([
-        ('todo',  'Todo'),
-        ('done',  'Done'),
-    ], string='Status', default='todo'
-     #, compute='_compute_state' 
-    )
+        ('open',   'Open'),
+        ('todo',   'Todo'),
+        ('doing',  'Doing'),
+        ('done',   'Done'),
+        ('close',  'Close'),
+    ], string='Status', default='open' )
 
-    """ 
-    @api.multi
-    def _compute_state(self):
-        for rec in self:
-            rec.state = rec._get_state()
-
-    def _get_state(self):
-        bd = self.board_ids.filtered(lambda bd: bd.state not in ['done','cancel'])
-        return bd and 'todo' or 'done'
-    """
 
     board_ids = fields.One2many('og.board', 'table_id', string='Boards')
     doing_board_id = fields.Many2one('og.board', compute='_compute_board' )
