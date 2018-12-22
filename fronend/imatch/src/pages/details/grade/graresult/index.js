@@ -72,7 +72,7 @@ class Graresult extends Component {
             close_table_id: { id: null, name: null },
             date_from: null,
             date_thru: null,
-            deal_ids: { id: null },
+            deal_ids: { id: null, name: null, board_ids: { id: null, name: null, state: null } },
             game_id: { id: null, name: null },
             guest_id: { id: null, name: null },
             guest_imp: null,
@@ -131,7 +131,7 @@ class Graresult extends Component {
         const matchData = turnData(deepCopy(originMatchData))
         const dealData = turnData(deepCopy(originDealData))
         const teamRoundInfoData = turnData(deepCopy(originTeamRoundInfoData))
-        
+
         const dealLinkData = dealData.map(item => {
             return (
                 <Link

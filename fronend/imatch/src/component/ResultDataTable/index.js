@@ -20,7 +20,15 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             title: "完成",
             dataIndex: "deal_ids",
             render: (text, record) => {
-                return `${record.deal_ids.length}`
+                let m = 0;
+                record.deal_ids.map(deal => {
+                    if (deal.board_ids.some(board => board.state !== 'done')) {
+                        return null;
+                    } else {
+                        m++
+                    }
+                })
+                return `${m}`
             }
         }, {
             title: "主队",
