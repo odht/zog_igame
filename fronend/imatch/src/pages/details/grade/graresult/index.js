@@ -69,24 +69,28 @@ class Graresult extends Component {
             location: { state },
         } = this.props;
         const matchFileds = {
-            close_table_id: { id: null, name: null },
+            close_table_id: null,
             date_from: null,
             date_thru: null,
-            deal_ids: { id: null, name: null, board_ids: { id: null, name: null, state: null } },
-            game_id: { id: null, name: null },
-            guest_id: { id: null, name: null },
+            deal_ids: { 
+                id: null, 
+                name: null, 
+                board_ids: { id: null, name: null, state: null } 
+            },
+            game_id: null,
+            guest_id: null,
             guest_imp: null,
             guest_vp: null,
-            host_id: { id: null, name: null },
+            host_id: null,
             host_imp: null,
             host_vp: null,
             imp_manual: null,
-            line_ids: { id: null },
+            line_ids: null,
             name: null,
             number: null,
-            open_table_id: { id: null, name: null },
-            phase_id: { id: null, name: null },
-            round_id: { id: null, name: null },
+            open_table_id: null,
+            phase_id: null,
+            round_id: null,
             vp_manual: null,
         }
         const dealFields = {
@@ -115,16 +119,13 @@ class Graresult extends Component {
             // vp: null,
             // vp_opp: null,
             // game_id: { id: null, name: null },
-            team_id: { id: null, name: null },
+            team_id: null,
             // match_id: { id: null, name: null },
             // round_id: { id: null, name: null },
         }
         const Match = odoo.env('og.match');
         const originMatchData = await Match.read(match_ids, matchFileds);
-
-        const Deal = odoo.env('og.deal');
-        const originDealData = await Deal.read(deal_ids, dealFields);
-
+        const originDealData = originMatchData[0].deal_ids//认为是都是打的同一套牌，所以应该是一样的deal，没有再重新请求
         const TeamInfo = odoo.env('og.team.round.info');
         const originTeamRoundInfoData = await TeamInfo.read(team_info_ids, teamInfoFields);
 
