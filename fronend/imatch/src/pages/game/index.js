@@ -56,9 +56,10 @@ class TeamList extends Component {
 		const fields={
 			id:null,
 			name:null,
-			team_ids:{id:null}
+			team_ids:null
 		}
 		const originDataSource=await Game.search_read(domain,fields);
+		console.log(originDataSource);
 		const dataSource= turnData(deepCopy(originDataSource))
 		await this.setState({
 			dataSource,

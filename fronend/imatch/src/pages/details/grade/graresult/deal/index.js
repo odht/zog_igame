@@ -102,7 +102,7 @@ class Deal extends Component {
       number: null,
       dealer: null,
       game: null,
-      schedule_id: { id: null, name: null },
+      schedule_id: null,
       phase: null,
       round: null,
       board_ids: {
@@ -116,14 +116,14 @@ class Deal extends Component {
         table_id: {
           id: null,
           room_type: null, // 开闭室
-          south_id: { id: null, name: null }, //玩家
-          north_id: { id: null, name: null },
-          east_id: { id: null, name: null },
-          west_id: { id: null, name: null },
-          round_id: { id: null, name: null },
+          south_id: null, //玩家
+          north_id: null,
+          east_id: null,
+          west_id: null,
+          round_id: null,
         },
         match_id: {
-          phase_id: { id: null, name: null },
+          phase_id: null,
           id: null,
           name: null,
           number: null, //桌
@@ -149,7 +149,7 @@ class Deal extends Component {
         isDone: false,
       })
     }
-    this.setState({
+   await this.setState({
       dealData,
       card_str,
     })
@@ -167,7 +167,7 @@ class Deal extends Component {
     const round = odoo.env('og.round');
     const rod = await round.browse(id, fields);
     const roundData = rod.look(fields);
-    this.setState({
+   await this.setState({
       roundData,
     })
   }
@@ -175,12 +175,13 @@ class Deal extends Component {
     const {
       location: { query: { deal_id, round_id } }
     } = this.props;
+    console.log(deal_id,round_id);
     this.handleDeal(deal_id)
     this.handleGetRound(round_id)
   }
   render() {
     const { dealData, card_str, isDone, roundData = {} } = this.state;
-
+console.log(dealData,roundData);
     const { phase_id = {}, name, game_id = {} } = roundData;
     const { name: phase } = phase_id;
     const { name: game } = game_id;
@@ -295,6 +296,7 @@ class Deal extends Component {
         return ''
       }
     }
+    console.log(BoardData);
     return (
       <div>
         <div className={styles.matchText}>
@@ -329,7 +331,7 @@ class Deal extends Component {
         </div>
         <Table
           bordered
-          rowKey={row => row.id}
+          rowKey={row => row.id+row.room_type}
           dataSource={BoardData}
           columns={columns}
         />
