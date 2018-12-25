@@ -72,7 +72,11 @@ class Graresult extends Component {
             close_table_id: null,
             date_from: null,
             date_thru: null,
-            deal_ids: { number: null },
+            deal_ids: { 
+                id: null, 
+                name: null, 
+                board_ids: { id: null, name: null, state: null } 
+            },
             game_id: null,
             guest_id: null,
             guest_imp: null,
