@@ -82,12 +82,12 @@ class Board(models.Model):
         return ret
 
     @api.multi
-    def claim_ok(self,pos,ok):
-        ret = super(Board, self).claim_ok(pos, ok)
+    def claim_ack(self,pos,ok):
+        ret = super(Board, self).claim_ack(pos, ok)
         if not ret:
             for rec in self:
                 info = rec._get_info()
-                rec.message_post('claim_ok', [pos, ok], info)
+                rec.message_post('claim_ack', [pos, ok], info)
 
         return ret
 
