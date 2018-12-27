@@ -63,11 +63,12 @@ class Board(models.Model):
 
     @api.multi
     def play(self,pos,card):
+        self.ensure_one()
+        player = self.player
         ret = super(Board, self).play(pos, card)
         if not ret:
-            for rec in self:
-                info = rec._get_info()
-                rec.message_post('play', [pos, card], info)
+            info = rec._get_info()
+            rec.message_post('play', [player, card], info)
 
         return ret
 
@@ -82,12 +83,12 @@ class Board(models.Model):
         return ret
 
     @api.multi
-    def claim_ok(self,pos,ok):
-        ret = super(Board, self).claim_ok(pos, ok)
+    def claim_ack(self,pos,ok):
+        ret = super(Board, self).claim_ack(pos, ok)
         if not ret:
             for rec in self:
                 info = rec._get_info()
-                rec.message_post('claim_ok', [pos, ok], info)
+                rec.message_post('claim_ack', [pos, ok], info)
 
         return ret
 
