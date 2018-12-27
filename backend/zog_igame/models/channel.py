@@ -67,8 +67,8 @@ class Board(models.Model):
         player = self.player
         ret = super(Board, self).play(pos, card)
         if not ret:
-            info = rec._get_info()
-            rec.message_post('play', [player, card], info)
+            info = self._get_info()
+            self.message_post('play', [player, card], info)
 
         return ret
 
