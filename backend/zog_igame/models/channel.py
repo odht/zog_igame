@@ -63,11 +63,12 @@ class Board(models.Model):
 
     @api.multi
     def play(self,pos,card):
+        self.ensure_one()
+        player = self.player
         ret = super(Board, self).play(pos, card)
         if not ret:
-            for rec in self:
-                info = rec._get_info()
-                rec.message_post('play', [pos, card], info)
+            info = rec._get_info()
+            rec.message_post('play', [player, card], info)
 
         return ret
 
