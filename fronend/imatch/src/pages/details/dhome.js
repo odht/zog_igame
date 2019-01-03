@@ -22,4 +22,4 @@ class TeamList extends Component {
 
 }
 
-export default connect(({ login, odooData, ogGame }) => ({ login, odooData, ogGame }))(TeamList)
+export default TeamList
