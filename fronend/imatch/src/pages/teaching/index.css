@@ -1,0 +1,181 @@
+.culturePic{
+    width: 98%;
+    height: auto;
+    margin: 1%;
+}
+.usTitle{
+    text-align: center;
+}
+
+@media screen and (min-width:100px){ 
+    .usEng{
+        color: rgb(24, 144,255);
+        font-size: 14px;
+        font-weight: bolder;
+        display: inline-block;
+        padding-top: 3%;
+    }
+    .usCn{
+        font-size: 14px;
+        display: inline-block;
+        margin: 2%;
+    }
+    .usLine{
+        color: lightgray;
+    }
+    .tellUsPic{
+        width: 0;
+        float: left;
+    }
+    .tellUsContent{
+        width: 100%;
+        height: 100%;
+        float: left;
+        /* background-color: red; */
+        padding: 2%;
+    }
+    .tellUsComp{
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 2%;
+    }
+    /* .companyInfoTitle{
+        font-size: 15px;
+        color: rgb(24, 144,255);
+        font-weight: bolder;
+        padding-top: 5%;
+        border-bottom: rgb(24, 144,255)solid 1px;
+    } */
+    .companyInfo{
+        width: 96%;
+        background-color: lightgray;
+        margin: 2%;
+        border-radius: 1%;
+        padding: 5px;
+    }
+    .companyInfoPic{
+        width: 150px;
+        height: 150px;
+        float: left;
+    }
+}
+
+@media screen and (min-width: 500px){
+    .usEng{
+        color: rgb(24, 144,255);
+        font-size: 30px;
+        font-weight: bolder;
+        display: inline-block;
+        padding-top: 3%;
+    }
+    .usCn{
+        display: inline-block;
+        font-size: 22px;
+        margin-left: 2%;
+        margin-right: 2%;
+        margin-top: 0;
+    }
+    .usLine{
+        /* color: lightgray; */
+        color: rebeccapurple;
+    }
+    .tellUsPic{
+        width: 50%;
+        float: left;
+    }
+    .tellUsContent{
+        width: 50%;
+        float: left;
+        /* background-color: red; */
+    }
+    .tellUsComp{
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 2%;
+    }
+}
+@media screen and (min-width: 768px){
+    .usEng{
+        color: rgb(24, 144,255);
+        font-size: 30px;
+        font-weight: bolder;
+        display: inline-block;
+        padding-top: 3%;
+    }
+    .usCn{
+        display: inline-block;
+        font-size: 22px;
+        margin-left: 2%;
+        margin-right: 2%;
+        margin-top: 0;
+    }
+    .usLine{
+        /* color: lightgray; */
+        color: rebeccapurple;
+    }
+    .tellUsPic{
+        width: 50%;
+        float: left;
+    }
+    .tellUsContent{
+        width: 50%;
+        float: left;
+        /* background-color: red; */
+    }
+    .tellUsComp{
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 7%;
+    }
+}
+
+@media screen and (min-width: 992px){
+    .usEng{
+        color: rgb(24, 144,255);
+        font-size: 34px;
+        font-weight: bolder;
+        display: inline-block;
+        padding-top: 3%;
+    }
+    .usCn{
+        display: inline-block;
+        font-size: 26px;
+        margin-left: 2%;
+        margin-right: 2%;
+        margin-top: 0;
+    }
+    .usLine{
+        /* color: lightgray; */
+        color: red;
+    }
+    .tellUsPic{
+        width: 50%;
+        float: left;
+    }
+    .tellUsContent{
+        width: 50%;
+        float: left;
+        /* background-color: red; */
+    }
+    .tellUsComp{
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 7%;
+    }
+}

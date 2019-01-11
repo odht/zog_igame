@@ -33,6 +33,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
+    "ant-design-pro": "^2.1.1",
     "global": "^4.3.2",
     "react-router-breadcrumbs-hoc": "^2.1.5",
     "server": "^1.0.18",

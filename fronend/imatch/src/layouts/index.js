@@ -38,7 +38,7 @@ class HomeIndex extends Component {
     const { location: { pathname } } = this.props;
     const router = '/' + pathname.split('/')[1];
     const { sid } = this.state;
-    if (sid) {
+    if (!sid) {
       if (router === '/details') {
         return (
           <LocaleProvider locale={zhCN}>
@@ -50,13 +50,13 @@ class HomeIndex extends Component {
       if (router === '/user') {
         return <UserLayout {...this.props}>{this.props.children}</UserLayout>
       }
-      if (router === '/home' || router === '/game') {
-        return (
-          <LocaleProvider locale={zhCN}>
-            <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
-          </LocaleProvider>
-        );
-      }
+        // if (router === '/home' || router === '/game') {
+        //   return (
+        //     <LocaleProvider locale={zhCN}>
+        //       <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
+        //     </LocaleProvider>
+        //   );
+        // }
       return (
         <HomeLayout {...this.props}>{this.props.children}</HomeLayout>
       )
