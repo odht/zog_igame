@@ -1,0 +1,42 @@
+.loginBox{
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    width:100%;
+    /* background-color: blueviolet; */
+}
+
+.logoPic{
+    width:350px;
+    height:150px;
+    margin:0 auto;
+    display:inline-block;
+}
+.normal {
+    width: 350px;
+    margin: 0 auto;
+    padding-top: 10%;
+    @media screen and (max-width: @screen-sm) {width: 95%;}
+}
+.rememberPwd{
+    margin-left: 10px;
+}
+.forgetPwd{
+    margin-left: 155px;
+}
+.registerBtn{
+    text-align: right;
+    /* background-color: red; */
+    display: inline-block;
+    width: 100%;
+    padding-right: 5%;
+    margin-top: 0px;
+}
+.sponsorLogin{
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    text-align: center;
+    padding-bottom: 50px;
+}

@@ -10,7 +10,7 @@ const routes = [
   { path: '/details/grade/graresult/round', breadcrumb: '桌' },
   { path: '/details/grade/graresult/teamMatch', breadcrumb: '队伍' },
   { path: '/details/grade/graresult/deal', breadcrumb: '牌' },
-
+  { path: '/details/join', breadcrumb: '比赛报名' },
 ];
 
 export default withBreadcrumbs(routes)(({ breadcrumbs, state }) => (

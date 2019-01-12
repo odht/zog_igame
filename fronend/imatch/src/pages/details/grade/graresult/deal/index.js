@@ -175,13 +175,11 @@ class Deal extends Component {
     const {
       location: { query: { deal_id, round_id } }
     } = this.props;
-    console.log(deal_id,round_id);
     this.handleDeal(deal_id)
     this.handleGetRound(round_id)
   }
   render() {
     const { dealData, card_str, isDone, roundData = {} } = this.state;
-console.log(dealData,roundData);
     const { phase_id = {}, name, game_id = {} } = roundData;
     const { name: phase } = phase_id;
     const { name: game } = game_id;
@@ -296,7 +294,6 @@ console.log(dealData,roundData);
         return ''
       }
     }
-    console.log(BoardData);
     return (
       <div>
         <div className={styles.matchText}>

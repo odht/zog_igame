@@ -2,7 +2,6 @@
 //  LSY
 //  2018-9-6
 import React, { Component } from 'react'
-import { connect } from 'dva'
 import styles from './index.css';
 import GradeList from '../../../component/GradeList';
 import odoo from '@/odoo-rpc/odoo';
@@ -13,18 +12,6 @@ class grade extends Component {
         loading: true,
     }
     componentDidMount() {
-        // const {
-        //     location: { state: { gameData: { round_ids } } },
-        //     dispatch,
-        // } = this.props;
-        // dispatch({
-        //     type: "ogRound/read",
-        //     payload: { id: round_ids }
-        // }).then(() => {
-        //     this.setState({
-        //         loading: false,
-        //     })
-        // })
         const {
             location: { state: { gameData } },
         } = this.props;
@@ -34,6 +21,9 @@ class grade extends Component {
         const fieldsTeam =
         {
             name: null,
+            id:null,
+            player_ids:{id:null,name:null},
+			team_ids:null,
             round_ids: {
                 date_from: null,
                 date_thru: null,
@@ -51,7 +41,6 @@ class grade extends Component {
         const id = parseInt(ids, 10);
         const Game = odoo.env('og.game');
         const gameData = await Game.read(id, fieldsTeam);
-        console.log(gameData);
         const originRoundData = gameData.round_ids;
 
         const roundData=turnData(deepCopy(originRoundData));//不稳定的转换函数，用于修改成符合视图渲染的数据
