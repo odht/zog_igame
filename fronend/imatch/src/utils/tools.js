@@ -56,27 +56,34 @@ function isOnlyObj(object) {//判断是不是最简单的对象(没有嵌套)
 	}
 	return true
 }
-function isPureObj(object) {//判断是不是纯对象，而不是数组或者存在其他原型的对象。
+function isPureObj(object) {//判断是不是纯对象，而不是数组。
 	return Object.prototype.toString.call(object) === '[object Object]'
 }
 function typeOf(obj) {
 	return Object.prototype.toString.call(obj)
 }
+//复制类实例化的对象不会产生预期的效果（类内部定义的方法都是不可枚举的）
 export function deepCopy(obj) {
-	let copy
+	let copy;
+	let contain = arguments[1] || new WeakMap();
 	if (typeOf(obj) === '[object Object]') {
 		copy = {}
-		for (let key in obj) {
-			copy[key] = deepCopy(obj[key])
+		if (contain.has(obj)) {
+			copy = obj
+		} else {
+			contain.set(obj, 'MARK')
+			for (let key in obj) {
+				copy[key] = deepCopy(obj[key], contain);
+			}
 		}
 	} else if (typeOf(obj) === '[object Function]') {
-		copy = obj.bind()
+		copy = obj.bind();
 	} else if (typeOf(obj) === '[object Array]') {
 		copy = obj.map((item) => {
-			return deepCopy(item)
+			return deepCopy(item, contain);
 		})
 	} else {
-		copy = obj
+		copy = obj;
 	}
 	return copy
 }

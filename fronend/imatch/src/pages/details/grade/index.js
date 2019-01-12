@@ -37,21 +37,20 @@ class grade extends Component {
             round_ids: {
                 date_from: null,
                 date_thru: null,
-                deal_ids: { id: null },
-                game_id: { id: null, name: null },
-                match_ids: { id: null },
+                deal_ids: null,
+                game_id: null,
+                match_ids: null,
                 name: null,
                 number: null,
-                phase_id: { id: null, name: null },
-                schedule_id: { id: null, name: null },
-                table_ids: { id: null },
-                team_info_ids: { id: null },
+                phase_id: null,
+                schedule_id: null,
+                table_ids: null,
+                team_info_ids: null,
             }
         }
         const id = parseInt(ids, 10);
         const Game = odoo.env('og.game');
-        const ptns = await Game.browse(id, fieldsTeam);
-        const gameData = ptns.look(fieldsTeam);
+        const gameData = await Game.read(id, fieldsTeam);
         console.log(gameData);
         const originRoundData = gameData.round_ids;
 

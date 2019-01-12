@@ -1,11 +1,16 @@
 import modelCreator from './models'
-import RPC from './rpc'
+import _RPC from './rpc'
 
-const create_env = (models, rpc )=>{
+import busCreator from './bus.bus'
+import mailChannelCreator from './mail.channel'
+import mailMessageCreator from './mail.message'
+
+const create_env = ({models, creators, rpc, odoo} )=>{
     const env = {}
     for(const mdl in models ){
         const fields = models[mdl]
-        const cls = modelCreator({model: mdl, fields, rpc, env })
+        const creator = creators[mdl] || modelCreator
+        const cls = creator({model: mdl, fields, rpc, env, odoo })
         env[mdl] = cls
     }
 
@@ -14,17 +19,40 @@ const create_env = (models, rpc )=>{
 
 class Odoo {
     constructor(options){
-        const { host,db,models } = options
-        const rpc = new RPC({ host,db })
+        //console.log('parant odoo',options)
+        const { host, db, models={}, creators={}, RPC } = options
+        const RPC0 = RPC || _RPC
+        const rpc = new RPC0({ host,db })
         this._rpc = rpc
         this._models = models
-        this._env = create_env(models, rpc)
+
+        const base_creators = {
+            'bus.bus': busCreator ,
+            'mail.channel': mailChannelCreator ,
+            'mail.message': mailMessageCreator
+        }
+
+        this._env = create_env({
+            models,
+            creators: { ...base_creators, ...creators },
+            rpc,
+            odoo: this
+
+        })
+    }
+
+    async init(){
+        for (const model in this._env){
+            console.log(model)
+            await this._env[model].init()
+        }
     }
 
     async login(params){
         const data = await this._rpc.login(params )
         if(!data.code){
             Odoo._session[this._rpc.sid] = this
+            await this.init()
             return this._rpc.sid
         }
         return null
@@ -46,6 +74,16 @@ class Odoo {
         return cls
     }
 
+    async user(fields) {
+        const uid = this._rpc.uid
+        return this.env('res.users').browse(uid,fields)
+    }
+
+    me = this.user
+
+    async ref(xmlid) {
+        return this.env('ir.model.data').call('xmlid_to_res_model_res_id', [xmlid, true] )
+    }
 }
 
 Odoo._session = {}
