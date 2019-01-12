@@ -195,7 +195,7 @@ class Board(models.Model):
     trick_count = fields.Integer(compute='_compute_trick_cnt')
 
     @api.multi
-    @api.depends('cards','ns_win','ew_win')
+    @api.depends('cards','ns_win','ew_win','claimer','state','ns_claim','ew_claim')
     def _compute_trick_cnt(self):
         for rec in self:
             cnt = rec.ns_win + rec.ew_win
