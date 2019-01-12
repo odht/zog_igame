@@ -28,8 +28,7 @@ class HomeIndex extends Component {
     // }
   }
   login = async () => {
-    const session_id = await odoo.login({ login: 'admin', password: '123' })
-    console.log(session_id);
+    const session_id = await odoo.login({ login: 'admin', password: '123' });
     this.setState({
       sid: session_id
     })
@@ -37,8 +36,8 @@ class HomeIndex extends Component {
   render() {
     const { location: { pathname } } = this.props;
     const router = '/' + pathname.split('/')[1];
-    const { sid } = this.state;
-    if (!sid) {
+    const sid = localStorage.getItem('sid') || this.state.sid;
+    if (sid) {
       if (router === '/details') {
         return (
           <LocaleProvider locale={zhCN}>
@@ -50,13 +49,13 @@ class HomeIndex extends Component {
       if (router === '/user') {
         return <UserLayout {...this.props}>{this.props.children}</UserLayout>
       }
-        // if (router === '/home' || router === '/game') {
-        //   return (
-        //     <LocaleProvider locale={zhCN}>
-        //       <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
-        //     </LocaleProvider>
-        //   );
-        // }
+      // if (router === '/home' || router === '/game') {
+      //   return (
+      //     <LocaleProvider locale={zhCN}>
+      //       <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
+      //     </LocaleProvider>
+      //   );
+      // }
       return (
         <HomeLayout {...this.props}>{this.props.children}</HomeLayout>
       )
