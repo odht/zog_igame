@@ -33,6 +33,8 @@ class Join extends React.Component {
 
   state = {
     userData: [],
+    conach: '',
+    leader: '',
   }
 
   // 提交报名
@@ -78,11 +80,12 @@ class Join extends React.Component {
     const Users = odoo.env('res.users');
     const users = await Users.search();
     const userData = users.look({ partner_id: { id: null, name: null } });
+    const attrUserDate = userData.map(item => { return { name: item.partner_id.name, id: item.partner_id.id } });
     this.setState({
-      userData: userData,
+      userData: attrUserDate,
     })
-
   };
+
   componentDidMount() {
     this.getPartner();
   }
@@ -90,7 +93,7 @@ class Join extends React.Component {
     const { location: { state: { gameData } } } = this.props;
     let children = [];
     this.state.userData.map(item => {
-      children.push(<Option key={item.partner_id.id}>{item.partner_id.name}</Option>);
+      children.push(<Option key={item.id}>{item.name}</Option>);
     });
 
     const { getFieldDecorator } = this.props.form;

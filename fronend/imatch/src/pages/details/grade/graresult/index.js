@@ -121,12 +121,12 @@ class Graresult extends Component {
         }
         const Match = odoo.env('og.match');
         const originMatchData = await Match.read(match_ids, matchFileds);
-        const originDealData = originMatchData[0].deal_ids//认为是都是打的同一套牌，所以应该是一样的deal，没有再重新请求
+        const originDealData = originMatchData.length > 0 ? originMatchData[0].deal_ids : [];//认为是都是打的同一套牌，所以应该是一样的deal，没有再重新请求
         const TeamInfo = odoo.env('og.team.round.info');
         const originTeamRoundInfoData = await TeamInfo.read(team_info_ids, teamInfoFields);
 
-        const matchData = turnData(deepCopy(originMatchData))
-        const dealData = turnData(deepCopy(originDealData))
+        const matchData = turnData(deepCopy(originMatchData)) || [];
+        const dealData = turnData(deepCopy(originDealData)) || [];
         const teamRoundInfoData = turnData(deepCopy(originTeamRoundInfoData))
 
         const dealLinkData = dealData.map(item => {
@@ -151,7 +151,6 @@ class Graresult extends Component {
                 loading: false
             }
         })
-        console.log(matchData, dealData, teamRoundInfoData);
 
     }
     render() {
@@ -164,7 +163,6 @@ class Graresult extends Component {
         // 牌组 
 
         const { matchData, teamRoundInfoData, dealData } = this.state
-        console.log(teamRoundInfoData, dealData);
 
         return (
             <div>

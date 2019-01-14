@@ -46,10 +46,11 @@ class UserBlock extends Component {
     login = async (values) => {
         const session_id = await odoo.login(values);
         const me = await odoo.me({ id: null, partner_id: { id: null, name: null } });
-        const { partner_id: { id } } = me.look({ id: null, partner_id: { id: null, name: null } });
+        const { partner_id: { id: partner_id }, id } = me.look({ id: null, partner_id: { id: null, name: null } });
         if (session_id) {
+            localStorage.setItem('uid', id);
             localStorage.setItem('sid', session_id);
-            localStorage.setItem('patId', id);
+            localStorage.setItem('patId', partner_id);
             router.push('/');
         }
     }

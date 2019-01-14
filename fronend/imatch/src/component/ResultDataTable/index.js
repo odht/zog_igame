@@ -24,17 +24,18 @@ const ResultDataTable = ({ matchData, state, loading }) => {
                 let borad1 = 0;
                 let borad2 = 0;
                 const table_ids = record.table_ids;
-                console.log(table_ids)
-                table_ids[0].board_ids.map(item => {
-                    if (item.state === 'done') {
-                        borad1++
-                    }
-                })
-                table_ids[1].board_ids.map(item => {
-                    if (item.state === 'done') {
-                        borad2++
-                    }
-                })
+                if (table_ids.length > 0) {
+                    table_ids[0].board_ids.map(item => {
+                        if (item.state === 'done') {
+                            borad1++
+                        }
+                    })
+                    table_ids[1].board_ids.map(item => {
+                        if (item.state === 'done') {
+                            borad2++
+                        }
+                    })
+                }
                 // record.table_ids.map(deal => {
                 //     if (deal.board_ids.map(board => board.state !== 'done')) {
                 //         return null;

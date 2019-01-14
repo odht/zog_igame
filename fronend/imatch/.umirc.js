@@ -17,7 +17,7 @@ export default {
 
    proxy: {
     '/api': {
-      target: 'http://192.168.1.8:8069/',
+      target: 'http://192.168.1.88:8069/',
       // target: 'http://124.42.117.43:8069/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
