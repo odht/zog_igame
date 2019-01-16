@@ -24,4 +24,7 @@ export default {
     },
   },
 
+  base:'/imatch',
+  publicPath:'/imatch/'
+
 }
