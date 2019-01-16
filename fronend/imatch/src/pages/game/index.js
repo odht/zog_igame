@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'dva'
+import { connect } from 'dva';
+import styles from './index.less';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { deepCopy, turnData } from '@/utils/tools';
@@ -42,6 +43,8 @@ const columns = [
 		dataIndex: 'ps',
 		width: 150,
 	},]
+
+
 class TeamList extends Component {
 	state = {
 		dataSource: [],
@@ -76,6 +79,7 @@ class TeamList extends Component {
 		return (
 			<div >
 				<Table
+				    className={styles.tableBox}
 					loading={loading}
 					rowKey={row => row.id}
 					columns={columns}
@@ -85,7 +89,8 @@ class TeamList extends Component {
 						showSizeChanger: true,
 						pageSizeOptions: ['10', '15', '20'],
 					}}
-					scroll={{ y: 300 }} />
+					// scroll={{ y: 300 }} 
+				/>
 			</div>)
 	}
 }

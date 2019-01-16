@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { Layout, Row, Col, Menu, Dropdown, Button, Drawer, Icon } from 'antd';
 import GlobalNavi from '../component/GlobalNavi';
-import styles from './BasicLayout.css'
+import styles from './HomeLayout.css'
 import logoPic from '../assets/zhiSaiLogo.png';
 import logOut from '../assets/logOut.png';
 import * as routes from '../common/navigationRoutes';
@@ -133,7 +133,7 @@ class BasicLayout extends Component {
                 <Header className={styles.header}>
                     <Row className={styles.headerFlex}>
                         <Col xs={18} sm={12} xl={12} xxl={8}>
-                            <Link to='/home'>
+                            <Link to='homepage'>
                                 <img className={styles.logo} src={logoPic} />
                             </Link>
                         </Col>
@@ -143,7 +143,7 @@ class BasicLayout extends Component {
                     </Row>
                 </Header>
                 {/* 内容 */}
-                <Content>
+                <Content  className={styles.contentBox}>
                     <Row style={{ backgroundColor: 'white' }}>
                         <Col span={1} xl={4}></Col>
                         <Col span={22} xl={16}>

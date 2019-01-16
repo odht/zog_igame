@@ -3,12 +3,16 @@
 //2018-9-4
 
 import React, { Component, Fragment } from 'react';
-import { Layout, Breadcrumb, Icon, Input, Button, Modal, Form, Checkbox } from 'antd';
+import { Layout, Icon, Input, Button, Modal, Form, Checkbox } from 'antd';
 import DetailsHeader from '../component/DetailsHeader';
 import * as routes from '../common/detailsroutes';
-import Breadcrumbs from '../component/Breakcrumbs'
-import styles from './BasicLayout.css';
-import BasicFooter from '../component/BasicFooter';
+import Breadcrumbs from '../component/Breakcrumbs';
+import styles from './DetailsLayout.less';
+import logoPic from '../assets/zhiSaiLogo.png';
+import { Link } from 'dva/router';
+
+
+// import BasicFooter from '../component/BasicFooter';
 const { Header, Content, Footer } = Layout;
 const { details: headerRoutes } = routes;
 
@@ -104,18 +108,24 @@ class DetailsLayout extends Component {
 					<img style={{ height: '80px', 'float': "left" }} src={logo} />
 					<Button type="primary" onClick={this.showModal}>登录</Button>
 				</div>*/}
-				<Header >
-					<DetailsHeader
+				<Header className={styles.header}>
+                    <Link to='/homepage'>
+                        <img className={styles.logo} src={logoPic} />
+                    </Link>
+					{/* <DetailsHeader
+						gameData={gameData}
+						headerRoutes={headerRoutes}
+						pathname={pathname}
+					/> */}
+				</Header>
+				<Content style={{ padding: '0 50px',minHeight:'800px' }}>
+				    <DetailsHeader
 						gameData={gameData}
 						headerRoutes={headerRoutes}
 						pathname={pathname}
 					/>
-				</Header>
-				<Content style={{ padding: '0 50px' }}>
 					<div style={{ padding: '13px 10px 13px 0', fontSize: 18 }}>
-						<Breadcrumbs
-							state={state}
-						></Breadcrumbs>
+						<Breadcrumbs state={state}></Breadcrumbs>
 					</div>
 					<Layout style={{ padding: '0px 0', background: '#fff' }}>
 
@@ -124,9 +134,11 @@ class DetailsLayout extends Component {
 						</Content>
 					</Layout>
 				</Content>
-				<footer className={styles.footer}>
-					<BasicFooter />
-				</footer>
+				{/* 页脚 */}
+                <Footer className={styles.footer}>
+                    <div className={styles.copyRight}>版权所有 © 2018 北京欧德慧通信息技术有限公司</div>
+                    <div className={styles.copyRight}>京ICP备16000236号-1</div>
+                </Footer>
 				<Modal
 					bodyStyle={{ paddingTop: "35px" }}
 					visible={visible}
