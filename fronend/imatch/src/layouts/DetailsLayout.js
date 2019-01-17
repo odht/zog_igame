@@ -118,7 +118,7 @@ class DetailsLayout extends Component {
 						pathname={pathname}
 					/> */}
 				</Header>
-				<Content style={{ padding: '0 50px',minHeight:'800px' }}>
+				<Content style={{ padding: '0 50px',minHeight:'800px', minWidth:'1000px' }}>
 				    <DetailsHeader
 						gameData={gameData}
 						headerRoutes={headerRoutes}

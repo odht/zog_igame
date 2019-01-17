@@ -8,6 +8,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
         title: "对阵结果",
         children: [{
             title: "桌",
+            align: 'center',
             dataIndex: "number",
             render: (text, record) => {
                 return <Link to={{
@@ -19,6 +20,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             }
         }, {
             title: "完成",
+            align: 'center',
             dataIndex: "deal_ids",
             render: (text, record) => {
                 let borad1 = 0;
@@ -47,35 +49,42 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             }
         }, {
             title: "主队",
+            align: 'center',
             dataIndex: "host_id",
             render: (text, record) => {
                 return <Link to={{ pathname: `/details/grade/graresult/teamMatch`, state, search: `?team_id=${record.host_id[0]}`, }}>{record.host_id[1]}</Link>;
             }
         }, {
             title: "客队",
+            align: 'center',
             dataIndex: "guest_id",
             render: (text, record) => {
                 return <Link to={{ pathname: '/details/grade/graresult/teamMatch', state, search: `?team_id=${record.guest_id[0]}` }}>{record.guest_id[1]}</Link>;
             }
         }, {
             title: "IMPS",
+            align: 'center',
             children: [{
                 title: "主队",
+                align: 'center',
                 dataIndex: "host_imp",
             }, {
                 title: "客队",
+                align: 'center',
                 dataIndex: "guest_imp",
             }]
         }, {
             title: "VPs",
             children: [{
                 title: "主队",
+                align: 'center',
                 dataIndex: "host_vp",
                 render: (text) => {
                     return text.toFixed(2);
                 }
             }, {
                 title: "客队",
+                align: 'center',
                 dataIndex: "guest_vp",
                 render: (text) => {
                     return text.toFixed(2);

@@ -32,7 +32,7 @@ const columns = [{
 	width: '9%'
 },{
 	title: '队员',
-	dataIndex: 'players',
+	dataIndex: 'player',
 	key: 'players',
 	align: 'center',
 	width: '52%'
@@ -47,7 +47,7 @@ const columns = [{
 
 class Team extends Component {
 	state = {
-		dataSource:[],
+		teamData:[],
 		loading: true,
 	}
 	componentWillMount() {
@@ -66,14 +66,43 @@ class Team extends Component {
 		const cls=odoo.env('og.team');
 		const dataSource=await cls.read(team_ids,fields);
 		console.log('====== 赛队数据 ------',dataSource);
-		
+		const teamData = this.parseData(dataSource)
+		console.log('====== 赛队数据 leader ------',teamData);
+			
 		await this.setState({
-			dataSource,
+			teamData,
 			loading:false
 		})
 	}
+
+	parseData=(data)=>{
+		    var getName = (player_ids,role)=>{
+		        var name = '';
+		        player_ids.forEach((playerItem)=>{
+		            if(role != 'player' && playerItem.role==role){
+		                name = playerItem.name
+		            }
+		            if(role == 'player' && playerItem.role==role){
+		                name = name+" "+playerItem.name
+		            }
+		        });
+		        return name;
+		    }
+		    var result = [];
+		    data.forEach((dataItem)=>{
+		        var tableItem = {
+		            id:dataItem.id,
+		            name:dataItem.name,
+		            leader:getName(dataItem.player_ids,"leader"),
+		            coach:getName(dataItem.player_ids,"coach"),
+		            player:getName(dataItem.player_ids,"player"),
+		        }
+		        result.push(tableItem)
+		    });
+		    return result;
+	}
 	render() {
-		const { loading ,dataSource} = this.state;
+		const { loading ,teamData} = this.state;
 		return (
 			<div style={{ margin: '0 auto' }}>
 				<Table
@@ -81,7 +110,7 @@ class Team extends Component {
 					bordered={true}
 					rowKey={row => row.id}
 					columns={columns}
-					dataSource={dataSource}
+					dataSource={teamData}
 					pagination={{
 						showQuickJumper: true,
 						showSizeChanger: true,
