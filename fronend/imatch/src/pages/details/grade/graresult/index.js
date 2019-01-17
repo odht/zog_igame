@@ -15,23 +15,32 @@ const columnRank = [{
     title: '赛队排名',
     children: [
         {
-            title: '名次', dataIndex: 'number', render: (text, index, key) => {
+            title: '名次', 
+            align: 'center',
+            dataIndex: 'number', 
+            render: (text, index, key) => {
                 return key + 1
             }
         },
         {
             title: '参赛队',
+            align: 'center',
             dataIndex: 'rankTeam',
             key: 'team',
             render: (text, record) => { return `${record.team_id[1]}` }
         },
         {
             title: 'VPs',
+            align: 'center',
             dataIndex: 'rankTeam',
             className: styles.red,
             render: (text, record) => { return `${record.score_close.toFixed(2)}` }
         },
-        { title: '罚分', dataIndex: 'punish' },
+        { 
+            title: '罚分', 
+            align: 'center',
+            dataIndex: 'punish' 
+        },
     ]
 }];
 
@@ -88,6 +97,7 @@ class Graresult extends Component {
             phase_id: null,
             round_id: null,
             vp_manual: null,
+            deal_ids:null
         }
         const dealFields = {
             // card_str:null,
@@ -126,6 +136,7 @@ class Graresult extends Component {
         const originTeamRoundInfoData = await TeamInfo.read(team_info_ids, teamInfoFields);
 
         const matchData = turnData(deepCopy(originMatchData)) || [];
+        console.log('----matchData ----',matchData);
         const dealData = turnData(deepCopy(originDealData)) || [];
         const teamRoundInfoData = turnData(deepCopy(originTeamRoundInfoData))
 

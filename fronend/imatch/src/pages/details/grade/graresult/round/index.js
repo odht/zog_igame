@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import styles from './index.css';
 import { deepCopy,turnData } from '@/utils/tools'
 import odoo from '@/odoo-rpc/odoo';
+
 const renderNumber = (value, row, index) => {
     const obj = {
         children: value,
@@ -72,7 +73,6 @@ const columns = [{
     children: [{
         title: '主队',
         dataIndex: 'host_imp',
-        render: renderNumber,
         align: "center",
         render: (value, row, index) => {
             const obj = {
@@ -115,6 +115,7 @@ const columns = [{
         }
     }]
 }];
+/*
 const dataSource = [
     { number: 1, room: "开", banker: "E", dingyue: "1NT", result: "-1", ns: "150", ew: "", host: "12", guest: "" },
     { number: 1, room: "闭", banker: "S", dingyue: "2NT", result: "2", ns: "", ew: "100", host: "0", guest: "23" },
@@ -122,10 +123,12 @@ const dataSource = [
     { number: 2, room: "闭", banker: "S", dingyue: "2NT", result: "2", ns: "", ew: "100", host: "", guest: "23" },
     { number: 3, room: "开", banker: "E", dingyue: "1NT", result: "-1", ns: "150", ew: "", host: "12", guest: "" },
     { number: 3, room: "闭", banker: "S", dingyue: "2NT", result: "2", ns: "", ew: "100", host: "12", guest: "23" }
-
 ]
+*/ 
+
 class Round extends Component {
     state = {
+        //
         dealData:{},
         lineData:{},
         tableData:{},
@@ -195,21 +198,26 @@ class Round extends Component {
             number:null
         }
         const {deal_ids,line_ids}=matchData;
+        console.log('---- matchData ----',matchData);
         const table_ids=[matchData.open_table_id[0], matchData.close_table_id[0]];
 
         const MatchLine = odoo.env('og.match.line');
         const originLineData = await MatchLine.read(line_ids,matchLineFields);
-
+        console.log('----- originLineData -----',originLineData);
+        
         const Deal=odoo.env('og.deal');
+        console.log('----- Deal -----',Deal);
         const originDealData=await Deal.read(deal_ids,dealFields);
-       
+        console.log('----- originDealData -----',originDealData);
+        
         const Tables=odoo.env('og.table');
         const originTableData=await Tables.read(table_ids,tableFields);
-
+        console.log('----- originTableData -----',originTableData);
+        
         const lineData=turnData(deepCopy(originLineData))
         const dealData=turnData(deepCopy(originDealData))
         const tableData=turnData(deepCopy(originTableData))
-
+        console.log('----- tableData -----',tableData);
         await this.setState({
             lineData,
             dealData,
@@ -258,7 +266,7 @@ class Round extends Component {
             Vps = `${matchData.host_vp.toFixed(2)} : ${matchData.guest_vp.toFixed(2)}`
             match_name = matchData.game_id[1];
             match_round = matchData.round_id[1];
-            matchVs = <span className={styles.match}>{matchData.host_id[1]} <span className={styles.VS}>VS</span> {matchData.guest_id[1]}</span>
+            matchVs = <span className={styles.match}>{matchData.host_id[1]} <span className={styles.VS}>  VS  </span> {matchData.guest_id[1]}</span>
         }
         if (lineData && lineData.length > 0) {
             lineData.map((item, index) => {
@@ -328,14 +336,16 @@ class Round extends Component {
                     <Button
                         type="primary"
                         onClick={this.handlerPrintScore}
-                        className={styles.printButton}>
+                        className={styles.printButton}
+                    >
                         打印成绩
-                  </Button>
+                    </Button>
                 </div>
                 <div id="print" >
                     <h2 style={{ textAlign: "center", marginTop: 15 }}>{match_name}：{match_round}</h2>
-                    <div style={{ textAlign: "center", 'fontSize': 20, marginBottom: 10 }}>{matchVs}</div>
+                    <div style={{ textAlign: "center", 'fontSize': 20, marginBottom: 20 }}>{matchVs}</div>
                     <Row type="flex" justify="end">
+                        <Col span={1}></Col>
                         <Col span={10} >
                             <Card
                                 title="开室"
@@ -359,7 +369,7 @@ class Round extends Component {
                                 </div>
                             </Card>
                         </Col>
-                        <Col span={4}></Col>
+                        <Col span={2}></Col>
                         <Col span={10}>
                             <Card
                                 title="闭室"
@@ -383,6 +393,7 @@ class Round extends Component {
                                 </div>
                             </Card>
                         </Col>
+                        <Col span={1}></Col>
                     </Row>
 
                     <Table
