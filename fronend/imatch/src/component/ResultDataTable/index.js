@@ -3,6 +3,7 @@ import { Table } from 'antd';
 import { Link } from 'dva/router';
 
 const ResultDataTable = ({ matchData, state, loading }) => {
+    console.log(matchData)
     const columns = [{
         title: "对阵结果",
         children: [{
@@ -20,15 +21,29 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             title: "完成",
             dataIndex: "deal_ids",
             render: (text, record) => {
-                let m = 0;
-                record.deal_ids.map(deal => {
-                    if (deal.board_ids.some(board => board.state !== 'done')) {
-                        return null;
-                    } else {
-                        m++
-                    }
-                })
-                return `${m}`
+                let borad1 = 0;
+                let borad2 = 0;
+                const table_ids = record.table_ids;
+                if (table_ids.length > 0) {
+                    table_ids[0].board_ids.map(item => {
+                        if (item.state === 'done') {
+                            borad1++
+                        }
+                    })
+                    table_ids[1].board_ids.map(item => {
+                        if (item.state === 'done') {
+                            borad2++
+                        }
+                    })
+                }
+                // record.table_ids.map(deal => {
+                //     if (deal.board_ids.map(board => board.state !== 'done')) {
+                //         return null;
+                //     } else {
+                //         m++
+                //     }
+                // })
+                return borad1 > borad2 ? borad2 : borad1
             }
         }, {
             title: "主队",
