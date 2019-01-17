@@ -1,6 +1,5 @@
 const modelCreator = options => {
   const { model, fields: fields_raw, rpc, env, odoo } = options;
-
   class cls {
     constructor(ids) {
       // ids = null :  null instanse

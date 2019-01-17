@@ -1,8 +1,3 @@
-.culturePic{
-    width: 98%;
-    height: auto;
-    margin: 1%;
-}
 .newsTitle{
     text-align: center;
 }
@@ -23,49 +18,7 @@
     .newsLine{
         color: lightgray;
     }
-/* ---------- */
-    .leftPart{
-        /* background-color: aqua; */
-    }
-    .rightPart{
-        /* background-color: burlywood; */
-    }
-    .newsBlock{
-        /* background-color: aquamarine; */
-        overflow: hidden;
-        margin-bottom: 2px;
-        border: lightblue 1px solid;
-        border-radius: 2%;
-        height: 70px;
-    }
-    .newsDate{
-        display: inline-block;
-        width: 25%;
-        height: 100%;
-        text-align: center;
-        padding: 2%;
-        float: left;
-        background-color: lightskyblue;
 
-    }
-    .newsDate span{
-        font-weight: bold;
-        font-size:8px;
-    }
-    .newsDate p{
-        margin-bottom: 0;
-        font-size: 20px;
-        font-weight: bolder;
-        color: black;
-    }
-    .newsContent{
-        /* background-color: blueviolet;  */
-        display: inline-block;
-        width: 75%;
-        height: 100%;
-        padding: 2%;
-        float: left;
-    }
 }
 @media screen and (min-width:576px){ 
     .newsEng{
@@ -82,49 +35,6 @@
     }
     .newsLine{
         color: black;
-    }
-/* ---------- */
-    .leftPart{
-        /* background-color: aqua; */
-    }
-    .rightPart{
-        /* background-color: burlywood; */
-    }
-    .newsBlock{
-        /* background-color: aquamarine; */
-        overflow: hidden;
-        margin-bottom: 2px;
-        border: lightblue 1px solid;
-        border-radius: 2%;
-        height: 90px;
-    }
-    .newsDate{
-        display: inline-block;
-        width: 20%;
-        height: 100%;
-        text-align: center;
-        padding: 2%;
-        float: left;
-        background-color: lightskyblue;
-
-    }
-    .newsDate span{
-        font-weight: bold;
-        font-size:15px;
-    }
-    .newsDate p{
-        margin-bottom: 0;
-        font-size: 30px;
-        font-weight: bolder;
-        color: black;
-    }
-    .newsContent{
-        /* background-color: blueviolet;  */
-        display: inline-block;
-        width: 80%;
-        height: 100%;
-        padding: 2%;
-        float: left;
     }
 }
 @media screen and (min-width: 768px){
@@ -146,88 +56,6 @@
         /* color: lightgray; */
         color: rebeccapurple;
     }
-    /* ---------- */
-    .leftPart{
-        /* background-color: aqua; */
-    }
-    .rightPart{
-        /* background-color: burlywood; */
-    }
-    .newsBlock{
-        /* background-color: aquamarine; */
-    }
-    .newsDate{
-        display: inline-block;
-        width: 20%;
-        height: 100%;
-        text-align: center;
-        padding: 2%;
-        float: left;
-        background-color: lightskyblue;
-    }
-    .newsDate h1{
-        margin-bottom: 0;
-    }
-    .newsContent{
-        /* background-color: blueviolet;  */
-        display: inline-block;
-        width: 80%;
-        height: 100%;
-        padding: 2%;
-        float: left;
-    }
-    .caseCenterTitle{
-        background-color:blue; 
-        text-align:center;
-        line-height:40px;
-        height:40px;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-    }
-    .caseCenter{
-        padding: 2%;
-        border: solid 1px lightblue;
-        margin-bottom: 5%;
-    }
-    .caseItem{
-        background-color: bisque;
-        height: 60px;
-        margin-bottom: 3px;
-        border-radius: 3px;
-    }
-    .logoPic{
-        width: 25%;
-        height: 100%;
-        float: left;
-        background-color: rgb(168, 102, 141);
-        border-radius: 3px;
-    }
-    .caseContent{
-        width: 75%;
-        height: 100%;
-        /* background-color: rgb(212, 199, 199); */
-        float: left;
-        padding: 2%;
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-        /* font-weight: bold; */
-    }
-    .tellUs{
-        padding: 2%;
-        border: solid 1px lightblue;
-        margin-bottom: 5%;
-    }
-    .tellUsTitle{
-        background-color:blue; 
-        text-align:center;
-        line-height:40px;
-        height:40px;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-    }
 }
 
 @media screen and (min-width: 992px){
@@ -248,43 +76,5 @@
     .newsLine{
         /* color: lightgray; */
         color: red;
-    }
-    .caseCenterTitle{
-        background-color:blue; 
-        text-align:center;
-        line-height:40px;
-        height:40px;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-    }
-    .caseCenter{
-        padding: 2%;
-        border: solid 1px lightblue;
-        margin-bottom: 5%;
-    }
-    .caseItem{
-        background-color: bisque;
-        height: 60px;
-        margin-bottom: 3px;
-        border-radius: 3px;
-    }
-    .logoPic{
-        width: 25%;
-        height: 100%;
-        float: left;
-        background-color: rgb(168, 102, 141);
-        border-radius: 3px;
-    }
-    .caseContent{
-        width: 75%;
-        height: 100%;
-        /* background-color: rgb(212, 199, 199); */
-        float: left;
-        padding: 2%;
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-        /* font-weight: bold; */
     }
 }

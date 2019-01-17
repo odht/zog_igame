@@ -15,7 +15,7 @@ class NoneLayout extends Component{
 
                 {/* 页头 */}
                 <Header className={styles.header}>
-                    <Link to='/home'>
+                    <Link to='/homepage'>
                         <img className={styles.logo} src={logoPic} />
                     </Link>
                     

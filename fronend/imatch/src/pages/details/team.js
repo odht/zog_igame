@@ -7,18 +7,42 @@ import odoo from '@/odoo-rpc/odoo';
 
 
 const columns = [{
+	title: '队号',
+	dataIndex: 'id',
+	key: 'id',
+	align: 'center',
+	width: '7%'
+},{
 	title: '队名',
 	dataIndex: 'name',
 	key: 'name',
 	align: 'center',
-	width: 95
-}, {
-	title: '',
+	width: '16%'
+},{
+	title: '领队',
+	dataIndex: 'leader',
+	key: 'leader',
+	align: 'center',
+	width: '9%'
+},{
+	title: '教练',
+	dataIndex: 'coach',
+	key: 'coach',
+	align: 'center',
+	width: '9%'
+},{
+	title: '队员',
+	dataIndex: 'players',
+	key: 'players',
+	align: 'center',
+	width: '52%'
+},{
+	title: '编辑',
 	dataIndex: 'modify',
 	key: 'modify',
 	align: 'center',
-	width: 95,
-	render: () => (<a>修改名单</a>)
+	width: '7%',
+	render: () => (<a>编辑</a>)
 }];
 
 class Team extends Component {
@@ -32,10 +56,17 @@ class Team extends Component {
 	getData = async () => {
 		const { location: { state: { gameData: { team_ids } } },  } = this.props;
 		const fields={
-			name:null
+			name:null,
+			player_ids:{
+				id:null,
+				name:null,
+				role:null
+			},
 		}
 		const cls=odoo.env('og.team');
 		const dataSource=await cls.read(team_ids,fields);
+		console.log('====== 赛队数据 ------',dataSource);
+		
 		await this.setState({
 			dataSource,
 			loading:false

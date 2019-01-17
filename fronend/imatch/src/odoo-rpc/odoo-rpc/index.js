@@ -7,7 +7,7 @@ import mailMessageCreator from './mail.message'
 
 const create_env = ({models, creators, rpc, odoo} )=>{
     const env = {}
-    for(const mdl in models ){
+    for(const mdl in models ){        
         const fields = models[mdl]
         const creator = creators[mdl] || modelCreator
         const cls = creator({model: mdl, fields, rpc, env, odoo })
@@ -31,7 +31,7 @@ class Odoo {
             'mail.channel': mailChannelCreator ,
             'mail.message': mailMessageCreator
         }
-
+        console.log(models)
         this._env = create_env({
             models,
             creators: { ...base_creators, ...creators },
