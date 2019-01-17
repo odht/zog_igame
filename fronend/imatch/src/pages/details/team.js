@@ -65,7 +65,8 @@ class Team extends Component {
 		}
 		const cls=odoo.env('og.team');
 		const dataSource=await cls.read(team_ids,fields);
-		console.log(dataSource);
+		console.log('====== 赛队数据 ------',dataSource);
+		
 		await this.setState({
 			dataSource,
 			loading:false
