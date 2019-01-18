@@ -2,16 +2,17 @@ import React from 'react';
 import { Form, Input, Button, Select, Radio } from 'antd';
 import odoo from '@/odoo-rpc/odoo';
 import router from 'umi/router';
+import styles from './join.less';
 const Option = Select.Option;
 
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 2 },
+    sm: { span: 8 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 8 },
+    sm: { span: 16 },
   },
 };
 const tailFormItemLayout = {
@@ -98,122 +99,126 @@ class Join extends React.Component {
 
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Item
-          {...formItemLayout}
-          label="比赛名称"
-        >
-          {getFieldDecorator('gameName', {
-            rules: [{
-              required: true, message: 'Please input your E-mail!',
-            }],
-            initialValue: gameData.name,
-          })(
-            <Input disabled />
-          )}
-        </Form.Item>
-        <Form.Item
-          {...formItemLayout}
-          label="队名"
-        >
-          {getFieldDecorator('teamName', {
-            rules: [{
-              required: true, message: 'Please input your E-mail!',
-            }],
-          })(
-            <Input />
-          )}
-        </Form.Item>
-        <Form.Item
-          {...formItemLayout}
-          label="领队"
-        >
-          {getFieldDecorator('leader', {
-            rules: [{
-              required: true, message: '请选择领队',
-            }],
-          })(
-            <Select
-              showSearch
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-              {children}
-            </Select>
-          )}
-        </Form.Item>
-        <Form.Item
-          {...formItemLayout}
-          label="教练"
-        >
-          {getFieldDecorator('coach', {
-            rules: [{
-              required: true, message: '请选择教练',
-            }],
-          })(
-            <Select
-              showSearch
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-              {children}
-            </Select>
-          )}
-        </Form.Item>
-        <Form.Item
-          {...formItemLayout}
-          label="队员"
-        >
-          {getFieldDecorator('players', {
-          })(
-            <Select
-              mode="multiple"
-              style={{ width: '100%' }}
-            >
-              {children}
-            </Select>
-          )}
-        </Form.Item>
-        <Form.Item
-          {...formItemLayout}
-          label="联系人"
-        >
-          {getFieldDecorator('xxxx', {
-            rules: [{
-              required: true, message: 'Please input your E-mail!',
-            }],
-          })(
-            <Input />
-          )}
-        </Form.Item>
-        <Form.Item
-          {...formItemLayout}
-          label="电话"
-        >
-          {getFieldDecorator('phone', {
-            rules: [{
-              required: true, message: 'Please input your E-mail!',
-            }],
-          })(
-            <Input />
-          )}
-        </Form.Item>
-        <Form.Item
-          {...formItemLayout}
-          label="Email"
-        >
-          {getFieldDecorator('email', {
-            rules: [{
-              type: 'email', message: 'The input is not valid E-mail!',
-            }, {
-              required: true, message: 'Please input your E-mail!',
-            }],
-          })(
-            <Input />
-          )}
-        </Form.Item>
-        <Form.Item {...tailFormItemLayout}>
-          <Button htmlType="submit" type="primary">提交</Button>
-        </Form.Item>
-      </Form>
+      <div className={styles.formBox}>
+        <Form onSubmit={this.handleSubmit} >
+          <Form.Item
+            {...formItemLayout}
+            label="比赛名称"
+          >
+            {getFieldDecorator('gameName', {
+              rules: [{
+                required: true, message: 'Please input your E-mail!',
+              }],
+              initialValue: gameData.name,
+            })(
+              <Input disabled style={{maxWidth:'300px'}}/>
+            )}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="队名"
+          >
+            {getFieldDecorator('teamName', {
+              rules: [{
+                required: true, message: 'Please input your E-mail!',
+              }],
+            })(
+              <Input style={{maxWidth:'300px'}} />
+            )}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="领队"
+          >
+            {getFieldDecorator('leader', {
+              rules: [{
+                required: true, message: '请选择领队',
+              }],
+            })(
+              <Select
+                showSearch
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                style={{maxWidth:'300px'}}
+              >
+                {children}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="教练"
+          >
+            {getFieldDecorator('coach', {
+              rules: [{
+                required: true, message: '请选择教练',
+              }],
+            })(
+              <Select
+                showSearch
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                style={{maxWidth:'300px'}}
+              >
+                {children}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="队员"
+          >
+            {getFieldDecorator('players', {
+            })(
+              <Select
+                mode="multiple"
+                style={{maxWidth:'300px'}}
+              >
+                {children}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="联系人"
+          >
+            {getFieldDecorator('xxxx', {
+              rules: [{
+                required: true, message: 'Please input your E-mail!',
+              }],
+            })(
+              <Input style={{maxWidth:'300px'}} />
+            )}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="电话"
+          >
+            {getFieldDecorator('phone', {
+              rules: [{
+                required: true, message: 'Please input your E-mail!',
+              }],
+            })(
+              <Input style={{maxWidth:'300px'}} />
+            )}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="Email"
+          >
+            {getFieldDecorator('email', {
+              rules: [{
+                type: 'email', message: 'The input is not valid E-mail!',
+              }, {
+                required: true, message: 'Please input your E-mail!',
+              }],
+            })(
+              <Input style={{maxWidth:'300px'}} />
+            )}
+          </Form.Item>
+          <Form.Item {...tailFormItemLayout}>
+            <Button htmlType="submit" type="primary">提交</Button>
+          </Form.Item>
+        </Form>
+      </div>  
     );
   }
 }
