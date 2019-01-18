@@ -5,6 +5,7 @@ import { Layout, Row, Col, Menu, Dropdown, Button, Drawer, Icon } from 'antd';
 import GlobalNavi from '../component/GlobalNavi';
 import styles from './HomeLayout.css'
 import logoPic from '../assets/zhiSaiLogo.png';
+import logIn from '../assets/logIn.png';
 import logOut from '../assets/logOut.png';
 import * as routes from '../common/navigationRoutes';
 import { Link } from 'dva/router';
@@ -54,12 +55,12 @@ class SubmitInfo extends React.Component {
     }
 }
 
-class BasicLayout extends Component {
+class HomeLayout extends Component {
 
     constructor(props) {
         super(props); console.log(props);
         this.state = {
-            avatar: this.props.loginForm.avatar,
+            // avatar: this.props.loginForm.avatar,
             inOutState: this.props.loginForm.inOutState,
             numTool: 0,
             numMess: -100,
@@ -118,7 +119,7 @@ class BasicLayout extends Component {
 
             <Dropdown className={styles.dropDown} placement="bottomLeft" overlay={menu} trigger={['click']}>
                 <a className="ant-dropdown-link" href="#">
-                    <img className={styles.userPic} src={this.state.avatar} />
+                    <img className={styles.userPic} src={logIn} />
                 </a>
             </Dropdown>
             :
@@ -176,12 +177,12 @@ class BasicLayout extends Component {
 }
 
 
-// export default BasicLayout;
+// export default HomeLayout;
 
 const mapStateToProps = ({ login_m }) => {
-    console.log(login_m);
+    // console.log(login_m);
     return { loginForm: login_m }
 }
 
 
-export default connect(mapStateToProps)(BasicLayout);
+export default connect(mapStateToProps)(HomeLayout);

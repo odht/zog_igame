@@ -3,7 +3,6 @@ import {Row, Col , Card, List, Icon} from "antd";
 import { Link } from 'dva/router';
 import styles from './index.css';
 import culturePic from '../../assets/culture.jpg';
-import logoPic from '../../assets/logo1.png';
 import IndexCarousel from '../../component/IndexCarousel'
 
 

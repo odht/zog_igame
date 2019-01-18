@@ -3,7 +3,6 @@ import { Card,List, Avatar } from 'antd';
 import styles from './index.less';
 import culturePic from '../../assets/culture.jpg';
 import logoPic from '../../assets/icon.png';
-import logo from '../../assets/logo1.png'
 import { Link } from 'dva/router';
 
 

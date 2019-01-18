@@ -7,6 +7,7 @@ import 'ant-design-pro/dist/ant-design-pro.css'; // 统一引入样式
 import Login from 'ant-design-pro/lib/Login';
 import logoPic from '../../../assets/BridgeLogo.png';
 import router from 'umi/router';
+import {connect} from 'dva';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
@@ -23,13 +24,13 @@ class UserBlock extends Component {
         lAccount: '',
         pwd: ''
     }
-    // 账号密码错误弹窗
-    showModal() {
-        console.log('显示弹窗。。。。。。');
-        this.props.dispatch({
-            type: 'login_m/showModal'
-        });
-    }
+    // // 账号密码错误弹窗
+    // showModal() {
+    //     console.log('显示弹窗。。。。。。');
+    //     this.props.dispatch({
+    //         type: 'login_m/showModal'
+    //     });
+    // }
     handleOk(e) {
         console.log('选择确认-----', e);
         this.props.dispatch({
@@ -43,17 +44,18 @@ class UserBlock extends Component {
         });
     }
 
-    login = async (values) => {
-        const session_id = await odoo.login(values);
-        const me = await odoo.me({ id: null, partner_id: { id: null, name: null } });
-        const { partner_id: { id: partner_id }, id } = me.look({ id: null, partner_id: { id: null, name: null } });
-        if (session_id) {
-            localStorage.setItem('uid', id);
-            localStorage.setItem('sid', session_id);
-            localStorage.setItem('patId', partner_id);
-            router.push('/');
-        }
-    }
+    // login = async (values) => {
+    //     const session_id = await odoo.login(values);
+    //     const me = await odoo.me({ id: null, partner_id: { id: null, name: null } });
+    //     const { partner_id: { id: partner_id }, id } = me.look({ id: null, partner_id: { id: null, name: null } });
+    //     if (session_id) {
+    //         localStorage.setItem('uid', id);
+    //         localStorage.setItem('sid', session_id);
+    //         localStorage.setItem('patId', partner_id);
+    //         router.push('/');
+    //         console.log('---- localStorage ----',localStorage);
+    //     }
+    // }
     //登录操作
     onSubmit = (err, values) => {
         console.log('value collected ----->', { ...values, autoLogin: this.state.autoLogin });
@@ -65,10 +67,14 @@ class UserBlock extends Component {
                 () => {
                     console.log('--- value判断 ----', values, '???', err);
                     if (!err) {
-                        this.login(values);
+                        // this.login(values);
                         this.setState({
-                            lAccount: values.account,
+                            lAccount: values.login,
                             pwd: values.password
+                        });
+                        this.props.dispatch({
+                            type:'login_m/login',
+                            payload:{login:values.login, password:values.password}
                         });
                     }
                 }
@@ -161,6 +167,7 @@ class UserBlock extends Component {
                         <Modal
                             title="提示"
                             centered
+                            visible={this.props.loginForm.modalVisible}
                             onOk={this.handleOk.bind(this)}
                             onCancel={this.handleCancel.bind(this)}
                             okText="确定"
@@ -180,4 +187,11 @@ class UserBlock extends Component {
 
 
 
-export default UserBlock;
+const mapStateToProps =({login_m}) =>{
+
+    console.log('----- login_m ------',login_m);
+    return{loginForm:login_m}
+}
+
+
+export default connect(mapStateToProps)(UserBlock);

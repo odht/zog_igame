@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
 import { Link } from 'dva/router';
+// import GeographicView from './GeographicView.js';
 import styles from './index.less';
 import router from 'umi/router';
 import odoo from '@/odoo-rpc/odoo';
@@ -8,29 +9,29 @@ import odoo from '@/odoo-rpc/odoo';
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 
-const residences = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'HangzhouHangzhouHangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West LakeLakeLakeLake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
+// const residences = [{
+//     value: 'zhejiang',
+//     label: 'Zhejiang',
+//     children: [{
+//         value: 'hangzhou',
+//         label: 'HangzhouHangzhouHangzhou',
+//         children: [{
+//             value: 'xihu',
+//             label: 'West LakeLakeLakeLake',
+//         }],
+//     }],
+// }, {
+//     value: 'jiangsu',
+//     label: 'Jiangsu',
+//     children: [{
+//         value: 'nanjing',
+//         label: 'Nanjing',
+//         children: [{
+//             value: 'zhonghuamen',
+//             label: 'Zhong Hua Men',
+//         }],
+//     }],
+// }];
 
 class RegisterBlock extends Component {
 
@@ -43,7 +44,7 @@ class RegisterBlock extends Component {
     createUser = async (values) => {
         const users = await odoo._rpc.register(values);
         if (users.code === 0) {
-            router.push('/');
+            router.push('/user/login');
         }
     }
 
@@ -95,11 +96,11 @@ class RegisterBlock extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 6 },
+                sm: { span: 8 },
             },
             wrapperCol: {
                 xs: { span: 2 },
-                sm: { span: 18 },
+                sm: { span: 16 },
             },
         };
         const prefixSelector = getFieldDecorator('prefix', {
@@ -121,7 +122,11 @@ class RegisterBlock extends Component {
                         label="昵称"
                     >
                         {getFieldDecorator('login', {
-                            rules: [{ required: true, message: '请填写您的昵称!', whitespace: true }],
+                            rules: [{ 
+                                required: true, 
+                                message: '请填写您的昵称!', 
+                                whitespace: true 
+                            }],
                         })(
                             <Input style={{ width: '85%', maxWidth: '300px' }} />
                         )}
@@ -132,16 +137,19 @@ class RegisterBlock extends Component {
                         label={(
                             <span>
                                 密码&nbsp;
-                        <Tooltip title="密码是6~12位字母和数字组合，字母区分大小写">
+                                <Tooltip title="密码是6~12位字母和数字组合，字母区分大小写">
                                     <Icon type='question-circle-o'></Icon>
                                 </Tooltip>
                             </span>
                         )}
                     >
                         {getFieldDecorator('password', {
-                            rules: [
-                                { required: true, message: '请填写您的密码!' },
-                                { validator: this.validateToNextPassword, }],
+                            rules: [{   
+                                    required: true, 
+                                    message: '请填写您的密码!', 
+                                    validator: this.validateToNextPassword,
+                                    whitespace: true
+                            }],
                         })(
                             <Input type="password" style={{ width: '85%', maxWidth: '300px' }} />
                         )}
@@ -151,11 +159,18 @@ class RegisterBlock extends Component {
                         label="确认密码"
                     >
                         {getFieldDecorator('confirm', {
-                            rules: [
-                                { required: true, message: '请再次确认您的密码!', },
-                                { validator: this.compareToFirstPassword, }],
+                            rules: [{ 
+                                    required: true, 
+                                    message: '请再次确认您的密码!', 
+                                    validator: this.compareToFirstPassword, 
+                                    whitespace: true
+                            }],
                         })(
-                            <Input type="password" onBlur={this.handleConfirmBlur} style={{ width: '85%', maxWidth: '300px' }} />
+                            <Input 
+                                type="password" 
+                                onBlur={this.handleConfirmBlur} 
+                                style={{ width: '85%', maxWidth: '300px' }} 
+                            />
                         )}
                     </Form.Item>
 
@@ -165,33 +180,82 @@ class RegisterBlock extends Component {
                     >
                         {getFieldDecorator('email', {
                             rules: [{
-                                type: 'email', message: '邮箱格式错误!',
-                            }, {
-                                required: false, message: '请填写您的邮箱!',
+                                type: 'email', 
+                                message: '邮箱格式错误!',
+                                required: false, 
+                                message: '请填写您的邮箱!', 
+                                whitespace: true
                             }],
                         })(
                             <Input style={{ width: '85%', maxWidth: '300px' }} />
                         )}
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         {...formItemLayout}
-                        label="住址"
+                        label="省市区"
                     >
                         {getFieldDecorator('residence', {
                             initialValue: ['zhejiang', 'hangzhou', 'xihu'],
-                            rules: [{ type: 'array', required: true, message: '请填写您的住址!' }],
+                            rules: [{ 
+                                type: 'array', 
+                                required: true, 
+                                message: '请填写您所在的省市区!',  
+                                whitespace: true 
+                            }],
                         })(
-                            <Cascader options={residences} style={{ width: '85%', maxWidth: '300px' }} />
+                            <GeographicView
+                                style={{ width: '100%', maxWidth: '300px' }} 
+                            />
                         )}
                     </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="街道"
+                    >
+                        {getFieldDecorator('street', {
+                            rules: [{ 
+                                required: true, 
+                                message: '请填写您的街道!', 
+                                whitespace: true 
+                            }],
+                        })(
+                            <Input style={{ width: '85%', maxWidth: '300px' }} />
+                        )}
+                    </Form.Item> */}
+                    {/* <Form.Item
+                        {...formItemLayout}
+                        label="省市区"
+                    >
+                        {getFieldDecorator('residence', {
+                            initialValue: ['zhejiang', 'hangzhou', 'xihu'],
+                            rules: [{ 
+                                type: 'array', 
+                                required: true, 
+                                message: '请填写您的住址!',  
+                                whitespace: true 
+                            }],
+                        })(
+                            <Cascader 
+                                options={residences} 
+                                style={{ width: '85%', maxWidth: '300px' }} 
+                            />
+                        )}
+                    </Form.Item> */}
                     <Form.Item
                         {...formItemLayout}
                         label="手机号"
                     >
                         {getFieldDecorator('phone', {
-                            rules: [{ required: true, message: '请填写您的手机号!' }],
+                            rules: [{ 
+                                required: true, 
+                                message: '请填写您的手机号!', 
+                                whitespace: true 
+                            }],
                         })(
-                            <Input addonBefore={prefixSelector} style={{ width: '85%', maxWidth: '300px' }} />
+                            <Input 
+                                addonBefore={prefixSelector} 
+                                style={{ width: '85%', maxWidth: '300px' }} 
+                            />
                         )}
                     </Form.Item>
                     <Form.Item
@@ -200,11 +264,17 @@ class RegisterBlock extends Component {
                         extra="请填写从手机获取的短信验证码."
                     >
                         {getFieldDecorator('captcha', {
-                            rules: [{ required: true, message: '请填写验证码!' }],
+                            rules: [{ 
+                                required: true, 
+                                message: '请填写验证码!', 
+                                whitespace: true 
+                            }],
                         })(
                             <Input style={{ width: '55%', maxWidth: '190px' }} />
                         )}
-                        <Button style={{ width: '90px', marginLeft: '8px', fontSize: '10px' }}>获取验证码</Button>
+                        <Button style={{ width: '90px', marginLeft: '8px', fontSize: '10px' }}>
+                            获取验证码
+                        </Button>
                     </Form.Item>
                     <Form.Item
                         style={{ textAlign: 'center' }}
@@ -214,7 +284,7 @@ class RegisterBlock extends Component {
                         })(
                             <Checkbox style={{ fontSize: '12px' }}>
                                 我已经阅读并且同意
-                        <Link to="/user/userAgreement">智赛棋牌用户协议</Link>
+                                <Link to="/user/userAgreement">智赛棋牌用户协议</Link>
                             </Checkbox>
                         )}
                     </Form.Item>
@@ -227,7 +297,7 @@ class RegisterBlock extends Component {
                             htmlType="submit"
                         >
                             注册
-                </Button>
+                        </Button>
                     </Form.Item>
                 </Form>
             </div>

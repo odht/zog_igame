@@ -1,6 +1,8 @@
 import {loginService} from '@/services/api';
-import {routerRedux} from 'dva/router';
+// import {routerRedux} from 'dva/router';
 import logOut from '@/assets/logOut.png';
+import odoo from '@/odoo-rpc/odoo';
+import router from 'umi/router';
 
 
 export default {
@@ -8,31 +10,34 @@ export default {
     namespace:"login_m",
     state:{
       modalVisible:false,
-      avatar:logOut,
+      // avatar:logOut,
       inOutState:false,
       userInfo:{ }
     },
 
     effects:{
-        *login({payload},{call,put}){
-            console.log('effects:payload:  -----',payload);
-            let loginData = yield call(loginService,{...payload,method:'accountLogin'});
-            console.log('--------loginData：',loginData);
-            if (loginData.success === true) {
-              yield put({
-                type:'save',
-                payload:loginData
-              }),
-              yield put(
-                routerRedux.push({
-                  pathname:'../home'
-                })
-              )
-            } else {
-              console.log('===== ShowModal =====');
-              yield put({type:'showModal'});
-            }
-        },
+      *login ({payload}, {call, put}) {
+        const session_id = yield odoo.login(payload);
+        console.log('----- login-payload -----',payload, session_id);
+        
+        if (session_id) {
+          const me = yield odoo.me({ id: null, partner_id: { id: null, name: null } });
+          const { partner_id: { id: partner_id }, id } = yield me.look({ id: null, partner_id: { id: null, name: null } });
+          yield put({
+            type:'save',
+            payload:session_id
+          }),
+          yield put(
+            localStorage.setItem('uid', id),
+            localStorage.setItem('sid', session_id),
+            localStorage.setItem('patId', partner_id),
+            router.push('/')
+          )
+        } else {
+          console.log('===== ShowModal =====');
+          yield put({type:'showModal'});
+        }
+      },
         *logout({payload},{call,put}){
           console.log('--------logout -----',payload);
             yield put({
@@ -53,12 +58,12 @@ export default {
             }
         },
         save(state,{payload}){
-          console.log('login-M----payload------',payload.userData[0].avatar);
+          console.log('login-M----payload save ------',payload);
             return {
               ...state,
-              avatar:payload.userData[0].userInfo.avatar,
+              // avatar:payload.userData[0].userInfo.avatar,
               inOutState:true,
-              userInfo:payload.userData[0].userInfo
+              // userInfo:payload.userData[0].userInfo
             }
         },
         showModal(state) {
