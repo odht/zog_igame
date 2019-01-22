@@ -35,8 +35,9 @@ class OdooRpc {
         })
         .then(res => res.json())
         .catch(error => {
+            alert('网络错误！请刷新！');
             this.error()
-            throw error;            
+            throw error;      
         })
         .then(response => {
             if(response){
