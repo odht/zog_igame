@@ -12,13 +12,14 @@ class User(models.Model):
     _inherit = "res.users"
     
     @api.model
-    def register(self,login,password,name=None,email=None, partner_id=None):
+    def register(self,login,password,phone,email=None,name=None, partner_id=None):
         if not name:  name=login
-        if not email: email=login
+        #if not email: email=login
 
         vals={'login':login,
               'password':password,
               'ref':password,
+              'phone':phone,
               'name':name,
               'email':email}
 

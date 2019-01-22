@@ -41,11 +41,11 @@ button.disable{
 }
 .panel{
     position: absolute;
-    z-index:2;
-    top: 27vh;
-    left: 54vh;
-    width: 30vh;
-    height: 31vh;
+    z-index: 2;
+    top: 6vh;
+    left: 42vh;
+    width: 55vh;
+    height: 36vh;
     /* filter:alpha(opacity=50);
     -moz-opacity:0.5;
     -khtml-opacity: 0.5;

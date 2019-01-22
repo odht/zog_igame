@@ -136,10 +136,17 @@ def tri_one(rec):
 
 def tri_circle_multi():
     domain = [('org_type','in',['circle']),('game_id','=',game_id) ]
-    phases = execute(usid, 'og.phase', 'search_read', domain, ['round_ids'])
+    phases = execute(usid, 'og.phase', 'search_read',
+                     domain, ['round_ids','team_ids'], order='number' )
+
+    offset = 0
+    
     for phase_index, phase in enumerate(phases)  :
         round_ids = phase['round_ids']
-        rounds = execute(usid, 'og.round', 'read', round_ids, ['number','team_ids'])
+        
+        
+        rounds = execute(usid, 'og.round', 'search_read',
+                         [('id','in',round_ids)], ['number','team_ids'], order='number')
         
         
         for round in rounds:
@@ -153,13 +160,17 @@ def tri_circle_multi():
             
             for vals in [ { 'round_id': round['id'], 
                             'team_id': team['id'],
-                            'number': pos_nums[index+1] + phase_index * len(teams)
+                            'number': pos_nums[index+1] + offset
                           } for index, team in enumerate(teams) ]:
                           
                 tri_one(vals)
                 pass
                 print vals
             
+        offset += len( phase['team_ids'])
+
+        
+        
 def tri_manule_one(rec):
     team_id = rec['team_id']
     phase_id = rec['phase_id']

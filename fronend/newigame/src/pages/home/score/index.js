@@ -46,9 +46,10 @@ export default class Home extends Component {
 
     //提交全部成绩
     handleSbumitScore = () => {
-        this.props.dispatch({
+        const { dispatch, location: { query: { table_id } } } = this.props;
+        dispatch({
             type: "ogTable/write",
-            payload: { vals: { state: "done" } }
+            payload: { id: parseInt(table_id),vals: { state: "done" } }
         }).then(() => {
             notification.config({
                 placement: "topLeft",
@@ -132,10 +133,7 @@ export default class Home extends Component {
         const { boardData, isAdmin, tableData, loading } = this.state;
         let name
         if (tableData.round_id) {
-            let nameArr = tableData.name.split(',');
-            let roomType = nameArr[0] === "open" ? '开室' : '闭室';
-            let vsNumber = nameArr[2];
-            name = `${roomType} , ${vsNumber}`
+            name = tableData.name
         }
         if (boardData && boardData.length > 0) {
             scoringData = boardData.sort((currentVal, nextVal) => { return currentVal.id - nextVal.id });
@@ -167,7 +165,7 @@ export default class Home extends Component {
         return (
             <div>
                 <div className={styles.headerTitle}>
-                    <h1 className={styles.headerTitleText}>计分表（{tableData.round_id ? `${tableData.round_id[1]},${name}` : ''}）</h1>
+                    <h1 className={styles.headerTitleText}>计分表（{tableData.round_id ? name: ''}）</h1>
                 </div>
                 <div style={{ background: '#fff' }}>
                     <Scoringtable

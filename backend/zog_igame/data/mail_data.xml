@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mt_og_table" model="mail.message.subtype">
+            <field name="name">Table Message</field>
+            <field name="sequence" eval="0"/>
+        </record>
+        
+        <record id="mt_og_board" model="mail.message.subtype">
+            <field name="name">Board Message</field>
+            <field name="sequence" eval="0"/>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,5 +1,7 @@
 # coding: utf-8 -*- coding: UTF-8 -*-
-from rpc import get_user, search_one, find
+from rpc import get_user,execute
+from tools import search_one, find
+import json
 
 
 def read_deal(file_name):
@@ -70,6 +72,22 @@ def og_deal_update_one(rec):
     print id
     if id:
         #print execute(usid, model, 'read', id)
+
+        deal = execute(usid, model, 'read', id, ['board_ids','cards'])[0]
+        cards = json.loads(deal['cards'] )
+
+        def fn(card):
+            card['number'] = 0
+            return card
+        
+        cards = json.dumps([ fn(card) for card in cards ])
+
+        for board_id in deal['board_ids']:
+            find('og.board',[['id','=',board_id]],{'cards':cards})
+
+        #execute(usid, 'og.board', 'write', deal['board_ids'], cards )
+
+
         pass
 
 

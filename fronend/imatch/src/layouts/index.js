@@ -1,59 +1,32 @@
-import React, { Component } from 'react';
-import BasicLayout from './BasicLayout';
-import DetailsLayout from './DetailsLayout';
-import UserLayout from './UserLayout';
-import HomeLayout from './HomeLayout';
-import { connect } from 'dva';
-import { LocaleProvider } from 'antd';
-import zhCN from 'antd/lib/locale-provider/zh_CN';
+import styles from './index.css';
+import React from 'react';
+import HomeLayout from './HomeLayout.js';
+import NoneLayout from './NoneLayout.js';
+import DetailsLayout from './DetailsLayout.js';
 
-class HomeIndex extends Component {
+function Layout(props) {
+    console.log('---------rootProps',props);
+    const { location:{ pathname } } = props;
 
-  state = {
-    sid: ''
-  }
-  componentWillMount() {
-    const { dispatch } = this.props;
-
-    if (!this.state.sid) {
-      dispatch({
-        type: "login/login",
-        payload: { login: 'admin', password: '123', type: 'account' }
-      }).then(() => {
-        this.setState({
-          sid: this.props.login.sid,
-        })
-      })
-    }
-  }
-  render() {
-    const { location: { pathname } } = this.props;
-    const router = '/' + pathname.split('/')[1];
-    const { sid } = this.state;
-
-    if (sid) {
-      if (router === '/details') {
-        return (
-          <LocaleProvider locale={zhCN}>
-            <DetailsLayout  {...this.props}>{this.props.children}</DetailsLayout>
-          </LocaleProvider>
-        )
-      }
-
-      if (router === '/user') {
-        return <UserLayout {...this.props}>{this.props.children}</UserLayout>
-      }
-      if (router === '/home') {
-        return <HomeLayout {...this.props}>{this.props.children}</HomeLayout>
-      }
-      return (
-        <LocaleProvider locale={zhCN}>
-          <BasicLayout {...this.props}>{this.props.children}</BasicLayout>
-        </LocaleProvider>
+    if (pathname.indexOf('/user') >-1) {
+      return(
+        <NoneLayout { ...props }> {props.children} </NoneLayout>
       )
-    } else {
-      return <div>正在加载</div>
+    } else if(pathname === '/homepage' ||pathname === '/news'||pathname === '/games'||pathname === '/teaching') {
+      return(
+        <HomeLayout { ...props }> {props.children} </HomeLayout> 
+      );
+    } else if (pathname.indexOf('/details') >-1) {
+      return(
+        <DetailsLayout { ...props }> {props.children} </DetailsLayout>
+      )
+    }{
+      return(
+        <HomeLayout { ...props }> {props.children} </HomeLayout>
+      );
     }
-  }
 }
-export default connect(({ login }) => ({ login }))(HomeIndex)
+
+
+export default Layout;
+
