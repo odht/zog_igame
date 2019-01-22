@@ -89,10 +89,10 @@ class JsonApi(http.Controller):
         return ret
 
     @http.route('/json/user/register',type='json', auth='none', cors='*', csrf=False )
-    def register(self,db,login,password):
+    def register(self,db,login,password,phone,email):
         with registry(db).cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, {})
-            return env['res.users'].register(login,password)
+            return env['res.users'].register(login,password,phone,email)
 
     @http.route('/json/user/reset/password',type='json', auth='none', cors='*', csrf=False )
     def reset_psw(self,db,login,password):
