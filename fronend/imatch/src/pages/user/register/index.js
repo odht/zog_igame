@@ -9,29 +9,6 @@ import odoo from '@/odoo-rpc/odoo';
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 
-// const residences = [{
-//     value: 'zhejiang',
-//     label: 'Zhejiang',
-//     children: [{
-//         value: 'hangzhou',
-//         label: 'HangzhouHangzhouHangzhou',
-//         children: [{
-//             value: 'xihu',
-//             label: 'West LakeLakeLakeLake',
-//         }],
-//     }],
-// }, {
-//     value: 'jiangsu',
-//     label: 'Jiangsu',
-//     children: [{
-//         value: 'nanjing',
-//         label: 'Nanjing',
-//         children: [{
-//             value: 'zhonghuamen',
-//             label: 'Zhong Hua Men',
-//         }],
-//     }],
-// }];
 
 class RegisterBlock extends Component {
 
@@ -43,12 +20,14 @@ class RegisterBlock extends Component {
     // 创建用户
     createUser = async (values) => {
         const users = await odoo._rpc.register(values);
+        console.log('--- createUser ---',users,values);
         if (users.code === 0) {
             router.push('/user/login');
         }
     }
 
     handleSubmit = (e) => {
+        console.log(e);
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
@@ -108,7 +87,7 @@ class RegisterBlock extends Component {
         })(
             <Select style={{ width: 70 }}>
                 <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
+                
             </Select>
         );
 
@@ -124,7 +103,7 @@ class RegisterBlock extends Component {
                         {getFieldDecorator('login', {
                             rules: [{ 
                                 required: true, 
-                                message: '请填写您的昵称!', 
+                                message: '请填写您的昵称 ^v^', 
                                 whitespace: true 
                             }],
                         })(
@@ -146,9 +125,10 @@ class RegisterBlock extends Component {
                         {getFieldDecorator('password', {
                             rules: [{   
                                     required: true, 
-                                    message: '请填写您的密码!', 
-                                    validator: this.validateToNextPassword,
+                                    message: '请填写您的密码 ^v^', 
                                     whitespace: true
+                            },{
+                                validator: this.validateToNextPassword,
                             }],
                         })(
                             <Input type="password" style={{ width: '85%', maxWidth: '300px' }} />
@@ -161,7 +141,7 @@ class RegisterBlock extends Component {
                         {getFieldDecorator('confirm', {
                             rules: [{ 
                                     required: true, 
-                                    message: '请再次确认您的密码!', 
+                                    message: '请再次确认您的密码 ^v^', 
                                     validator: this.compareToFirstPassword, 
                                     whitespace: true
                             }],
@@ -181,9 +161,8 @@ class RegisterBlock extends Component {
                         {getFieldDecorator('email', {
                             rules: [{
                                 type: 'email', 
-                                message: '邮箱格式错误!',
+                                message: '邮箱格式错误 ^v^',
                                 required: false, 
-                                message: '请填写您的邮箱!', 
                                 whitespace: true
                             }],
                         })(
@@ -199,7 +178,7 @@ class RegisterBlock extends Component {
                             rules: [{ 
                                 type: 'array', 
                                 required: true, 
-                                message: '请填写您所在的省市区!',  
+                                message: '请填写您所在的省市区 ^v^',  
                                 whitespace: true 
                             }],
                         })(
@@ -215,7 +194,7 @@ class RegisterBlock extends Component {
                         {getFieldDecorator('street', {
                             rules: [{ 
                                 required: true, 
-                                message: '请填写您的街道!', 
+                                message: '请填写您的街道 ^v^', 
                                 whitespace: true 
                             }],
                         })(
@@ -231,7 +210,7 @@ class RegisterBlock extends Component {
                             rules: [{ 
                                 type: 'array', 
                                 required: true, 
-                                message: '请填写您的住址!',  
+                                message: '请填写您的住址 ^v^',  
                                 whitespace: true 
                             }],
                         })(
@@ -246,11 +225,14 @@ class RegisterBlock extends Component {
                         label="手机号"
                     >
                         {getFieldDecorator('phone', {
-                            rules: [{ 
-                                required: true, 
-                                message: '请填写您的手机号!', 
-                                whitespace: true 
-                            }],
+                            rules: [{
+                                    required: true,
+                                    message: '请输入您的手机号 ^v^',
+                                },
+                                {
+                                    pattern: /^\d{11}$/,
+                                    message: '手机号格式错误 ^v^',
+                                },],
                         })(
                             <Input 
                                 addonBefore={prefixSelector} 
@@ -266,7 +248,7 @@ class RegisterBlock extends Component {
                         {getFieldDecorator('captcha', {
                             rules: [{ 
                                 required: true, 
-                                message: '请填写验证码!', 
+                                message: '请填写验证码 ^v^', 
                                 whitespace: true 
                             }],
                         })(
@@ -281,6 +263,10 @@ class RegisterBlock extends Component {
                     >
                         {getFieldDecorator('agreement', {
                             valuePropName: 'checked',
+                            rules:[{
+                                required:true,
+                                message: '您还没有阅读并同意我们的协议 ^v^'
+                            }]
                         })(
                             <Checkbox style={{ fontSize: '12px' }}>
                                 我已经阅读并且同意

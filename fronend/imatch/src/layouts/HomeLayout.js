@@ -102,7 +102,7 @@ class HomeLayout extends Component {
         // alert(this.state.inOutState === true);
         // 用户图标
         const menu = (
-            <Menu className={styles.dropDownMenu}>
+            <Menu>
                 <Menu.Item>
                     <Link to="user/userInfo" style={{ color: '#888888' }}>个人信息</Link>
                 </Menu.Item>
@@ -118,7 +118,7 @@ class HomeLayout extends Component {
         const userAvatar = this.props.loginForm.inOutState === true ?
 
             <Dropdown className={styles.dropDown} placement="bottomLeft" overlay={menu} trigger={['click']}>
-                <a className="ant-dropdown-link" href="#">
+                <a href="#">
                     <img className={styles.userPic} src={logIn} />
                 </a>
             </Dropdown>

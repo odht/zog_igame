@@ -5,26 +5,15 @@ import router from 'umi/router';
 import styles from './join.less';
 const Option = Select.Option;
 
+
 const formItemLayout = {
   labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
+      xs: { span: 24 },
+      sm: { span: 8 },
   },
   wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
+      xs: { span: 2 },
+      sm: { span: 16 },
   },
 };
 
@@ -107,11 +96,11 @@ class Join extends React.Component {
           >
             {getFieldDecorator('gameName', {
               rules: [{
-                required: true, message: 'Please input your E-mail!',
+                required: true, message: '请输入您的比赛名称 ^v^',
               }],
-              initialValue: gameData.name,
+              initialValue: gameData.gameName,
             })(
-              <Input disabled style={{maxWidth:'300px'}}/>
+              <Input disabled style={{ width: '85%', maxWidth: '300px' }}/>
             )}
           </Form.Item>
           <Form.Item
@@ -120,10 +109,10 @@ class Join extends React.Component {
           >
             {getFieldDecorator('teamName', {
               rules: [{
-                required: true, message: 'Please input your E-mail!',
+                required: true, message: '请输入您的队伍名称 ^v^',
               }],
             })(
-              <Input style={{maxWidth:'300px'}} />
+              <Input style={{ width: '85%', maxWidth: '300px' }} />
             )}
           </Form.Item>
           <Form.Item
@@ -132,13 +121,13 @@ class Join extends React.Component {
           >
             {getFieldDecorator('leader', {
               rules: [{
-                required: true, message: '请选择领队',
+                required: true, message: '请选择领队 ^v^',
               }],
             })(
               <Select
                 showSearch
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                style={{maxWidth:'300px'}}
+                style={{ width: '85%', maxWidth: '300px' }}
               >
                 {children}
               </Select>
@@ -150,13 +139,13 @@ class Join extends React.Component {
           >
             {getFieldDecorator('coach', {
               rules: [{
-                required: true, message: '请选择教练',
+                required: true, message: '请选择教练 ^v^',
               }],
             })(
               <Select
                 showSearch
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                style={{maxWidth:'300px'}}
+                style={{ width: '85%', maxWidth: '300px' }}
               >
                 {children}
               </Select>
@@ -167,10 +156,13 @@ class Join extends React.Component {
             label="队员"
           >
             {getFieldDecorator('players', {
+              rules: [{
+                required: true, message: '请选择队员 ^v^',
+              }],
             })(
               <Select
                 mode="multiple"
-                style={{maxWidth:'300px'}}
+                style={{ width: '85%', maxWidth: '300px' }}
               >
                 {children}
               </Select>
@@ -180,12 +172,12 @@ class Join extends React.Component {
             {...formItemLayout}
             label="联系人"
           >
-            {getFieldDecorator('xxxx', {
+            {getFieldDecorator('linkman', {
               rules: [{
-                required: true, message: 'Please input your E-mail!',
+                required: true, message: '请选择赛队联系人 ^v^',
               }],
             })(
-              <Input style={{maxWidth:'300px'}} />
+              <Input style={{ width: '85%', maxWidth: '300px' }} />
             )}
           </Form.Item>
           <Form.Item
@@ -194,10 +186,10 @@ class Join extends React.Component {
           >
             {getFieldDecorator('phone', {
               rules: [{
-                required: true, message: 'Please input your E-mail!',
+                required: true, message: '请输入联系人手机号 ^v^',
               }],
             })(
-              <Input style={{maxWidth:'300px'}} />
+              <Input style={{ width: '85%', maxWidth: '300px' }} />
             )}
           </Form.Item>
           <Form.Item
@@ -206,15 +198,15 @@ class Join extends React.Component {
           >
             {getFieldDecorator('email', {
               rules: [{
-                type: 'email', message: 'The input is not valid E-mail!',
+                type: 'email', message: '您的邮箱格式错误，请重输 ^v^',
               }, {
-                required: true, message: 'Please input your E-mail!',
+                required: true, message: '请输入您的邮箱 ^v^',
               }],
             })(
-              <Input style={{maxWidth:'300px'}} />
+              <Input style={{ width: '85%', maxWidth: '300px' }} />
             )}
           </Form.Item>
-          <Form.Item {...tailFormItemLayout}>
+          <Form.Item style={{textAlign:'center'}}>
             <Button htmlType="submit" type="primary">提交</Button>
           </Form.Item>
         </Form>
