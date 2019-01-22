@@ -3,7 +3,7 @@ import React from 'react';
 import { Menu, Drawer, Icon, Layout } from 'antd';
 import { Link } from 'dva/router';
 import styles from './index.less';
-import { List, Home, News, Product, Us } from '../svg';
+import { List, Home, News, Product, Us, Teaching, Games } from '../svg';
 
 
 class GlobalNavi extends React.PureComponent {
@@ -31,14 +31,14 @@ class GlobalNavi extends React.PureComponent {
         
         const icon = (item) => {
             switch (item.path) {
-                case "/home":
+                case "/homepage":
                     return <Icon component={Home}  />
                 case "/news":
                     return <Icon component={News} />
-                case "/games":
-                    return <Icon component={Product} />
+                case "/game":
+                    return <Icon component={Games} />
                 case "/teaching":
-                    return <Icon component={Us} />
+                    return <Icon component={Teaching} />
                 default:
                     return null
             }
@@ -66,7 +66,8 @@ class GlobalNavi extends React.PureComponent {
                     closable={false}
                     onClose={this.onClose}
                     visible={this.state.visible}
-                    width={'50%'}
+                    width={'200px'}
+                    height={'400px'}
                 >
                     <Menu
                         theme='grey'

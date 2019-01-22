@@ -33,14 +33,18 @@ class TeamList extends Component {
   render() {
     const { location: { state: { gameData } } } = this.props;
     const { teamData } = this.state;
+    console.log('----- teamData -----',gameData);
     const uid = localStorage.getItem('uid');
     return (
       <div>
         <ListDecorator
           detailData={gameData}
+          // announcement={announcement}
         />
         {teamData.length > 0 || parseInt(uid) === 1 ? '' :
-          <Link to={{ pathname: `/details/join`, state: { gameData: gameData } }}  ><Button style={{ margin: 10 }} type='primary'>点击报名</Button></Link>
+          <Link to={{ pathname: `/details/join`, state: { gameData: gameData } }}>
+            <Button style={{ margin: 10 }} type='primary'>点击报名</Button>
+          </Link>
         }
       </div>
     );

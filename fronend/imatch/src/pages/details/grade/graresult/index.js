@@ -17,7 +17,8 @@ const columnRank = [{
         {
             title: '名次', 
             align: 'center',
-            dataIndex: 'number', 
+            dataIndex: 'number',
+            key: 'number', 
             render: (text, index, key) => {
                 return key + 1
             }
@@ -26,20 +27,23 @@ const columnRank = [{
             title: '参赛队',
             align: 'center',
             dataIndex: 'rankTeam',
+            key: 'rankTeam',
             key: 'team',
             render: (text, record) => { return `${record.team_id[1]}` }
         },
         {
             title: 'VPs',
             align: 'center',
-            dataIndex: 'rankTeam',
+            dataIndex: 'vps',
+            key: 'vps',
             className: styles.red,
             render: (text, record) => { return `${record.score_close.toFixed(2)}` }
         },
         { 
             title: '罚分', 
             align: 'center',
-            dataIndex: 'punish' 
+            dataIndex: 'punish',
+            key: 'punish'
         },
     ]
 }];
@@ -174,7 +178,7 @@ class Graresult extends Component {
         // 牌组 
 
         const { matchData, teamRoundInfoData, dealData } = this.state
-
+        console.log(this.state);
         return (
             <div>
                 <div className={styles.title} >
@@ -186,6 +190,7 @@ class Graresult extends Component {
                         <Col xs={24} xl={16}  >
                             <ResultDataTable
                                 loading={loading}
+                                rowKey={record => record.id}
                                 matchData={matchData}
                                 state={state}
                             />

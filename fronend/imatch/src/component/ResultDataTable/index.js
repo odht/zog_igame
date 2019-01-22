@@ -10,6 +10,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             title: "桌",
             align: 'center',
             dataIndex: "number",
+            key: "number",
             render: (text, record) => {
                 return <Link to={{
                     pathname: '/details/grade/graresult/round',
@@ -22,6 +23,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             title: "完成",
             align: 'center',
             dataIndex: "deal_ids",
+            key: "deal_ids",
             render: (text, record) => {
                 let borad1 = 0;
                 let borad2 = 0;
@@ -51,6 +53,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             title: "主队",
             align: 'center',
             dataIndex: "host_id",
+            key: "host_id",
             render: (text, record) => {
                 return <Link to={{ pathname: `/details/grade/graresult/teamMatch`, state, search: `?team_id=${record.host_id[0]}`, }}>{record.host_id[1]}</Link>;
             }
@@ -58,6 +61,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
             title: "客队",
             align: 'center',
             dataIndex: "guest_id",
+            key: "guest_id",
             render: (text, record) => {
                 return <Link to={{ pathname: '/details/grade/graresult/teamMatch', state, search: `?team_id=${record.guest_id[0]}` }}>{record.guest_id[1]}</Link>;
             }
@@ -68,10 +72,12 @@ const ResultDataTable = ({ matchData, state, loading }) => {
                 title: "主队",
                 align: 'center',
                 dataIndex: "host_imp",
+                key: "host_imp",
             }, {
                 title: "客队",
                 align: 'center',
                 dataIndex: "guest_imp",
+                key: "guest_imp",
             }]
         }, {
             title: "VPs",
@@ -79,6 +85,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
                 title: "主队",
                 align: 'center',
                 dataIndex: "host_vp",
+                key: "host_vp",
                 render: (text) => {
                     return text.toFixed(2);
                 }
@@ -86,6 +93,7 @@ const ResultDataTable = ({ matchData, state, loading }) => {
                 title: "客队",
                 align: 'center',
                 dataIndex: "guest_vp",
+                key: "guest_vp",
                 render: (text) => {
                     return text.toFixed(2);
                 }

@@ -5,7 +5,7 @@ const db = 'TT'
 // 需要的模型名
 const models = {
         'res.users': ["login", "password", "partner_id", 'team_player_ids'],
-        'og.game': ["name", "notes", "date_from", "date_thru", "phase_ids", "round_ids", "schedule_ids", "deal_ids", "team_ids", "player_ids", "match_ids", "table_ids", "board_ids",],
+        'og.game': ["name", "notes", "date_from", "date_thru", "phase_ids", "round_ids", "schedule_ids", "deal_ids", "team_ids", "player_ids", "match_ids", "match_type", "table_ids", "board_ids",],
         'og.phase': ["name", "number", "sequence", "game_id", "org_type", "score_type", "score_uom", "round_ids", "team_ids"],
         'og.schedule': ["name", "number", "date_from", "date_thru", "deal_ids", "round_ids"],
         'og.deal': ["name", "number", "dealer", "vulnerable", "card_str", "card_ids", "schedule_id", "game_id", "schedule_ids", "game_ids", "board_ids", "match_ids", "match_line_ids"],

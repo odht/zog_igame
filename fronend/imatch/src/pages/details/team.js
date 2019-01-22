@@ -55,6 +55,7 @@ class Team extends Component {
 	}
 	getData = async () => {
 		const { location: { state: { gameData: { team_ids } } },  } = this.props;
+		console.log(this.props);
 		const fields={
 			name:null,
 			player_ids:{

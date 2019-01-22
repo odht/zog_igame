@@ -26,11 +26,7 @@ var countrysList=[
     {
         value: 'China',
         label: '中国'
-    },
-    {
-        value: 'USA',
-        label: '美国'
-    },
+    }
 ];
 var provincesList=[
     
@@ -92,7 +88,11 @@ class BaseInfoBlock extends Component{
                         label="游戏昵称"
                     >
                             {getFieldDecorator('nickname', {
-                                rules: [{ required: true, message: '请填写您的昵称!', whitespace: true }],
+                                rules: [{ 
+                                    required: true, 
+                                    message: '请填写您的昵称 ^v^', 
+                                    whitespace: true 
+                                }],
                             })( 
                                 <Input style={{ width: '85%', maxWidth:'300px'}}/> 
                             )}
@@ -102,7 +102,11 @@ class BaseInfoBlock extends Component{
                         label="姓名"
                     >
                             {getFieldDecorator('nickname', {
-                                rules: [{ required: true, message: '请填写您的姓名!', whitespace: true }],
+                                rules: [{ 
+                                    required: true,
+                                    message: '请填写您的姓名 ^v^',
+                                    whitespace: true 
+                                }],
                             })( 
                                 <Input style={{ width: '85%', maxWidth:'300px'}}/> 
                             )}
@@ -112,7 +116,11 @@ class BaseInfoBlock extends Component{
                         label="性别"
                     >
                             {getFieldDecorator('gender', {
-                                rules: [{ required: true, message: '请填写您的性别!', whitespace: true }],
+                                rules: [{ 
+                                    required: true, 
+                                    message: '请填写您的性别 ^v^', 
+                                    whitespace: true 
+                                }],
                             })( 
                                 <Radio.Group>
                                     <Radio value="male">男</Radio>
@@ -125,7 +133,11 @@ class BaseInfoBlock extends Component{
                         label="棋牌等级"
                     >
                             {getFieldDecorator('level', {
-                                rules: [{ required: true, message: '请填写您的棋牌等级!', whitespace: true }],
+                                rules: [{ 
+                                    required: true, 
+                                    message: '请填写您的棋牌等级 ^v^', 
+                                    whitespace: true 
+                                }],
                             })( 
                                 <Select placeholder="请填写您的棋牌等级" style={{ width: '85%', maxWidth:'300px'}}>
                                     <Option value="C-L">梅花初级大师</Option>
@@ -152,7 +164,11 @@ class BaseInfoBlock extends Component{
                         label="微信"
                     >
                             {getFieldDecorator('weChat', {
-                                rules: [{ required: true, message: '请填写您的微信号!', whitespace: true }],
+                                rules: [{ 
+                                    required: true, 
+                                    message: '请填写您的微信号 ^v^', 
+                                    whitespace: true 
+                                }],
                             })( 
                                 <Input style={{ width: '85%', maxWidth:'300px'}}/> 
                             )}
@@ -162,7 +178,11 @@ class BaseInfoBlock extends Component{
                         label="QQ号"
                     >
                             {getFieldDecorator('QQ', {
-                                rules: [{ required: true, message: '请填写您的QQ号!', whitespace: true }],
+                                rules: [{ 
+                                    required: true, 
+                                    message: '请填写您的QQ号 ^v^', 
+                                    whitespace: true 
+                                }],
                             })( 
                                 <Input style={{ width: '85%', maxWidth:'300px'}}/> 
                             )}
@@ -173,9 +193,9 @@ class BaseInfoBlock extends Component{
                     >
                         {getFieldDecorator('email', {
                             rules: [{
-                                type: 'email', message: '邮箱格式错误!',
+                                type: 'email', message: '邮箱格式错误 ^v^',
                             }, {
-                                required: true, message: '请填写您的邮箱!',
+                                required: true, message: '请填写您的邮箱 ^v^',
                             }],
                         })(
                             <Input style={{ width: '85%', maxWidth:'300px'}}/>
@@ -187,7 +207,7 @@ class BaseInfoBlock extends Component{
                     >
                         {getFieldDecorator('country', {
                             initialValue: ['中国'],
-                            rules: [{ type: 'array', required: true, message: '请填写您的国家/地区!' }],
+                            rules: [{ type: 'array', required: true, message: '请填写您的国家/地区 ^v^' }],
                         })(
                             <Cascader options={countrysList} style={{ width: '85%', maxWidth:'300px'}}/>
                         )}
@@ -198,7 +218,7 @@ class BaseInfoBlock extends Component{
                     >
                         {getFieldDecorator('province', {
                             initialValue: ['河北省','石家庄市'],
-                            rules: [{ type: 'array', required: true, message: '请填写您所在的省市!' }],
+                            rules: [{ type: 'array', required: true, message: '请填写您所在的省市 ^v^' }],
                         })(
                             <Cascader options={provincesList} style={{ width: '85%', maxWidth:'300px'}}/>
                         )}
@@ -208,7 +228,7 @@ class BaseInfoBlock extends Component{
                         label="街道地址"
                     >
                             {getFieldDecorator('street', {
-                                rules: [{ required: true, message: '请填写您所在的街道地址!', whitespace: true }],
+                                rules: [{ required: true, message: '请填写您所在的街道地址 ^v^', whitespace: true }],
                             })( 
                                 <Input style={{ width: '85%', maxWidth:'300px'}}/> 
                             )}
