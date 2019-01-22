@@ -58,7 +58,8 @@ class SubmitInfo extends React.Component {
 class HomeLayout extends Component {
 
     constructor(props) {
-        super(props); console.log(props);
+        super(props); 
+        console.log(props);
         this.state = {
             // avatar: this.props.loginForm.avatar,
             inOutState: this.props.loginForm.inOutState,
@@ -132,7 +133,7 @@ class HomeLayout extends Component {
             <Layout>
                 {/* 页头 */}
                 <Header className={styles.header}>
-                    <Row className={styles.headerFlex}>
+                    <Row>
                         <Col xs={18} sm={12} xl={12} xxl={8}>
                             <Link to='homepage'>
                                 <img className={styles.logo} src={logoPic} />

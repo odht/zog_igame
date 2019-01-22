@@ -50,6 +50,7 @@ export default {
     reducers:{
         logouts(state,{payload}){
           console.log('login-M----logout-payload------',payload);
+          localStorage.setItem('inOutState', false);
           const{inOutState} = payload;
             return {
               ...state,
@@ -58,12 +59,14 @@ export default {
             }
         },
         save(state,{payload}){
-          console.log('login-M----payload save ------',payload);
+            console.log('login-M----payload save ------',payload);
+            localStorage.setItem('inOutState', true);
             return {
               ...state,
               // avatar:payload.userData[0].userInfo.avatar,
               inOutState:true,
-              // userInfo:payload.userData[0].userInfo
+              // userInfo:payload.userData[0].userInfo,
+              
             }
         },
         showModal(state) {
@@ -72,11 +75,11 @@ export default {
             console.log('-=-=-=-', { ...state });
             return { ...state, modalVisible: true }
           },
-          handleOk(state) {
+        handleOk(state) {
             console.log('------- loginModel/handleOk -------');
             return { ...state, modalVisible: false }
           },
-          handleCancel(state) {
+        handleCancel(state) {
             console.log('------- loginModel/handleCancel -------');
             return { ...state, modalVisible: false }
           }

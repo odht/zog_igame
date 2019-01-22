@@ -7,7 +7,7 @@ import ResultDataTable from '../../../../component/ResultDataTable';
 import styles from './index.css';
 import { Row, Col, Table } from 'antd';
 import { Link } from 'dva/router';
-import { connect } from 'dva';
+// import { connect } from 'dva';
 import { deepCopy, turnData } from '@/utils/tools';
 import odoo from '@/odoo-rpc/odoo';
 
@@ -28,7 +28,6 @@ const columnRank = [{
             align: 'center',
             dataIndex: 'rankTeam',
             key: 'rankTeam',
-            key: 'team',
             render: (text, record) => { return `${record.team_id[1]}` }
         },
         {

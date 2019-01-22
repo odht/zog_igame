@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Alert, Checkbox, Modal, Divider } from 'antd';
 import { Link } from 'dva/router';
 import styles from './index.css';
-import odoo from '@/odoo-rpc/odoo';
+// import odoo from '@/odoo-rpc/odoo';
 import 'ant-design-pro/dist/ant-design-pro.css'; // 统一引入样式
 import Login from 'ant-design-pro/lib/Login';
 import logoPic from '../../../assets/BridgeLogo.png';
-import router from 'umi/router';
+// import router from 'umi/router';
 import {connect} from 'dva';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
@@ -24,13 +24,7 @@ class UserBlock extends Component {
         lAccount: '',
         pwd: ''
     }
-    // // 账号密码错误弹窗
-    // showModal() {
-    //     console.log('显示弹窗。。。。。。');
-    //     this.props.dispatch({
-    //         type: 'login_m/showModal'
-    //     });
-    // }
+
     handleOk(e) {
         console.log('选择确认-----', e);
         this.props.dispatch({
