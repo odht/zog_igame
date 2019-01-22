@@ -15,3 +15,4 @@
 "access_og_board_group_user","og_board group_user","model_og_board","base.group_user",1,1,1,1
 "access_og_board_call_group_user","og_board_call group_user","model_og_board_call","base.group_user",1,1,1,1
 "access_og_channel_group_user","og_channel group_user","model_og_channel","base.group_user",1,1,1,1
+"access_res_users_group_user","res_users group_user","base.model_res_users","base.group_user",1,1,1,1

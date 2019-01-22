@@ -18,8 +18,10 @@ const { headerRoutes } = routes;
 
 class BasicLayout extends Component {
   logout = () => {
-    this.props.dispatch({ type: 'user/logout' })
-    router.push('/user/login')
+    this.props.dispatch({ type: 'user/logout' });
+    localStorage.setItem('sid', null);
+    localStorage.setItem('patId', null);
+    router.push('/user/login');
   }
   render() {
 

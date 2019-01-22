@@ -1,17 +1,80 @@
-.footer {
-    border-top: 1px solid #EEE;
-    padding: 40px 0;
-    color: #888;
-    line-height: 1.6;
-    vertical-align: top;
+
+.header{
+   background-color:lightBlue;
+   padding: 0;
 }
-.logo{
-    width: 170px;
-    height: 35px;
-    background: rgba(255, 255, 255, .2);
-    margin: 13px 26px 16px 0;
-    float: left;
-    background-image: url(../assets/57130611.jpg);
-    background-position: 0px,0px;
-    background-size: 350px;
+
+@media screen and (min-width: 100px){
+   .logo{
+      height: 60px;
+      width: 200px;
+      margin-left: 4%;
+   }
+}
+@media screen and (min-width: 512px){
+   .logo{
+      height: 60px;
+      width: 200px;
+      margin-left: 4%;
+   }
+}
+
+.userCol{
+   position: relative;
+}
+.dropDown{
+   position: absolute;
+   height:60px;
+   right: 1px; 
+}
+.userPic{
+   position: absolute;
+   height:50px;
+   width: 50px;
+   right: 20px;
+   top: 8px;
+   border-radius: 50%
+}
+.footer{
+   background-color:lightGray; 
+   color:rgb(114, 103, 101);
+   width:100%;
+   height:15%;
+   text-align: center;
+}
+
+.copyRight{
+  font-size: 12px
+}
+
+.service{
+   font-size: 16px;
+   height:80px;
+   width:31px;
+   background:rgb(234, 233, 238);
+   position:fixed;
+   right: 100px;
+   bottom:40px;
+   color: #999;
+   font-weight: bold;
+   text-align: center;
+   transition: right 0.5s ease ;
+   border-radius: 5px;
+   /* -webkit-transform:skew(-5deg); */
+}
+.service span{
+   display:inline-block;
+   /* -webkit-transform:skew(10deg); */
+}
+.online{
+   /* background:rgb(0, 122, 204); */
+   position: fixed;
+   height:30px;
+   width:100px;
+   bottom:10px;
+   right:10px;
+   transition: right 0.5s ease 
+}
+.tranMessage{
+   transition: right 0.5s ease 
 }

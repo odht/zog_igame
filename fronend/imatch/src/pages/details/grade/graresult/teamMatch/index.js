@@ -54,17 +54,20 @@ class TeamMatch extends Component {
       {
         title: '轮次',
         dataIndex: 'round_id',
+        align: 'center',
         render: (text, record) => {
           return `${record.round_id[1]}`
         }
       }, {
         title: '对阵方',
         dataIndex: 'opp_team_id',
+        align: 'center',
         render: (text, record) => {
           return `${record.opp_team_id[1]}`
         }
       }, {
         title: 'IMPs',
+        align: 'center',
         children: [{
           title: () => {
             if (TeamRoundInfoData.length > 0 && TeamRoundInfoData[0].team_id.length > 0) {
@@ -73,14 +76,17 @@ class TeamMatch extends Component {
               ''
             }
           },
+          align: 'center',
           dataIndex: 'imp',
 
         }, {
           title: '对手',
+          align: 'center',
           dataIndex: 'imp_opp',
         }],
       }, {
         title: 'VPs',
+        align: 'center',
         children: [{
           title: () => {
             if (TeamRoundInfoData.length > 0 && TeamRoundInfoData[0].team_id.length > 0) {
@@ -89,12 +95,14 @@ class TeamMatch extends Component {
               ''
             }
           },
+          align: 'center',
           dataIndex: 'vp',
           render: (text) => {
             return text.toFixed(2);
           }
         }, {
           title: '对手',
+          align: 'center',
           dataIndex: 'vp_opp',
           render: (text) => {
             return text.toFixed(2);
@@ -102,6 +110,7 @@ class TeamMatch extends Component {
         }],
       }, {
         title: '总分',
+        align: 'center',
         dataIndex: 'score',
         render: (text) => {
           return text.toFixed(2);
@@ -111,6 +120,7 @@ class TeamMatch extends Component {
     return (
       <div>
         <Table
+          bordered={true}
           loading={loading}
           rowKey={row => row.id}
           columns={TeamMatchColumns}

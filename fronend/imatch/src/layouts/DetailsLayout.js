@@ -3,18 +3,28 @@
 //2018-9-4
 
 import React, { Component, Fragment } from 'react';
-import { Layout, Breadcrumb, Icon, Input, Button, Modal, Form, Checkbox } from 'antd';
+import { Layout, Icon, Input, Button, Modal, Form, Checkbox } from 'antd';
 import DetailsHeader from '../component/DetailsHeader';
 import * as routes from '../common/detailsroutes';
-import Breadcrumbs from '../component/Breakcrumbs'
-import styles from './BasicLayout.css';
-import BasicFooter from '../component/BasicFooter';
+import Breadcrumbs from '../component/Breakcrumbs';
+import styles from './DetailsLayout.less';
+import logoPic from '../assets/zhiSaiLogo.png';
+import { Link } from 'dva/router';
+import logIn from '../assets/logIn.png';
+import logOut from '../assets/logOut.png';
+import { connect } from 'dva';
+
+// import BasicFooter from '../component/BasicFooter';
 const { Header, Content, Footer } = Layout;
 const { details: headerRoutes } = routes;
 
 //面包屑
 const FormItem = Form.Item;
 class NormalLoginForm extends React.Component {
+
+	state={
+		inOutState: this.props.loginForm.inOutState,
+	}
 	handleSubmit = (e) => {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
@@ -26,6 +36,32 @@ class NormalLoginForm extends React.Component {
 
 	render() {
 		const { getFieldDecorator } = this.props.form;
+		// 用户图标
+		const menu = (
+			<Menu className={styles.dropDownMenu}>
+				<Menu.Item>
+					<Link to="user/userInfo" style={{ color: '#888888' }}>个人信息</Link>
+				</Menu.Item>
+				<Menu.Item>
+					<a target="_blank" rel="noopener noreferrer" href="http:" style={{ color: '#888888' }}>消息</a>
+				</Menu.Item>
+				<Menu.Divider />
+				<Menu.Item>
+					<Button style={{ color: '#444444' }} onClick={this.handleLogout}>退出登录</Button>
+				</Menu.Item>
+			</Menu>
+		);
+		const userAvatar = this.props.loginForm.inOutState === true ?
+
+			<Dropdown className={styles.dropDown} placement="bottomLeft" overlay={menu} trigger={['click']}>
+				<a className="ant-dropdown-link" href="#">
+					<img className={styles.userPic} src={logIn} />
+				</a>
+			</Dropdown>
+			:
+			<Link to="user/login">
+				<img className={styles.userPic} src={logOut} />
+			</Link>
 		return (
 			<Form onSubmit={this.handleSubmit} className="login-form">
 				<FormItem>
@@ -99,23 +135,29 @@ class DetailsLayout extends Component {
 		const { visible, confirmLoading } = this.state;
 		const { location: { pathname, state: { gameData }, state } } = this.props;
 		return (
-			<Layout style={{ minWidth: 780 }}>
+			<Layout >
 				{/*<div style={{ border: 'none', textAlign: "center", lineHeight: '80px' }}>
 					<img style={{ height: '80px', 'float': "left" }} src={logo} />
 					<Button type="primary" onClick={this.showModal}>登录</Button>
 				</div>*/}
-				<Header >
-					<DetailsHeader
+				<Header className={styles.header}>
+                    <Link to='/homepage'>
+                        <img className={styles.logo} src={logoPic} />
+                    </Link>
+					{/* <DetailsHeader
+						gameData={gameData}
+						headerRoutes={headerRoutes}
+						pathname={pathname}
+					/> */}
+				</Header>
+				<Content style={{ padding: '0 50px',minHeight:'800px' }}>
+				    <DetailsHeader
 						gameData={gameData}
 						headerRoutes={headerRoutes}
 						pathname={pathname}
 					/>
-				</Header>
-				<Content style={{ padding: '0 50px' }}>
 					<div style={{ padding: '13px 10px 13px 0', fontSize: 18 }}>
-						<Breadcrumbs
-							state={state}
-						></Breadcrumbs>
+						<Breadcrumbs state={state}></Breadcrumbs>
 					</div>
 					<Layout style={{ padding: '0px 0', background: '#fff' }}>
 
@@ -124,9 +166,11 @@ class DetailsLayout extends Component {
 						</Content>
 					</Layout>
 				</Content>
-				<footer className={styles.footer}>
-					<BasicFooter />
-				</footer>
+				{/* 页脚 */}
+                <Footer className={styles.footer}>
+                    <div className={styles.copyRight}>版权所有 © 2018 北京欧德慧通信息技术有限公司</div>
+                    <div className={styles.copyRight}>京ICP备16000236号-1</div>
+                </Footer>
 				<Modal
 					bodyStyle={{ paddingTop: "35px" }}
 					visible={visible}
@@ -147,4 +191,12 @@ class DetailsLayout extends Component {
 
 
 
-export default DetailsLayout;
+// export default DetailsLayout;
+
+const mapStateToProps = ({ login_m }) => {
+    // console.log(login_m);
+    return { loginForm: login_m }
+}
+
+
+export default connect(mapStateToProps)(DetailsLayout);

@@ -15,23 +15,36 @@ const columnRank = [{
     title: '赛队排名',
     children: [
         {
-            title: '名次', dataIndex: 'number', render: (text, index, key) => {
+            title: '名次', 
+            align: 'center',
+            dataIndex: 'number',
+            key: 'number', 
+            render: (text, index, key) => {
                 return key + 1
             }
         },
         {
             title: '参赛队',
+            align: 'center',
             dataIndex: 'rankTeam',
+            key: 'rankTeam',
             key: 'team',
             render: (text, record) => { return `${record.team_id[1]}` }
         },
         {
             title: 'VPs',
-            dataIndex: 'rankTeam',
+            align: 'center',
+            dataIndex: 'vps',
+            key: 'vps',
             className: styles.red,
             render: (text, record) => { return `${record.score_close.toFixed(2)}` }
         },
-        { title: '罚分', dataIndex: 'punish' },
+        { 
+            title: '罚分', 
+            align: 'center',
+            dataIndex: 'punish',
+            key: 'punish'
+        },
     ]
 }];
 
@@ -72,17 +85,13 @@ class Graresult extends Component {
             close_table_id: null,
             date_from: null,
             date_thru: null,
-            deal_ids: { 
-                id: null, 
-                name: null, 
-                board_ids: { id: null, name: null, state: null } 
-            },
-            game_id: null,
-            guest_id: null,
+            game_id: { id: null, name: null },
+            guest_id: { id: null, name: null },
             guest_imp: null,
             guest_vp: null,
             host_id: null,
             host_imp: null,
+            table_ids: { id: null, name: null, board_ids: { id: null, name: null, state: null } },
             host_vp: null,
             imp_manual: null,
             line_ids: null,
@@ -92,6 +101,7 @@ class Graresult extends Component {
             phase_id: null,
             round_id: null,
             vp_manual: null,
+            deal_ids:null
         }
         const dealFields = {
             // card_str:null,
@@ -125,12 +135,13 @@ class Graresult extends Component {
         }
         const Match = odoo.env('og.match');
         const originMatchData = await Match.read(match_ids, matchFileds);
-        const originDealData = originMatchData[0].deal_ids//认为是都是打的同一套牌，所以应该是一样的deal，没有再重新请求
+        const originDealData = originMatchData.length > 0 ? originMatchData[0].deal_ids : [];//认为是都是打的同一套牌，所以应该是一样的deal，没有再重新请求
         const TeamInfo = odoo.env('og.team.round.info');
         const originTeamRoundInfoData = await TeamInfo.read(team_info_ids, teamInfoFields);
 
-        const matchData = turnData(deepCopy(originMatchData))
-        const dealData = turnData(deepCopy(originDealData))
+        const matchData = turnData(deepCopy(originMatchData)) || [];
+        console.log('----matchData ----',matchData);
+        const dealData = turnData(deepCopy(originDealData)) || [];
         const teamRoundInfoData = turnData(deepCopy(originTeamRoundInfoData))
 
         const dealLinkData = dealData.map(item => {
@@ -155,7 +166,6 @@ class Graresult extends Component {
                 loading: false
             }
         })
-        console.log(matchData, dealData, teamRoundInfoData);
 
     }
     render() {
@@ -168,8 +178,7 @@ class Graresult extends Component {
         // 牌组 
 
         const { matchData, teamRoundInfoData, dealData } = this.state
-        console.log(teamRoundInfoData, dealData);
-
+        console.log(this.state);
         return (
             <div>
                 <div className={styles.title} >
@@ -181,6 +190,7 @@ class Graresult extends Component {
                         <Col xs={24} xl={16}  >
                             <ResultDataTable
                                 loading={loading}
+                                rowKey={record => record.id}
                                 matchData={matchData}
                                 state={state}
                             />

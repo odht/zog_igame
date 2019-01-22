@@ -28,6 +28,9 @@ class Board(models.Model):
             'result': self.result,
             'ns_point': self.ns_point,
             'ew_point': self.ew_point,
+            'claim_result': self.claim_result,
+            'ns_claim': self.ns_claim,
+            'ew_claim': self.ew_claim,
             
             'auction': self.auction,
             'ns_win': self.ns_win,
