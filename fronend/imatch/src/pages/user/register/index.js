@@ -162,7 +162,7 @@ class RegisterBlock extends Component {
                             rules: [{
                                 type: 'email', 
                                 message: '邮箱格式错误 ^v^',
-                                required: false, 
+                                required: true, 
                                 whitespace: true
                             }],
                         })(
