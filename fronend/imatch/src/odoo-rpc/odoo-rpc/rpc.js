@@ -125,8 +125,8 @@ class RPC {
 
     async register(params) {
         const url = `${this.host}/json/user/register`;
-        const { login, db, password } = params;
-        const data = await this.json(url, { login, password, db: this.db, });
+        const { login, db, password, phone, email } = params;
+        const data = await this.json(url, { login, password, db: db || this.db, phone, email });
         return data;
     }
 
