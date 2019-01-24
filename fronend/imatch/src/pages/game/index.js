@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
 import styles from './index.less';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';

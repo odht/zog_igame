@@ -16,7 +16,6 @@ import Message from './Message';
 
 const { Header, Footer, Content } = Layout;
 const { naviRoutes } = routes;
-var timer;
 
 class SubmitInfo extends React.Component {
     state = { visible: false };
@@ -76,7 +75,7 @@ class HomeLayout extends Component {
             payload: { inOutState: false }
         });
     }
-    componentWillMount(props) {
+    UNSAFE_componentWillMount(props) {
         console.log('----------props-layout', this.props);
     }
     display_name() {
@@ -119,13 +118,13 @@ class HomeLayout extends Component {
         const userAvatar = this.props.loginForm.inOutState === true ?
 
             <Dropdown className={styles.dropDown} placement="bottomLeft" overlay={menu} trigger={['click']}>
-                <a href="#">
-                    <img className={styles.userPic} src={logIn} />
+                <a>
+                    <img className={styles.userPic} src={logIn} alt='登录状态' />
                 </a>
             </Dropdown>
             :
             <Link to="user/login">
-                <img className={styles.userPic} src={logOut} />
+                <img className={styles.userPic} src={logOut} alt='登出状态'/>
             </Link>
 
         return (
@@ -136,7 +135,7 @@ class HomeLayout extends Component {
                     <Row>
                         <Col xs={18} sm={12} xl={12} xxl={8}>
                             <Link to='homepage'>
-                                <img className={styles.logo} src={logoPic} />
+                                <img className={styles.logo} src={logoPic} alt='logo'/>
                             </Link>
                         </Col>
                         <Col xs={6} sm={12} xl={12} xxl={16} className={styles.userCol}>

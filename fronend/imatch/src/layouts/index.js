@@ -1,4 +1,3 @@
-import styles from './index.css';
 import React from 'react';
 import HomeLayout from './HomeLayout.js';
 import NoneLayout from './NoneLayout.js';
@@ -20,7 +19,7 @@ function Layout(props) {
       return(
         <DetailsLayout { ...props }> {props.children} </DetailsLayout>
       )
-    }{
+    }else{
       return(
         <HomeLayout { ...props }> {props.children} </HomeLayout>
       );

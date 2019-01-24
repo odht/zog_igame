@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { Row, Col, Upload, message, Button, Icon, Form, Input, Radio, Select, Cascader } from 'antd';
-import { Link } from 'dva/router';
 import styles from './baseSet.less';
 import 'antd/dist/antd.css';
-import { connect } from 'dva';
-
-
 import userPic from '../../../../assets/icon.png';
+import GeographicView from '../../../../component/GeographicView/GeographicView';
 
+const { Option } = Select;
 
 var userInfo = {
     name: "王自健",
@@ -117,11 +115,11 @@ class BaseInfoBlock extends Component {
                             <Input style={{ width: '85%', maxWidth: '300px' }} />
                         )}
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         {...formItemLayout}
                         label="姓名"
                     >
-                        {getFieldDecorator('nickname', {
+                        {getFieldDecorator('name', {
                             rules: [{
                                 required: true,
                                 message: '请填写您的姓名 ^v^',
@@ -130,7 +128,7 @@ class BaseInfoBlock extends Component {
                         })(
                             <Input style={{ width: '85%', maxWidth: '300px' }} />
                         )}
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item
                         {...formItemLayout}
                         label="性别"
@@ -148,65 +146,7 @@ class BaseInfoBlock extends Component {
                             </Radio.Group>
                         )}
                     </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="棋牌等级"
-                    >
-                        {getFieldDecorator('level', {
-                            rules: [{
-                                required: true,
-                                message: '请填写您的棋牌等级 ^v^',
-                                whitespace: true
-                            }],
-                        })(
-                            <Select placeholder="请填写您的棋牌等级" style={{ width: '85%', maxWidth: '300px' }}>
-                                <Option value="C-L">梅花初级大师</Option>
-                                <Option value="D-L">方块初级大师</Option>
-                                <Option value="H-L">红心初级大师</Option>
-                                <Option value="S-L">黑桃初级大师</Option>
-                                <Option value="C-M">梅花中级大师</Option>
-                                <Option value="D-M">方块中级大师</Option>
-                                <Option value="H-M">红心中级大师</Option>
-                                <Option value="S-M">黑桃中级大师</Option>
-                                <Option value="O-C">一星国家大师</Option>
-                                <Option value="T-C">二星国家大师</Option>
-                                <Option value="Th-C">三星国家大师</Option>
-                                <Option value="O-H">一星终身大师</Option>
-                                <Option value="T-H">二星终身大师</Option>
-                                <Option value="Th-H">三星终身大师</Option>
-                                <Option value="F-H">四星终身大师</Option>
-                                <Option value="Fi-H">五星终身大师</Option>
-                            </Select>
-                        )}
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="微信"
-                    >
-                        {getFieldDecorator('weChat', {
-                            rules: [{
-                                required: true,
-                                message: '请填写您的微信号 ^v^',
-                                whitespace: true
-                            }],
-                        })(
-                            <Input style={{ width: '85%', maxWidth: '300px' }} />
-                        )}
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="QQ号"
-                    >
-                        {getFieldDecorator('QQ', {
-                            rules: [{
-                                required: true,
-                                message: '请填写您的QQ号 ^v^',
-                                whitespace: true
-                            }],
-                        })(
-                            <Input style={{ width: '85%', maxWidth: '300px' }} />
-                        )}
-                    </Form.Item>
+                    
                     <Form.Item
                         {...formItemLayout}
                         label="邮箱"
@@ -232,27 +172,37 @@ class BaseInfoBlock extends Component {
                             <Cascader options={countrysList} style={{ width: '85%', maxWidth: '300px' }} />
                         )}
                     </Form.Item>
+                    
+
                     <Form.Item
                         {...formItemLayout}
-                        label="省市"
+                        label="省市区"
                     >
-                        {getFieldDecorator('province', {
-                            initialValue: ['河北省', '石家庄市'],
-                            rules: [{ type: 'array', required: true, message: '请填写您所在的省市 ^v^' }],
+                        {getFieldDecorator('city', {
+                            rules: [{ 
+                                required: true, 
+                                message: '请填写您所在的省市区 ^v^',  
+                            }],
                         })(
-                            <Cascader options={provincesList} style={{ width: '85%', maxWidth: '300px' }} />
+                            <GeographicView
+                                style={{ width: '100%', maxWidth: '300px' }} 
+                            />
                         )}
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
-                        label="街道地址"
+                        label="街道"
                     >
                         {getFieldDecorator('street', {
-                            rules: [{ required: true, message: '请填写您所在的街道地址 ^v^', whitespace: true }],
+                            rules: [{ 
+                                required: true, 
+                                message: '请填写您的街道 ^v^', 
+                                whitespace: true 
+                            }],
                         })(
                             <Input style={{ width: '85%', maxWidth: '300px' }} />
                         )}
-                    </Form.Item>
+                    </Form.Item> 
 
                     <Form.Item
                         style={{ textAlign: 'center' }}

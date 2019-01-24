@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { Alert, Checkbox, Modal, Divider } from 'antd';
 import { Link } from 'dva/router';
 import styles from './index.css';
-// import odoo from '@/odoo-rpc/odoo';
 import 'ant-design-pro/dist/ant-design-pro.css'; // 统一引入样式
 import Login from 'ant-design-pro/lib/Login';
 import logoPic from '../../../assets/BridgeLogo.png';
-// import router from 'umi/router';
 import {connect} from 'dva';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
@@ -99,7 +97,7 @@ class UserBlock extends Component {
             <div className={styles.loginBox} >
                 <div className={styles.normal}>
                     <div style={{ textAlign: 'center' }}>
-                        <img src={logoPic} className={styles.logoPic} />
+                        <img src={logoPic} className={styles.logoPic} alt='logo'/>
                     </div>
                     <Login
                         defaultActiveKey={this.state.type}
