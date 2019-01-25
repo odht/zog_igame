@@ -74,7 +74,7 @@ class NavigationBar extends Component{
 {/* 最新赛事 */}
         <div className={styles.caseTitle}>
           最新赛事
-          <span><Link to='./games' style={{color:'cadetblue'}}>更多 >></Link></span>
+          <span><Link to='./game' style={{color:'cadetblue'}}>更多 >></Link></span>
           </div>
         <div className={styles.caseList}>
           <img className={styles.casePic} src={topPic1}  alt="案例-1" />

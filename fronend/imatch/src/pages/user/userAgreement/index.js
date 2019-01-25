@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'antd';
 import styles from './index.less';
 import 'antd/dist/antd.css';
 import { Link } from 'dva/router';
@@ -257,7 +258,7 @@ class UserAgreement extends Component{
                         <strong>24.2本协议签订地为中华人民共和国广东省深圳市南山区。</strong>
                     </p>
                     <p>
-                        <strong>24.3若您和智赛棋牌之间发生任何纠纷或争议，首先应友好协商解决；协商不成的，您同意将纠纷或争议提交本协议签订地（即中国广东省深圳市南山区）有管辖权的人民法院管辖。</strong>
+                        <strong>24.3若您和智赛棋牌之间发生任何纠纷或争议，首先应友好协商解决；协商不成的，您同意将纠纷或争议提交本协议签订地有管辖权的人民法院管辖。</strong>
                     </p>
                     <p>
                         24.4本协议所有条款的标题仅为阅读方便，本身并无实际涵义，不能作为本协议涵义解释的依据。
@@ -300,7 +301,13 @@ class UserAgreement extends Component{
                         26.1如果您对本协议或本服务有意见或建议，可与智赛棋牌客户服务部门联系，我们会给予您必要的帮助。（正文完）
                     </p>
                     <p className={styles.author}>智赛棋牌</p>
+                    <div style={{textAlign:'center'}}>
+                        <Link to='/user/userAgreement/accountRules'>
+                            <Button className={styles.finishButton}>阅读完毕</Button>
+                        </Link>
+                    </div>
                 </div>
+                <div style={{height:'10px',backgroundColor:'transparent'}}></div>
             </React.Fragment> 
                     
         )

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import {Form, Steps, Button, Select, Input, Tooltip, Icon } from 'antd';
-import { Link } from 'dva/router';
+import {Form, Steps, Button, Select, Input, message } from 'antd';
 import styles from './phoneSet.less';
 import 'antd/dist/antd.css';
-import {connect} from 'dva';
+import BtnTimer from '../../../../component/BtnTimer';
 
+const {Option} = Select;
 
 class OldPhoneConfirm extends Component{
 
@@ -36,7 +36,6 @@ class OldPhoneConfirm extends Component{
         })(
             <Select style={{ width: 70 }}>
                 <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
             </Select>
         );
         return(
@@ -47,9 +46,15 @@ class OldPhoneConfirm extends Component{
                         label="手机号"
                     >
                         {getFieldDecorator('phone', {
-                            rules: [{ required: true, message: '请填写您的手机号!' }],
+                            rules: [{ 
+                                required: true, 
+                                message: '请填写您的手机号!' 
+                            },{
+                                pattern: /^\d{11}$/,
+                                message: '手机号格式错误 ^v^',
+                            }],
                         })(
-                            <Input addonBefore={prefixSelector} style={{ width: '85%', maxWidth:'300px'}} />
+                            <Input addonBefore={prefixSelector} style={{ width: '95%', maxWidth:'300px'}} />
                         )}
                     </Form.Item>
                     <Form.Item
@@ -60,9 +65,12 @@ class OldPhoneConfirm extends Component{
                         {getFieldDecorator('captcha', {
                             rules: [{ required: true, message: '请填写验证码!' }],
                         })(
-                            <Input style={{ width: '55%', maxWidth:'190px'}}/>
+                            <Input style={{ width: '70%', maxWidth:'190px'}}/>
                         )}
-                        <Button style={{width: '90px', marginLeft:'8px',fontSize:'10px'}}>获取验证码</Button>
+                        {/* <Button style={{width: '90px', marginLeft:'8px',fontSize:'10px'}}>
+                            获取验证码
+                        </Button> */}
+                        <BtnTimer></BtnTimer>
                     </Form.Item>
                 </Form>
             </div>
@@ -101,7 +109,6 @@ class NewPhoneConfirm extends Component{
         })(
             <Select style={{ width: 70 }}>
                 <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
             </Select>
         );
         return(
@@ -112,9 +119,15 @@ class NewPhoneConfirm extends Component{
                         label="手机号"
                     >
                         {getFieldDecorator('phone', {
-                            rules: [{ required: true, message: '请填写您的手机号!' }],
+                            rules: [{ 
+                                required: true, 
+                                message: '请填写您的手机号!' 
+                            },{
+                                pattern: /^\d{11}$/,
+                                message: '手机号格式错误 ^v^',
+                            }],
                         })(
-                            <Input addonBefore={prefixSelector} style={{ width: '85%', maxWidth:'300px'}} />
+                            <Input addonBefore={prefixSelector} style={{ width: '95%', maxWidth:'300px'}} />
                         )}
                     </Form.Item>
                     <Form.Item
@@ -125,9 +138,12 @@ class NewPhoneConfirm extends Component{
                         {getFieldDecorator('captcha', {
                             rules: [{ required: true, message: '请填写验证码!' }],
                         })(
-                            <Input style={{ width: '55%', maxWidth:'190px'}}/>
+                            <Input style={{ width: '70%', maxWidth:'190px'}}/>
                         )}
-                        <Button style={{width: '90px', marginLeft:'8px',fontSize:'10px'}}>获取验证码</Button>
+                        {/* <Button style={{width: '90px', marginLeft:'8px',fontSize:'10px'}}>
+                        获取验证码
+                        </Button> */}
+                        <BtnTimer></BtnTimer>
                     </Form.Item>
                 </Form>
             </div>
