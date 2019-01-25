@@ -65,7 +65,6 @@ export default {
               // avatar:payload.userData[0].userInfo.avatar,
               inOutState:true,
               // userInfo:payload.userData[0].userInfo,
-              
             }
         },
         showModal(state) {
