@@ -76,13 +76,13 @@ class HomeLayout extends Component {
         });
     }
     UNSAFE_componentWillMount(props) {
-        console.log('------WillMount----props-layout', this.props);
+        console.log('------WillMount----localStorage', localStorage.getItem('inOutState'));
         this.setState({
             inOutState: localStorage.getItem('inOutState')
         });
     }
     componentDidMount(props){
-        console.log('------DidMount----props-layout', this.props);
+        console.log('------WillMount----localStorage', localStorage.getItem('inOutState'));
         this.setState({
             inOutState: localStorage.getItem('inOutState')
         });

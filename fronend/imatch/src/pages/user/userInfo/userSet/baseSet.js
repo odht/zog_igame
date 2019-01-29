@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Row, Col, Upload, message, Button, Icon, Form, Input, Radio, Select, Cascader } from 'antd';
+import { Row, Col, Upload, message, Button, Icon, Form, Input, Radio, Cascader, Select } from 'antd';
 import styles from './baseSet.less';
 import 'antd/dist/antd.css';
 import userPic from '../../../../assets/icon.png';
-import GeographicView from '../../../../component/GeographicView/GeographicView';
+import ChinaCityList from '../../../../../mock/ChinaCityList';
 
-const { Option } = Select;
 
 var userInfo = {
     name: "王自健",
@@ -22,12 +21,12 @@ var userInfo = {
 
 var countrysList = [
     {
-        value: 'China',
+        value: '中国',
         label: '中国'
+    },{
+        value: '美国',
+        label: '美国'
     }
-];
-var provincesList = [
-
 ];
 
 const props = {
@@ -64,27 +63,18 @@ class UserPicBlock extends Component {
 
 class BaseInfoBlock extends Component {
     state = {
-        provincesList: []
+
     }
-    componentDidMount() {
-        this.getProvincesList()
-    }
-    getProvincesList = async () => {
-        fetch('/api/geographic/province', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
             }
-        }).then((res) => {
-            console.log(res);
-            return res.json()
-        }).then((res) => {
-            console.log(res);
-            this.setState({
-                provincesList: res,
-            })
-        })
+        });
     }
+
     render() {
 
         const { getFieldDecorator } = this.props.form;
@@ -105,7 +95,7 @@ class BaseInfoBlock extends Component {
                         {...formItemLayout}
                         label="游戏昵称"
                     >
-                        {getFieldDecorator('nickname', {
+                        {getFieldDecorator('name', {
                             rules: [{
                                 required: true,
                                 message: '请填写您的昵称 ^v^',
@@ -166,10 +156,17 @@ class BaseInfoBlock extends Component {
                         label="国家/地区"
                     >
                         {getFieldDecorator('country', {
-                            initialValue: ['中国'],
-                            rules: [{ type: 'array', required: true, message: '请填写您的国家/地区 ^v^' }],
+                            rules: [{
+                                type:'array', 
+                                required: true, 
+                                message: '请填写您的国家/地区 ^v^' 
+                            }],
                         })(
-                            <Cascader options={countrysList} style={{ width: '85%', maxWidth: '300px' }} />
+                            <Cascader 
+                                options={countrysList} 
+                                style={{ width: '85%', maxWidth: '300px' }} 
+                                placeholder=''
+                            />
                         )}
                     </Form.Item>
                     
@@ -184,8 +181,16 @@ class BaseInfoBlock extends Component {
                                 message: '请填写您所在的省市区 ^v^',  
                             }],
                         })(
-                            <GeographicView
-                                style={{ width: '100%', maxWidth: '300px' }} 
+                            <Cascader 
+                                style={{ width: '85%', maxWidth: '300px' }}
+                                fieldNames={{ 
+                                label: 'name', 
+                                value: 'name', 
+                                children: 'childrenList' 
+                                }} 
+                                options={ChinaCityList} 
+                                onChange={this.onChange} 
+                                placeholder=""
                             />
                         )}
                     </Form.Item>

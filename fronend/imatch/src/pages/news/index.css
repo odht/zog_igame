@@ -34,7 +34,7 @@
         margin: 2%;
     }
     .newsLine{
-        color: black;
+        color: lightgray;
     }
 }
 @media screen and (min-width: 768px){
@@ -54,7 +54,7 @@
     }
     .newsLine{
         /* color: lightgray; */
-        color: rebeccapurple;
+        color: lightgray;
     }
 }
 
@@ -75,6 +75,6 @@
     }
     .newsLine{
         /* color: lightgray; */
-        color: red;
+        color: lightgray;
     }
 }

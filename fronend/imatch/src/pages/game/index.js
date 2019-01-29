@@ -28,7 +28,7 @@ const columns = [
 		}
 	},
 	{
-		title: '举办单位',
+		title: '主办单位',
 		dataIndex: 'host',
 		key: 'host',
 		width: '25%',
@@ -54,13 +54,15 @@ const columns = [
 				return "双人赛";
 			}
 		}
-	}, {
-		title: '备注',
-		dataIndex: 'ps',
-		key:'ps',
-		width: '20%',
-		align:'center'
-	},]
+	},
+	//  {
+	// 	title: '备注',
+	// 	dataIndex: 'ps',
+	// 	key:'ps',
+	// 	width: '20%',
+	// 	align:'center'
+	// },
+]
 
 
 class TeamList extends Component {
