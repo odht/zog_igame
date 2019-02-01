@@ -11,7 +11,7 @@ const models = {
         'og.deal': ["name", "number", "dealer", "vulnerable", "card_str", "card_ids", "schedule_id", "game_id", "schedule_ids", "game_ids", "board_ids", "match_ids", "match_line_ids"],
         // 'og.deal.card':[ "deal_id", "name", "suit", "rank", "position"],
         'og.round': ["name", "number", "sequence", "game_id", "schedule_id", "phase_id", "last_in_phase", "date_from", "date_thru", "deal_ids", "team_info_ids", "match_ids", "table_ids", "team_ids", "board_ids"],
-        'og.team': ["name", "partner_id", "game_id", "phase_ids", "player_ids", "round_info_ids", "match_team_ids", "rank",],
+        'og.team': ["name", "partner_id", "game_id", "phase_ids", "player_ids", "round_info_ids", "match_team_ids", "rank","number"],
         'og.team.player': ["name", "partner_id", "team_id", "role", "table_player_ids"],
         'og.team.round.info': ['name', 'number', 'sequence', 'round_id', 'team_id', 'game_id', 'phase_ids', 'match_team_id', 'opp_team_id', 'match_id', 'imp', 'imp_opp', 'vp', 'vp_opp', 'score_uom', 'score_manual', 'score', 'score_open', 'score_close', 'rank_open', 'rank_close'],
         'og.match': ["name", "number", "round_id", "phase_id", "game_id", "deal_ids", "date_from", "date_thru", "host_id", "guest_id", "match_team_ids", "line_ids", "open_table_id", "close_table_id", "table_ids", "deal_count", "imp", "imp_manual", "host_imp", "guest_imp", "vp", "vp_manual", "host_vp", "guest_vp",],

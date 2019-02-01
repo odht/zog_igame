@@ -7,6 +7,9 @@ import WrapTableForm from '@/component/TableForm/table/table'
 export { PopForm }
 export { WrapTableForm }
 class Tables extends Component {
+    state={
+        dataSource:[]
+    }
     constructor(props) {
         super(props);
         this.props = props;
@@ -14,9 +17,10 @@ class Tables extends Component {
         this.model ? null : this.data = this.props.data || void 0;
     }
     render() {
-        const { selectedRowKeys, searchData, allowClear, edit, visible, } = this.props;
-        var { columns,list } = this.props;    
-        const dataSource = this.props.getdata();
+        const { selectedRowKeys, searchData, allowClear, edit, visible,dataSource } = this.props;
+        var { columns,list } = this.props;   
+        console.log(this.props); 
+        console.log(dataSource);
         const rowSelection = {
             selectedRowKeys,
             onChange: this.props.onSelectChange.bind(this),
@@ -41,7 +45,7 @@ class Tables extends Component {
                                         <Popconfirm title="确认删除？" onConfirm={() => this.props.handleDelete(record.id)}>
                                             <a href="javascript:;" style={{ marginRight: '10px' }}>删除</a>
                                         </Popconfirm>
-                                        <a href="javascript:;" onClick={() => this.props.edit(record)} style={{ marginRight: '10px' }}>编辑</a>
+                                        <a href="javascript:;" onClick={() => this.props.editBool(record)} style={{ marginRight: '10px' }}>编辑</a>
                                     </> : null}
                                 {item.render(text, record, this)}
                             </div>
@@ -79,8 +83,10 @@ class Tables extends Component {
                 >
                     {this.props.addTitle}
                 </Button>
+                {this.props.children}
                 <Table
                     rowSelection={rowSelection}
+                    rowKey={row=>row.id}
                     columns={columns}
                     dataSource={dataSource}
                     pagination={pagination}

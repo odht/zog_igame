@@ -53,10 +53,21 @@ export default class PopForm extends Component {
     onOk() {
         const { edit } = { ...this.state };
         const keyEdit = Object.keys(edit);
+        // const defaults=this.props.list.reduce((pre,cur)=>{
+        //     pre[cur.attribute]=cur.defaultValue;
+        //     return pre
+        // },{})
+        // keyEdit.forEach((item,index)=>{
+        //     edit[index]=item||'默认值'
+        // })
         let error;
         keyEdit.length > 0 ? error = keyEdit.every((item) => Boolean(edit[item])) : error = false;
         if(error){
+
             this.props.onOk(edit)           
+        }else{
+            console.log(edit,keyEdit);
+            alert('数据出错')
         }
     }
     render() {
@@ -112,6 +123,10 @@ class InputComponent extends Component {
         val: '',
         error: true,//true没错，false错了
     }
+    componentDidMount(){
+        const { edit, attr } = this.props;
+        this.props.change(edit[attr]||'默认值', attr);
+    }
     valueChange(e) {
         var { error } = { ...this.state };
         const value = e.target.value;
@@ -151,7 +166,7 @@ class InputComponent extends Component {
         return (
             <>
                 <Input
-                    placeholder={edit[attr] ? edit[attr] : ""}
+                    placeholder={edit[attr] ? edit[attr] : "默认值"}
                     onChange={this.valueChange.bind(this)}>
                 </Input>
                 {this.state.error? null : <span
