@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'antd';
 import styles from './index.less';
 import 'antd/dist/antd.css';
 import { Link } from 'dva/router';
@@ -16,7 +17,7 @@ class UserAgreement extends Component{
                     <p className={styles.aTitle}>智赛棋牌账号规则</p>                    
                     <div style={{width:'94%', height:'2px', marginLeft:'3%', backgroundColor:'white', marginBottom:'5px'}}></div>
                     <p>尊敬的智赛棋牌用户您好：</p>
-                    <p><strong>为有效利用智赛棋牌号码资源，维护用户合法权益，特制订《智赛棋牌号码规则》（以下简称“本规则”），同时您应当阅读并遵守<a href="#">《智赛棋牌服务协议》</a>。请您务必审慎阅读、充分理解各条款内容，特别是免除或者限制智赛棋牌责任的条款、对用户权利进行限制的条款、约定争议解决方式和司法管辖的条款等，以及开通或使用某项服务的单独协议或规则。限制、免责条款或者其他涉及您重大权益的条款可能以加粗、加下划线等形式提示您重点注意。</strong></p>
+                    <p><strong>为有效利用智赛棋牌号码资源，维护用户合法权益，特制订《智赛棋牌号码规则》（以下简称“本规则”），同时您应当阅读并遵守<Link to='/user/userAgreement'>《智赛棋牌服务协议》</Link>。请您务必审慎阅读、充分理解各条款内容，特别是免除或者限制智赛棋牌责任的条款、对用户权利进行限制的条款、约定争议解决方式和司法管辖的条款等，以及开通或使用某项服务的单独协议或规则。限制、免责条款或者其他涉及您重大权益的条款可能以加粗、加下划线等形式提示您重点注意。</strong></p>
                     <p><strong>除非您已充分阅读、完全理解并接受本规则所有条款，否则您无权申请、使用智赛棋牌号码及相关服务。您点击“同意”或“下一步”，或您申请、使用智赛棋牌号码及相关服务的行为或者以其他任何明示或者默示方式表示接受本规则的，均视为您已阅读并同意签署本规则。本规则即在您与智赛棋牌之间产生法律效力，成为对双方均具有约束力的法律文件。</strong></p>
                     <p><strong>如果您因年龄、智力等因素而不具有完全民事行为能力，请在法定监护人（以下简称"监护人"）的陪同下阅读和判断是否同意本协议。</strong></p>
                     <p><strong>如果您是中国大陆地区以外的用户，您订立或履行本规则的行为需要同时遵守您所属和/或所处国家或地区的法律。</strong></p>
@@ -124,7 +125,13 @@ class UserAgreement extends Component{
                     <p>15.6 本协议条款无论因何种原因部分无效或不可执行，其余条款仍有效，对双方具有约束力。（正文完）</p>
 
                     <p className={styles.author}>智赛棋牌</p>
+                    <div style={{textAlign:'center'}}>
+                        <Link to='/user/register'>
+                            <Button className={styles.finishButton}>阅读完毕</Button>
+                        </Link>
+                    </div>
                 </div>
+                <div style={{height:'10px',backgroundColor:'transparent'}}></div>
             </React.Fragment> 
                     
         )

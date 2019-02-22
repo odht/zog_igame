@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
 import styles from './index.less';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
@@ -97,7 +96,7 @@ class TeamList extends Component {
 			const gameInfo = JSON.parse(element.notes);
 			gameInfo["gameName"] = element.name;
 			gameInfo["match_type"] = element.match_type;
-			gameInfo["timeSpace"] = element.date_from + ' —— ' + element.date_thru;
+			gameInfo["timeSpace"] = element.date_from + ' ~ ' + element.date_thru;
 			gameInfo["date_from"] = element.date_from;
 			gameInfo["date_thru"] = element.date_thru;
 			gameInfo["id"] = element.id;

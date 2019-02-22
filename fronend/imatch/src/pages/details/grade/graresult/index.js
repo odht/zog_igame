@@ -7,7 +7,6 @@ import ResultDataTable from '../../../../component/ResultDataTable';
 import styles from './index.css';
 import { Row, Col, Table } from 'antd';
 import { Link } from 'dva/router';
-import { connect } from 'dva';
 import { deepCopy, turnData } from '@/utils/tools';
 import odoo from '@/odoo-rpc/odoo';
 
@@ -20,6 +19,7 @@ const columnRank = [{
             dataIndex: 'number',
             key: 'number', 
             render: (text, index, key) => {
+                // console.log( key);
                 return key + 1
             }
         },
@@ -28,7 +28,6 @@ const columnRank = [{
             align: 'center',
             dataIndex: 'rankTeam',
             key: 'rankTeam',
-            key: 'team',
             render: (text, record) => { return `${record.team_id[1]}` }
         },
         {
@@ -37,7 +36,9 @@ const columnRank = [{
             dataIndex: 'vps',
             key: 'vps',
             className: styles.red,
-            render: (text, record) => { return `${record.score_close.toFixed(2)}` }
+            render: (text, record) => {                
+                return `${record.score_close.toFixed(2)}` 
+            }
         },
         { 
             title: '罚分', 
@@ -66,6 +67,7 @@ class Graresult extends Component {
     componentWillUnmount() {
         clearInterval(this.timer);
     }
+
     // shouldComponentUpdate(props, state) {
     //     // const { odooData: { team_info_ids } } = props;
     //     // if (team_info_ids) {
@@ -78,7 +80,7 @@ class Graresult extends Component {
     // }
     getNewData = async () => {
         const {
-            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id, id } } },
+            location: { state: { roundData: { match_ids, team_info_ids, id } } },
             location: { state },
         } = this.props;
         const matchFileds = {
@@ -103,16 +105,16 @@ class Graresult extends Component {
             vp_manual: null,
             deal_ids:null
         }
-        const dealFields = {
-            // card_str:null,
-            // dealer:null,
-            // game_id:{id:null,name:null},
-            // name:null,
-            number: null,
-            // schedule_id:{id:null,name:null},
-            // vulnerable:null,
-            // board_ids:{id:null},
-        }
+        // const dealFields = {
+        //     // card_str:null,
+        //     // dealer:null,
+        //     // game_id:{id:null,name:null},
+        //     // name:null,
+        //     number: null,
+        //     // schedule_id:{id:null,name:null},
+        //     // vulnerable:null,
+        //     // board_ids:{id:null},
+        // }
         const teamInfoFields = {
             // id: null,
             // name: null,
@@ -138,12 +140,15 @@ class Graresult extends Component {
         const originDealData = originMatchData.length > 0 ? originMatchData[0].deal_ids : [];//认为是都是打的同一套牌，所以应该是一样的deal，没有再重新请求
         const TeamInfo = odoo.env('og.team.round.info');
         const originTeamRoundInfoData = await TeamInfo.read(team_info_ids, teamInfoFields);
-
+        console.log(originTeamRoundInfoData);
         const matchData = turnData(deepCopy(originMatchData)) || [];
         console.log('----matchData ----',matchData);
         const dealData = turnData(deepCopy(originDealData)) || [];
         const teamRoundInfoData = turnData(deepCopy(originTeamRoundInfoData))
-
+        teamRoundInfoData.sort(function(a,b){
+            return b.score_close - a.score_close;
+        })
+        console.log(teamRoundInfoData);
         const dealLinkData = dealData.map(item => {
             return (
                 <Link
@@ -171,7 +176,7 @@ class Graresult extends Component {
     render() {
         // 比赛对战数据
         const {
-            location: { state: { roundData: { match_ids, team_info_ids, deal_ids, name, game_id, id } } },
+            location: { state: { roundData: { name, game_id } } },
             location: { state },
         } = this.props;
         const { loading } = this.state;

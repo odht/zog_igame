@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Table, Row, Col } from 'antd';
+import { Table } from 'antd';
 import './team.css';
-import { connect } from 'dva';
-import { lookup } from '@/utils/tools';
+
 import odoo from '@/odoo-rpc/odoo';
 
 
@@ -35,13 +34,13 @@ const columns = [{
 	dataIndex: 'player',
 	key: 'players',
 	align: 'center',
-	width: '52%'
+	width: '50%'
 },{
 	title: '编辑',
 	dataIndex: 'modify',
 	key: 'modify',
 	align: 'center',
-	width: '7%',
+	width: '9%',
 	render: () => (<a>编辑</a>)
 }];
 
@@ -50,7 +49,7 @@ class Team extends Component {
 		teamData:[],
 		loading: true,
 	}
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.getData()
 	}
 	getData = async () => {
@@ -80,10 +79,10 @@ class Team extends Component {
 		    var getName = (player_ids,role)=>{
 		        var name = '';
 		        player_ids.forEach((playerItem)=>{
-		            if(role != 'player' && playerItem.role==role){
+		            if(role !== 'player' && playerItem.role === role){
 		                name = playerItem.name
 		            }
-		            if(role == 'player' && playerItem.role==role){
+		            if(role === 'player' && playerItem.role === role){
 		                name = name+" "+playerItem.name
 		            }
 		        });
@@ -122,4 +121,4 @@ class Team extends Component {
 	}
 }
 
-export default Team
+export default Team;
