@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-import { connect } from 'dva';
+// import { connect } from 'dva';
 import { deepCopy,turnData } from '@/utils/tools'
 import odoo from '@/odoo-rpc/odoo';
 class TeamMatch extends Component {
@@ -49,7 +49,7 @@ class TeamMatch extends Component {
   }
   render() {
     const { TeamRoundInfoData, loading } = this.state;
-
+    console.log(TeamRoundInfoData);
     const TeamMatchColumns = [
       {
         title: '轮次',
@@ -80,7 +80,7 @@ class TeamMatch extends Component {
           dataIndex: 'imp',
 
         }, {
-          title: '对手',
+          title: '对阵方',
           align: 'center',
           dataIndex: 'imp_opp',
         }],
@@ -101,7 +101,7 @@ class TeamMatch extends Component {
             return text.toFixed(2);
           }
         }, {
-          title: '对手',
+          title: '对阵方',
           align: 'center',
           dataIndex: 'vp_opp',
           render: (text) => {
@@ -118,13 +118,25 @@ class TeamMatch extends Component {
       }
     ]
     return (
-      <div>
+      
+      <div style={{padding:'10px'}}>
+        <div 
+          style={{
+              width:'100%', 
+              height:'50px',
+              lineHeight:'50px', 
+              textAlign:'center', 
+              fontSize:'25px'
+            }}>
+            赛队各轮次对阵比分表
+            {/* ${TeamRoundInfoData[0].team_id[1]} */}
+        </div>
         <Table
-          bordered={true}
-          loading={loading}
-          rowKey={row => row.id}
-          columns={TeamMatchColumns}
-          dataSource={TeamRoundInfoData}
+          bordered={ true }
+          loading={ loading }
+          rowKey={ row => row.id }
+          columns={ TeamMatchColumns }
+          dataSource={ TeamRoundInfoData }
           pagination={{
             showQuickJumper: true,
             showSizeChanger: true,

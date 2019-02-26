@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { Menu, Row, Col } from 'antd';
-import { Link } from 'dva/router';
+import { Row, Col } from 'antd';
 import styles from './index.less';
 import 'antd/dist/antd.css';
-import {connect} from 'dva';
 import userPic from '../../../../assets/icon.png';
 
 
-var userInfo = { };
 var userInfo={
     name:"王自健",
     gender:"先生",
@@ -37,7 +34,7 @@ class userInfoBlock extends Component{
                     <Col lg={7} md={7} >
                         <div className={styles.userNameBox}>
                             {/* <img src={userInfo.avatar} className={styles.userPic}/> */}
-                            <img src={userPic} className={styles.userPic}/>
+                            <img src={userPic} className={styles.userPic} alt='UserPic'/>
                             <p className={styles.nameBox}>{userInfo.name} {userInfo.gender}</p>
                             <p className={styles.levelBox}>{userInfo.level}</p>
                         </div>
@@ -53,14 +50,14 @@ class userInfoBlock extends Component{
                             <span className={styles.infoTitle}>联系电话：</span>
                             <span className={styles.infoContent}>{userInfo.phone}</span>
                         </div>
-                        <div>
+                        {/* <div>
                             <span className={styles.infoTitle}>微信：</span>
                             <span className={styles.infoContent}>{userInfo.weChat}</span>
                         </div>
                         <div>
                             <span className={styles.infoTitle}>QQ号：</span>
                             <span className={styles.infoContent}>{userInfo.QQ}</span>
-                        </div>
+                        </div> */}
                         <div>
                             <span className={styles.infoTitle}>邮箱：</span>
                             <span className={styles.infoContent}>{userInfo.email}</span>

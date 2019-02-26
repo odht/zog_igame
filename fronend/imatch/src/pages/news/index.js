@@ -24,8 +24,14 @@ class NewsBlock extends Component{
                     <p><span className={styles.newsLine}>─────────</span><span className={styles.newsCn}>新闻中心</span><span className={styles.newsLine}>─────────</span></p>
                 </div>
                 <Row gutter={50}>
-                    <Col xl={12} xs={24}>
-                        <Card title="全国新闻" bordered={true} extra={<a href="#">更多 >></a>}>
+                    <Col md={1} lg={1} xs={24}></Col>
+                    <Col md={11} lg={11} xs={24}>
+                        <Card 
+                            title="全国新闻" 
+                            bordered={true} 
+                            extra={<a href="">更多 >></a>}
+                            style={{marginTop:'10px'}}
+                        >
                             <List
                                 dataSource={gnews.list}
                                 renderItem={item => (
@@ -36,8 +42,13 @@ class NewsBlock extends Component{
                             />
                         </Card>
                     </Col>
-                    <Col xl={12} xs={24}>
-                        <Card title="石家庄新闻" bordered={true} extra={<a href="#">更多 >></a>}>
+                    <Col md={11} lg={11} xs={24}>
+                        <Card 
+                            title="石家庄新闻" 
+                            bordered={true} 
+                            extra={<a href="">更多 >></a>}
+                            style={{marginTop:'10px'}}
+                        >
                         <List
                                 dataSource={news.list}
                                 renderItem={item => (
@@ -48,6 +59,7 @@ class NewsBlock extends Component{
                             />
                         </Card>
                     </Col>
+                    <Col md={1} lg={1} xs={24}></Col>
                 </Row>
             </div>  
         );
