@@ -118,16 +118,15 @@ export default function(props) {
     const {location:{pathname}}=props
     return (
         <Row style={{backgroundColor:'white', width:'100%', height:'100%'}}>
-            <Col xl={1} md={1}></Col>
-            <Col xl={4} md={4}>
+            <Col xl={1} sm={1}></Col>
+            <Col xl={5} sm={6}>
                 <Sider pathname={pathname}/>
             </Col>
-            {/* <Col xl={1} md={1}></Col> */}
-            <Col xl={17} md={17}>
+            <Col xl={17} sm={16}>
             <div style={{width:'100%', height:'30px',textAlign:"center",lineHeight:'50px'}}></div>
                 { props.children }
             </Col>
-            <Col xl={1} md={1}></Col>
+            <Col xl={1} sm={1}></Col>
         </Row>
     );
 }

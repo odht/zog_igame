@@ -190,9 +190,9 @@ class Graresult extends Component {
                     <span>{game_id[1]} {name}</span>
                 </div>
 
-                <div>
+                <div style={{padding:'10px'}}>
                     <Row type='flex' justify='center'>
-                        <Col xs={24} xl={16}  >
+                        <Col xs={24} lg={15}  >
                             <ResultDataTable
                                 loading={loading}
                                 rowKey={record => record.id}
@@ -213,7 +213,10 @@ class Graresult extends Component {
                                 牌：{dealData}
                             </div>
                         </Col>
-                        <Col xs={24} xl={8}>
+                        <Col xs={24} lg={1}>
+                            <div style={{width:'100%',height:'20px'}}></div>
+                        </Col>
+                        <Col xs={24} lg={8}>
                             {
                                 <Table
                                     loading={loading}
