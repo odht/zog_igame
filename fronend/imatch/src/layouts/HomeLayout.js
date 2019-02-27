@@ -57,7 +57,7 @@ class SubmitInfo extends React.Component {
 class HomeLayout extends Component {
 
     constructor(props) {
-        super(props); 
+        super(props);
         console.log(props);
         this.state = {
             // avatar: this.props.loginForm.avatar,
@@ -81,7 +81,7 @@ class HomeLayout extends Component {
             inOutState: localStorage.getItem('inOutState')
         });
     }
-    componentDidMount(props){
+    componentDidMount(props) {
         console.log('------WillMount----localStorage', localStorage.getItem('inOutState'));
         this.setState({
             inOutState: localStorage.getItem('inOutState')
@@ -133,7 +133,7 @@ class HomeLayout extends Component {
             </Dropdown>
             :
             <Link to="user/login">
-                <img className={styles.userPic} src={logOut} alt='登出状态'/>
+                <img className={styles.userPic} src={logOut} alt='登出状态' />
             </Link>
 
         return (
@@ -144,7 +144,7 @@ class HomeLayout extends Component {
                     <Row>
                         <Col xs={18} sm={12} xl={12} xxl={8}>
                             <Link to='homepage'>
-                                <img className={styles.logo} src={logoPic} alt='logo'/>
+                                <img className={styles.logo} src={logoPic} alt='logo' />
                             </Link>
                         </Col>
                         <Col xs={6} sm={12} xl={12} xxl={16} className={styles.userCol}>
@@ -153,15 +153,17 @@ class HomeLayout extends Component {
                     </Row>
                 </Header>
                 {/* 内容 */}
-                <Content  className={styles.contentBox}>
+                <Content className={styles.contentBox}>
                     <Row style={{ backgroundColor: 'white' }}>
                         <Col span={1} xl={4}></Col>
                         <Col span={22} xl={16}>
-                            <GlobalNavi
-                                naviRoutes={naviRoutes}
-                                pathName={headerRouter}
-                                style={{ backgroundColor: 'white', marginBottom: '50%' }}
-                            />
+                            {this.props.sponsor ? null :
+                                <GlobalNavi
+                                    naviRoutes={naviRoutes}
+                                    pathName={headerRouter}
+                                    style={{ backgroundColor: 'white', marginBottom: '50%' }}
+                                />
+                            }
                             {this.props.children}
                             {/* 在线留言 */}
                             <div className={styles.service} style={{ right: this.state.numTool + 'px' }} onClick={this.display_name}><Icon type='message' />{this.state.numTool === 70 ? "收起" : "留言"}</div>
