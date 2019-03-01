@@ -1,5 +1,6 @@
 /**
- * title: 新闻讯息 - 智赛桥牌
+ * title: 新闻管理 - 智赛桥牌
+ * icon: schedule
  */
 import React from 'react';
 import { Menu } from 'antd';

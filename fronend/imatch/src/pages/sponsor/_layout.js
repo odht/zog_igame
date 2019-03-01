@@ -1,29 +1,52 @@
 import React from 'react';
-import { Menu, Layout, Icon } from 'antd';
+import { Menu, Layout, Icon, Breadcrumb } from 'antd';
 import Link from 'umi/link';
 import HomeLayout from '../../layouts/HomeLayout';
 import { connect } from 'dva';
+import { makeBreadcrumb } from '@/utils/tools'
 const { Header, Content, Footer, Sider, } = Layout;
 export default connect()((props) => {
+    const { route: { routes }, location: { pathname } } = props
+    const menu = () => {
+        return routes.map((item) => {
+            if (item.path && item.path !== '/sponsor') {
+                return (
+                    <Menu.Item
+                        key={item.path}
+                    >
+                        <Link to={item.path}>
+                            <Icon type={item.icon} />
+                            {item.title.split(' ')[0]}
+                        </Link>
+                    </Menu.Item>
+                )
+            } else {
+                return undefined
+            }
+        }).reverse()
+    }
     return (
         <>
             <Layout>
                 <Sider>
                     <Menu
-                        // onClick={this.handleClick}
                         style={{ width: 200, height: "80vh" }}
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
+                        selectedKeys={[pathname]}
                         mode="inline"
                     >
-                        <Menu.Item key="1"><Link to="/sponsor/news"><Icon type="schedule" />新闻管理</Link></Menu.Item>
-                        <Menu.Item key="2"><Link to="/sponsor/match"><Icon type="form" />赛事管理</Link></Menu.Item>
-                        <Menu.Item key="3"><Link to="/sponsor/help"><Icon type="bulb" />帮助</Link></Menu.Item>
-                        <Menu.Item key="4"><Link to="/sponsor/leave"><Icon type="message" />留言</Link></Menu.Item>
+                        {menu()}
                     </Menu>
                 </Sider>
                 <Content>
                     {/*面包屑 */}
+                    <Breadcrumb
+                        style={{
+                            backgroundColor: "white",
+                            padding: '6px 20px'
+                        }}
+                    >
+                        {makeBreadcrumb(routes, pathname)}
+                    </Breadcrumb>
                     {props.children}
                 </Content>
             </Layout>
