@@ -11,6 +11,7 @@ export default {
       routes: {
         exclude: [],
       },
+      title: '智赛竞技平台',
       hardSource: false,
     }],
   ],

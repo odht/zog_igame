@@ -154,23 +154,23 @@ class HomeLayout extends Component {
                 </Header>
                 {/* 内容 */}
                 <Content className={styles.contentBox}>
-                    <Row style={{ backgroundColor: 'white' }}>
-                        <Col span={1} xl={4}></Col>
-                        <Col span={22} xl={16}>
-                            {this.props.sponsor ? null :
+                    {this.props.sponsor ? this.props.children :
+                        <Row style={{ backgroundColor: 'white' }}>
+                            <Col span={1} xl={4}></Col>
+                            <Col span={22} xl={16}>
                                 <GlobalNavi
                                     naviRoutes={naviRoutes}
                                     pathName={headerRouter}
                                     style={{ backgroundColor: 'white', marginBottom: '50%' }}
                                 />
-                            }
-                            {this.props.children}
-                            {/* 在线留言 */}
-                            <div className={styles.service} style={{ right: this.state.numTool + 'px' }} onClick={this.display_name}><Icon type='message' />{this.state.numTool === 70 ? "收起" : "留言"}</div>
-                            <div className={styles.online} style={{ right: this.state.numMess + 'px' }}><SubmitInfo onBack={this.display_name.bind(this)} /></div>
-                        </Col>
-                        <Col span={1} xl={4}></Col>
-                    </Row>
+                                {this.props.children}
+                                {/* 在线留言 */}
+                                <div className={styles.service} style={{ right: this.state.numTool + 'px' }} onClick={this.display_name}><Icon type='message' />{this.state.numTool === 70 ? "收起" : "留言"}</div>
+                                <div className={styles.online} style={{ right: this.state.numMess + 'px' }}><SubmitInfo onBack={this.display_name.bind(this)} /></div>
+                            </Col>
+                            <Col span={1} xl={4}></Col>
+                        </Row>
+                    }
                 </Content>
                 {/* 页脚 */}
                 <Footer

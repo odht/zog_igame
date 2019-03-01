@@ -75,7 +75,7 @@ class UserBlock extends Component {
             );
         }
         if (!player){
-            router.push("/sponsor/home")
+            router.push("/sponsor/news")
         }
     }
     onTabChange = (key) => {

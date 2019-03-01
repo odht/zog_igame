@@ -87,3 +87,24 @@ export function deepCopy(obj) {
 	}
 	return copy
 }
+export function makeBreadcrumb(routes) {
+    const breadcrumbNameMapArray = routes.filter((item) => item.path && item.path != '')
+    const breadcrumbNameMap = breadcrumbNameMapArray.reduce((pre, now) => {
+        pre[now.path] = now.title;
+        return pre
+    }, {})
+    const pathSnippets = this.props.location.pathname.split('/').filter(i => i && i != 'imatch');
+    const extraBreadcrumbItems = pathSnippets.map((_, index) => {
+        const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+        console.log(breadcrumbNameMap);
+        return (
+            <Breadcrumb.Item key={url}>
+                <Link to={url}>
+                    {breadcrumbNameMap[url].split(' ')[0]}
+                </Link>
+            </Breadcrumb.Item>
+        );
+    });
+    const BreadcrumbItem = [].concat(extraBreadcrumbItems);
+    return BreadcrumbItem
+}
