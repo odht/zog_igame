@@ -9,7 +9,7 @@ export default connect()((props) => {
     const { route: { routes }, location: { pathname } } = props
     const menu = () => {
         return routes.map((item) => {
-            if (item.path && item.path !== '/sponsor') {
+            if (item.path && !item.isNotMenu) {
                 return (
                     <Menu.Item
                         key={item.path}
@@ -37,7 +37,7 @@ export default connect()((props) => {
                         {menu()}
                     </Menu>
                 </Sider>
-                <Content>
+                <Content >
                     {/*面包屑 */}
                     <Breadcrumb
                         style={{
@@ -47,7 +47,13 @@ export default connect()((props) => {
                     >
                         {makeBreadcrumb(routes, pathname)}
                     </Breadcrumb>
-                    {props.children}
+                    <div
+                        style={{
+                            padding: 20
+                        }}
+                    >
+                        {props.children}
+                    </div>
                 </Content>
             </Layout>
         </>
