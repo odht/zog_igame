@@ -16,7 +16,7 @@ class Board(models.Model):
     _inherit = "og.board"
 
     @api.multi
-    def bid(self, pos, call):
+    def bid(self, pos, call, agreement, notes):
         self.ensure_one()
         
         if self.state != 'bidding':
@@ -29,9 +29,11 @@ class Board(models.Model):
         nums = self.call_ids.mapped('number')
         num  = 1+(nums and max(nums) or 0)
         vals = {'name':call, 'pos': pos,
-                'board_id':self.id, 'number': num }
+                'board_id':self.id, 'number': num, 'agreement':agreement, 'notes':notes}
 
-        self.call_ids.create(vals)
+        self.call_ids.create1(vals)
+
+
         dclr,contract,rank,trump,risk = self.call_ids._compute_contract()
         self.contract = contract
         self.declarer = dclr

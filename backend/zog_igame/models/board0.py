@@ -55,10 +55,14 @@ class Board(models.Model):
             
             nn = rec.dealer and 'WNES'.index(rec.dealer) or 0
 
+            """
             auction = [ None for i in range( nn % 4) 
-                      ] + [ cd.name for cd in rec.call_ids]
+                      ] + [ [cd.name,cd.pos]+json.loads(cd.agreements) for cd in rec.call_ids]
+            """
+            auction = [ [cd.name,cd.pos]+json.loads(cd.agreements) for cd in rec.call_ids]
                       
-            rec.auction = json.dumps(auction)
+            #rec.auction = json.dumps(auction)
+            rec.auction = auction
 
     player = fields.Selection(POSITIONS,compute='_compute_player')
     tricks =  fields.Char(compute='_compute_trick')
