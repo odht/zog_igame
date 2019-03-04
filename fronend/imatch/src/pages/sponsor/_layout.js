@@ -25,13 +25,14 @@ export default connect()((props) => {
             }
         }).reverse()
     }
+    const menuPathname = routes.filter((item) => item.path && !item.isNotMenu).find((item) => pathname.indexOf(item.path) > -1).path
     return (
         <>
             <Layout>
                 <Sider>
                     <Menu
                         style={{ width: 200, height: "80vh" }}
-                        selectedKeys={[pathname]}
+                        selectedKeys={[menuPathname]}
                         mode="inline"
                     >
                         {menu()}
