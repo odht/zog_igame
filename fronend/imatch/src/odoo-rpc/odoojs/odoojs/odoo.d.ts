@@ -312,7 +312,7 @@ export interface clsStatic {
      * 新建数据
      * @param vals 
      */
-    creat(vals: {}): cls | data
+    create(vals: {}): cls | data
     /**
      * 改数据
      * @param id 

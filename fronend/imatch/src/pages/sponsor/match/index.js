@@ -14,7 +14,7 @@ function toCreate() {
 }
 async function getGameData() {
 	const cls = odoo.env('og.game');
-	console.log(cls._env,cls._rpc);
+	console.log(cls._env, cls._rpc);
 	const fields = {
 		name: null,
 		date_from: null,
@@ -41,21 +41,20 @@ const Checked = (props) => {
 	)
 }
 
-const TableData = (props) => {
-	const [loading, setLoading] = useState(true)
-	const [dataSource, setDataSource] = useState([])
+const TableData = ({dataSource,loading}) => {
+	
 	const columns = [{
 		title: "比赛名称",
 		dataIndex: "name"
 	}, {
 		title: "开始时间",
-		dataIndex: "date-from"
+		dataIndex: "date_from"
 	}, {
 		title: "结束时间",
-		dataIndex: "date-thus"
+		dataIndex: "date_thru"
 	}, {
 		title: "主办方",
-		dataIndex: "creat"
+		dataIndex: "host"
 	}, {
 		title: "状态",
 		dataIndex: "status"
@@ -65,37 +64,50 @@ const TableData = (props) => {
 	}, {
 		title: '操作',
 		dataIndex: 'operation',
-		render: () => <a href="javascript:;">管理</a>
+		render: () => {
+			return (
+				<>
+					<a href="javascript:;" >组织</a>
+					<a href="javascript:;" style={{marginLeft:10}}>管理</a>
+					<a href="javascript:;"style={{marginLeft:10}}>删除</a>
+				</>
+			)
+		}
 	},]
+
+	return (
+		<Table
+			loading={loading}
+			columns={columns}
+			bordered
+			rowKey={(row) => row.name}
+			dataSource={dataSource}
+			style={{
+				marginTop: 24,
+				maxWidth: '90%',
+				minWidth: 700,
+				backgroundColor: "white"
+			}}
+		/>
+	)
+}
+
+export default (props) => {
+	const [loading, setLoading] = useState(true)
+	const [dataSource, setDataSource] = useState([])
 	useEffect(() => {
 		getGameData().then((val) => {
 			setDataSource(val.map((item) => parseNotes(item)))
 			setLoading(false)
 		})
-	},[])
-	return (
-		<Spin spinning={loading}>
-			<Table
-				columns={columns}
-				bordered
-				dataSource={dataSource}
-				style={{
-					marginTop: 24,
-					maxWidth: '90%',
-					minWidth: 700
-				}}
-			/>
-		</Spin>
-	)
-}
-
-export default (props) => {
+	}, [])
+	console.log(dataSource);
 	return (
 		<div>
 			<Button onClick={toCreate}>新建比赛</Button>
 			<Divider style={{ height: 1.5 }} />
 			<Checked />
-			<TableData />
+			<TableData dataSource={dataSource} loading={loading} />
 		</div>
 	)
 }

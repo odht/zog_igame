@@ -3,10 +3,11 @@
  * isNotMenu: true
  */
 import React, { useEffect, useState, useRef } from 'react';
-import {  } from 'antd'
+import { } from 'antd'
 import odoo from '../../../odoo-rpc/odoo'
 import router from 'umi/router';
 import StepContent from '@/component/steps/test'
+import { parseNotes } from '@/utils/tools'
 const steps = [{
     title: '基本信息',
     dataIndex: [{
@@ -47,8 +48,7 @@ const steps = [{
         type: "Input",
         name: "concet",
         rules: []
-    },
-        , {
+    }, {
         label: "联系方式",
         type: "Input",
         name: "phone",
@@ -76,6 +76,7 @@ const steps = [{
     title: '确认',
     render(form, steps, data) {
         return steps.map((item) => item.dataIndex).filter((item) => item).reduce((pre, cur) => [...pre, ...cur], []).map((item) => {
+            console.log(item);
             return (
                 <p key={item.name}>{item.label + "：" + data[item.name]}</p>
             )
@@ -85,9 +86,13 @@ const steps = [{
 
 
 export default (props) => {
-    const onSubmit =async (data) => {
-        const cls=odoo.env('og.game');
-        const result = await cls.creat(parseNotes(data))
+    const onSubmit = async (data) => {
+        console.log(data);
+        const cls = odoo.env('og.game');
+        data.date_from = data.date[0];
+        data.date_thru = data.date[1];
+        delete data.date
+        const result = await cls.create(parseNotes(data))
         router.replace("/sponsor/match")
     }
     const onCancel = () => {
