@@ -1,5 +1,9 @@
+// TBD:   this.call , use this._ids not this._id,  for api.multi
+
+
 const modelCreator = options => {
-  const { model, fields: fields_raw, rpc, env, odoo } = options;
+  const { model, fields: fields_raw, rpc, env } = options;
+
   class cls {
     constructor(ids) {
       // ids = null :  null instanse
@@ -17,6 +21,14 @@ const modelCreator = options => {
         this._id = ids;
       }
     }
+
+      async call( method, args=[], kwargs ={} ){
+          return cls.call( method, [ this._id, ...args ], kwargs );
+      }
+
+      async toggle_active(){
+          return this.call( 'toggle_active');
+      }
 
     // only for multi
     list() {
@@ -151,24 +163,26 @@ const modelCreator = options => {
 
   Object.defineProperty(cls, 'name', { value: model, configurable: true });
 
-  cls._odoo = odoo;
-
   cls._name = model;
   cls._rpc = rpc;
   cls._env = env;
   cls._records = {};
-  cls._fields = null;
+  cls._fields = {};
   cls._fields_raw = fields_raw || ['name'];
 
   cls.init = async () => {
     // run only one  time. to set cls._fields for this cls
-    if (cls._fields) {
+
+
+
+    if (cls._fields&& Object.keys(cls._fields).length !== 0) {
       return cls.env(cls._name);
     }
     const _fields = await cls.fields_get(cls._fields_raw, ['type', 'relation']);
     if (_fields && Object.keys(_fields).length > 0) {
       cls._fields = _fields;
     }
+    console.log( 'init:', cls._name, cls._fields_raw, cls._fields )
     return cls.env(cls._name);
   };
 
@@ -192,6 +206,8 @@ const modelCreator = options => {
   };
 
   cls.call = async (method, args = [], kwargs = {}) => {
+
+
     const params = {
       model: cls._name,
       method,
@@ -213,7 +229,9 @@ const modelCreator = options => {
 
   cls._get_fields2 = async fields0 => {
     const fields = fields0 || {};
+
     await cls.init();
+    console.log(cls._fields);
     return Object.keys(cls._fields).reduce(async (accPromise, cur) => {
       const acc = await accPromise;
       const { type, relation } = cls._fields[cur];

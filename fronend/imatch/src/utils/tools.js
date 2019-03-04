@@ -109,3 +109,28 @@ export function makeBreadcrumb(routes, pathname) {
 	const BreadcrumbItem = [].concat(extraBreadcrumbItems);
 	return BreadcrumbItem
 }
+export function parseNotes(data) {
+	if (data.host) {
+		const { host, unit, referee, arbitration, concet, phone, endtime } = data
+		const obj = {
+			host,
+			unit,
+			referee,
+			arbitration,
+			concet,
+			phone,
+			endtime,
+		}
+		data.notes = JSON.stringify(obj)
+		Object.keys(obj).every((item) => {
+			delete data[item]
+		})
+		return data
+	} else {
+		const jsonString = data.notes;
+		console.log(jsonString);
+		const note = JSON.parse(jsonString);
+		console.log(note);
+		return { ...data, ...note }
+	}
+}

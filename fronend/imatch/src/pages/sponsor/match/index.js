@@ -2,13 +2,27 @@
  * title: 赛事管理 - 智赛桥牌
  * icon: form
  */
-import React, { useEffect } from 'react';
-import { Button, Divider, Radio, Table } from 'antd'
+import React, { useEffect, useState } from 'react';
+import { Button, Divider, Radio, Table, Spin } from 'antd'
 import router from 'umi/router'
+import { parseNotes } from '@/utils/tools'
+import odoo from '../../../odoo-rpc/odoo';
 
 const RadioGroup = Radio.Group
-function toCreate(){
+function toCreate() {
 	router.push('/sponsor/match/newMatch')
+}
+async function getGameData() {
+	const cls = odoo.env('og.game');
+	console.log(cls._env,cls._rpc);
+	const fields = {
+		name: null,
+		date_from: null,
+		date_thru: null,
+		notes: null,
+	}
+	const dataSource = await cls.search_read([['id', '>=', 0]], fields)
+	return dataSource
 }
 const Checked = (props) => {
 	const checked = ['全部', '预审', '预审未过', '比赛中', '备案', '欠费']
@@ -28,6 +42,8 @@ const Checked = (props) => {
 }
 
 const TableData = (props) => {
+	const [loading, setLoading] = useState(true)
+	const [dataSource, setDataSource] = useState([])
 	const columns = [{
 		title: "比赛名称",
 		dataIndex: "name"
@@ -38,7 +54,7 @@ const TableData = (props) => {
 		title: "结束时间",
 		dataIndex: "date-thus"
 	}, {
-		title: "创建者",
+		title: "主办方",
 		dataIndex: "creat"
 	}, {
 		title: "状态",
@@ -51,17 +67,25 @@ const TableData = (props) => {
 		dataIndex: 'operation',
 		render: () => <a href="javascript:;">管理</a>
 	},]
+	useEffect(() => {
+		getGameData().then((val) => {
+			setDataSource(val.map((item) => parseNotes(item)))
+			setLoading(false)
+		})
+	},[])
 	return (
-		<>
+		<Spin spinning={loading}>
 			<Table
 				columns={columns}
 				bordered
+				dataSource={dataSource}
 				style={{
-					marginTop:24,
-					width:'55%'
+					marginTop: 24,
+					maxWidth: '90%',
+					minWidth: 700
 				}}
 			/>
-		</>
+		</Spin>
 	)
 }
 

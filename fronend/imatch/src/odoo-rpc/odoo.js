@@ -1,9 +1,10 @@
-import ODOO from './odoo-rpc'
-
+import ODOO from './odoojs/odoojs/odoo'
+import zog_igame from './odoojs/odoo.addons.zog_igame';
 const host = 'http://192.168.1.88:8069'
 // const host = 'http://192.168.1.8:8069'
 
 const db = 'TT'
+const modules = { zog_igame };
 // 需要的模型名
 const models = {
         'res.users': ["login", "password", "partner_id", 'team_player_ids'],
@@ -24,7 +25,7 @@ const models = {
         'og.board': ["name", "table_id", "match_id", "host_id", "guest_id", "round_id", "phase_id", "game_id", "deal_id", "number", "sequence", "dealer", "vulnerable", "card_str", "hands", "call_ids", "auction", "declarer", "contract", "openlead", "result", "ns_point", "ew_point", "ns_win", "ew_win", "card_ids", "tricks", "last_trick", "current_trick", "state", "player", "claimer", "claim_result", "host_imp", "guest_imp"],
 
 }
-const odoo = new ODOO({ host, db, models })
+const odoo = new ODOO({ host, db, modules, models })
 
 export default odoo
 
