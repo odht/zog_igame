@@ -1,3 +1,5 @@
+import { Breadcrumb } from 'antd'
+import Link from 'umi/link'
 export function lookup(ids = [], data = {}) {
 	/* get recordset by id or ids  */
 	return (Array.isArray(ids) ? ids : [ids]).map(id => data[id]).filter(item => item)
@@ -86,4 +88,24 @@ export function deepCopy(obj) {
 		copy = obj;
 	}
 	return copy
+}
+export function makeBreadcrumb(routes, pathname) {
+	const breadcrumbNameMapArray = routes.filter((item) => item.path && item.path != '')
+	const breadcrumbNameMap = breadcrumbNameMapArray.reduce((pre, now) => {
+		pre[now.path] = now.title;
+		return pre
+	}, {})
+	const pathSnippets = pathname.split('/').filter(i => i && i != 'imatch');
+	const extraBreadcrumbItems = pathSnippets.map((_, index) => {
+		const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+		return (
+			<Breadcrumb.Item key={url}>
+				<Link to={url}>
+					{breadcrumbNameMap[url].split(' ')[0]}
+				</Link>
+			</Breadcrumb.Item>
+		);
+	});
+	const BreadcrumbItem = [].concat(extraBreadcrumbItems);
+	return BreadcrumbItem
 }

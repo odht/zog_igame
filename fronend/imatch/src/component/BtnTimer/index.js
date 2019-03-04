@@ -40,7 +40,7 @@ class BtnTimer extends Component{
         return(
             <Button
                 onClick={this.btnTimerHandle} 
-                style={{ width: '70px', marginLeft: '8px', fontSize: '10px', textAlign:'center' }}
+                style={{ width: '65px', marginLeft: '5px', fontSize: '10px', textAlign:'center' }}
                 disabled={this.state.btnDisable}
                 size='small'
             >

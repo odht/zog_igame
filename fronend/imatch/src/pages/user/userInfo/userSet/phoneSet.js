@@ -65,7 +65,7 @@ class OldPhoneConfirm extends Component{
                         {getFieldDecorator('captcha', {
                             rules: [{ required: true, message: '请填写验证码!' }],
                         })(
-                            <Input style={{ width: '70%', maxWidth:'190px'}}/>
+                            <Input style={{ width: '70%', maxWidth:'220px' }}/>
                         )}
                         {/* <Button style={{width: '90px', marginLeft:'8px',fontSize:'10px'}}>
                             获取验证码
@@ -138,7 +138,7 @@ class NewPhoneConfirm extends Component{
                         {getFieldDecorator('captcha', {
                             rules: [{ required: true, message: '请填写验证码!' }],
                         })(
-                            <Input style={{ width: '70%', maxWidth:'190px'}}/>
+                            <Input style={{ width: '70%', maxWidth:'220px' }}/>
                         )}
                         {/* <Button style={{width: '90px', marginLeft:'8px',fontSize:'10px'}}>
                         获取验证码

@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Alert, Checkbox, Modal, Divider } from 'antd';
 import { Link } from 'dva/router';
+import router from 'umi/router';
 import styles from './index.css';
 import 'ant-design-pro/dist/ant-design-pro.css'; // 统一引入样式
 import Login from 'ant-design-pro/lib/Login';
 import logoPic from '../../../assets/BridgeLogo.png';
-import {connect} from 'dva';
+import { connect } from 'dva';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
 
-
+console.log(useState);
 class UserBlock extends Component {
 
     state = {
@@ -18,7 +19,7 @@ class UserBlock extends Component {
         type: 'tab1',
         autoLogin: true,
         modalVisible: false,
-
+        player: true,//true为牌手，false为主办方
         lAccount: '',
         pwd: ''
     }
@@ -51,7 +52,8 @@ class UserBlock extends Component {
     //登录操作
     onSubmit = (err, values) => {
         console.log('value collected ----->', { ...values, autoLogin: this.state.autoLogin });
-        if (this.state.type === 'tab1') {
+        const { player, type } = this.state
+        if (type === 'tab1') {
             this.setState(
                 {
                     notice: '',
@@ -65,12 +67,15 @@ class UserBlock extends Component {
                             pwd: values.password
                         });
                         this.props.dispatch({
-                            type:'login_m/login',
-                            payload:{login:values.login, password:values.password}
+                            type: 'login_m/login',
+                            payload: { login: values.login, password: values.password }
                         });
                     }
                 }
             );
+        }
+        if (!player){
+            router.push("/sponsor/news")
         }
     }
     onTabChange = (key) => {
@@ -92,12 +97,18 @@ class UserBlock extends Component {
             localStorage.removeItem('pwd');
         }
     }
+    togglePlayer = (e) => {
+        this.setState((state, props) => {
+            return { ...state, player: !state.player }
+        })
+    }
     render() {
+        const { player } = this.state
         return (
             <div className={styles.loginBox} >
                 <div className={styles.normal}>
                     <div style={{ textAlign: 'center' }}>
-                        <img src={logoPic} className={styles.logoPic} alt='logo'/>
+                        <img src={logoPic} className={styles.logoPic} alt='logo' />
                     </div>
                     <Login
                         defaultActiveKey={this.state.type}
@@ -149,10 +160,10 @@ class UserBlock extends Component {
                         </Checkbox>
                             <Link className={styles.forgetPwd} to="/user/forgetPWD">忘记密码</Link>
                         </div>
-                        <Submit>登录</Submit>
+                        <Submit>{player ? "牌手登录" : "主办方登录"}</Submit>
                         <Link className={styles.registerBtn} to="/user/register">牌手注册 >></Link>
                         <Divider></Divider>
-                        <Link className={styles.sponsorLogin} to="/user/loginSponsor">--- 主办方登录 ---</Link>
+                        <a className={styles.sponsorLogin} onClick={this.togglePlayer}>--- {player ? "主办方登录" : "牌手登录"} ---</a>
                     </Login>
                     {/* 错误弹窗 */}
                     <div>
@@ -179,10 +190,10 @@ class UserBlock extends Component {
 
 
 
-const mapStateToProps =({login_m}) =>{
+const mapStateToProps = ({ login_m }) => {
 
-    console.log('----- login_m ------',login_m);
-    return{loginForm:login_m}
+    console.log('----- login_m ------', login_m);
+    return { loginForm: login_m }
 }
 
 
