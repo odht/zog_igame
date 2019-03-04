@@ -57,12 +57,12 @@ class Board(models.Model):
                 channel.message_post(subject = 'og.board', body = json.dumps(message)  )
 
     @api.multi
-    def bid(self, pos, call):
-        ret = super(Board, self).bid(pos, call)
+    def bid(self, pos, call,agreement,notes):
+        ret = super(Board, self).bid(pos, call,agreement,notes)
         if not ret:
             for rec in self:
                 info = rec._get_info()
-                rec.message_post('bid', [pos, call], info)
+                rec.message_post('bid', [pos, call,agreement,notes], info)
 
         return ret
 

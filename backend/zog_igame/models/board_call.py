@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 
+import json
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -11,6 +12,12 @@ from .bridge_tools import POSITIONS
 from .bridge_tools import TRUMPS,RISKS,CONTRACTS
 from .bridge_tools import SUITS,RANKS,CARDS
 from .bridge_tools import partner, lho
+
+class BoardAgreement(models.Model):
+    _name = "og.board.agreement"
+    _description = "Board Call Agreement"
+    call_id = fields.Many2one('og.board.call',required=True, ondelete='cascade')
+    notes = fields.Text('Notes')
 
 class BoardCall(models.Model):
     """
@@ -22,6 +29,17 @@ class BoardCall(models.Model):
     _order = 'number'
 
     board_id = fields.Many2one('og.board',required=True, ondelete='cascade')
+    agreement_ids = fields.One2many('og.board.agreement','call_id')
+    agreements  = fields.Char(compute='_compute_agreements')
+
+    @api.multi
+    @api.depends('agreement_ids')
+    def _compute_agreements(self):
+        for rec in self:
+            notes = [cd.notes for cd in rec.agreement_ids]
+            agreements = ['True']+notes if len(notes) else ['False','Null']
+            rec.agreements = json.dumps(agreements)
+
 
     number = fields.Integer()
     pos   = fields.Selection(POSITIONS, required=True )
@@ -99,6 +117,16 @@ class BoardCall(models.Model):
 
 
     @api.multi
+    def create1(self,vals):
+        vals1={'name':vals['name'], 'pos': vals['pos'],'board_id':vals['board_id'], 'number': vals['number']}
+        res = self.create(vals1)
+
+        vals2={'call_id':res.id, 'notes': vals['notes']}
+
+        if vals['agreement']=='True':
+            self.agreement_ids.create(vals2)
+
+
     def write(self, vals):
         """ no write
         """
