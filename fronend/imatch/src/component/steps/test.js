@@ -3,7 +3,7 @@
  * isNotMenu: true
  */
 import React, { useEffect, useState, useRef } from 'react';
-import { Steps, Button, Divider, Form, Input, DatePicker, Upload, Icon } from 'antd'
+import { Steps, Button, Divider, Form, Input, DatePicker, Spin } from 'antd'
 import moment from 'moment';
 import router from 'umi/router';
 
@@ -66,9 +66,15 @@ function turnDate(steps, data) {
     }, data)
 
 }
-export default Form.create({})((props) => {
+const option = {
+    onFieldsChange: (props, changed, all) => {
+        console.log(props, changed, all);
+    }
+}
+export default Form.create(option)((props) => {
     const [current, setCurrent] = useState(0)
     const [data, setData] = useState({})
+    const [loading, setLoading] = useState(false)
     const { form: { getFieldDecorator, validateFields }, steps, lastStep = () => false, onCancel } = props;
     const pre = () => {
         setCurrent(current && current - 1)
@@ -85,7 +91,7 @@ export default Form.create({})((props) => {
             })
             setCurrent(current === stepsLastIndex ? stepsLastIndex : current + 1)
             if (current === stepsLastIndex) {
-                lastStep(turnDate(steps, data))
+                lastStep(turnDate(steps, data), setLoading)
             }
         })
 
@@ -94,43 +100,47 @@ export default Form.create({})((props) => {
     return (
         <div style={{
             width: "60%",
-            minWidth: 600
+            minWidth: 600,
+            backgroundColor: "white",
+            padding: 20
         }}>
-            <Steps current={current}>
-                {steps.map((item) => <Steps.Step key={item.title} title={item.title} />)}
-            </Steps>
-            {<Form onSubmit={handleSubmit}>
-                <div style={{ minHeight: "300px", paddingTop: 24, paddingRight: "40%" }}>
-                    {steps[current].render ? steps[current].render(props.form, steps, turnDate(steps, data))
-                        : steps[current].dataIndex.map((item) => {
-                            return (
-                                <Form.Item
+            <Spin spinning={loading}>
+                <Steps current={current}>
+                    {steps.map((item) => <Steps.Step key={item.title} title={item.title} />)}
+                </Steps>
+                {<Form onSubmit={handleSubmit}>
+                    <div style={{ minHeight: "300px", paddingTop: 24, paddingRight: "40%" }}>
+                        {steps[current].render ? steps[current].render(props.form, steps, turnDate(steps, data))
+                            : steps[current].dataIndex.map((item) => {
+                                return (
+                                    <Form.Item
 
-                                    {...formItemLayout}
-                                    label={item.label}
-                                    key={item.name}
-                                >
-                                    {item.render ? item.render(props.form, data) : getFieldDecorator(item.name, {
-                                        rules: item.rules || [],
-                                        initialValue: data[item.name]
-                                    })(
-                                        itemType(item)
-                                    )}
-                                </Form.Item>
-                            )
-                        })}
-                </div>
-                <Divider />
-                <Form.Item>
-                    <div style={{ float: 'right' }}>
-                        {current > 0 ? <Button onClick={pre} style={{ marginRight: 15 }}>上一步</Button> : null}
-                        <Button type="primary" htmlType="submit" style={{ marginRight: 15 }}>{current === 3 ? "提交" : "下一步"}</Button>
-                        <Button onClick={onCancel}>取消创建</Button>
+                                        {...formItemLayout}
+                                        label={item.label}
+                                        key={item.name}
+                                    >
+                                        {item.render ? item.render(props.form, data) : getFieldDecorator(item.name, {
+                                            rules: item.rules || [],
+                                            initialValue: data[item.name]
+                                        })(
+                                            itemType(item)
+                                        )}
+                                    </Form.Item>
+                                )
+                            })}
                     </div>
-                </Form.Item>
+                    <Divider />
+                    <Form.Item>
+                        <div style={{ float: 'right' }}>
+                            {current > 0 ? <Button onClick={pre} style={{ marginRight: 15 }}>上一步</Button> : null}
+                            <Button type="primary" htmlType="submit" style={{ marginRight: 15 }}>{current === 3 ? "提交" : "下一步"}</Button>
+                            <Button onClick={onCancel}>取消创建</Button>
+                        </div>
+                    </Form.Item>
 
-            </Form>
-            }
+                </Form>
+                }
+            </Spin>
         </div>
     )
 })

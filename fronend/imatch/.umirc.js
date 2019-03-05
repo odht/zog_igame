@@ -6,7 +6,7 @@ export default {
     ['umi-plugin-react', {
       antd: true,
       dva: true,
-      // dynamicImport: true,
+      dynamicImport: true,
       dll: false,
       routes: {
         exclude: [],

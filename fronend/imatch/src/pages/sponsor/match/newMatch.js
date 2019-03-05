@@ -37,7 +37,7 @@ const steps = [{
         label: "主办单位",
         type: "Input",
         name: "host",
-        rules: []
+        rules: [{ required: true, message: '请输入比赛名称' }]
     }, {
         label: "协办单位",
         type: "Input",
@@ -78,7 +78,7 @@ const steps = [{
         return steps.map((item) => item.dataIndex).filter((item) => item).reduce((pre, cur) => [...pre, ...cur], []).map((item) => {
             console.log(item);
             return (
-                <p key={item.name}>{item.label + "：" + data[item.name]}</p>
+                <p key={item.name}><span style={{ fontWeight: "bolder" }}>{item.label + "："}</span> {data[item.name]}</p>
             )
         })
     }
@@ -86,14 +86,18 @@ const steps = [{
 
 
 export default (props) => {
-    const onSubmit = async (data) => {
+    const onSubmit = async (data, setLoading) => {
         console.log(data);
+        setLoading(true)
         const cls = odoo.env('og.game');
         data.date_from = data.date[0];
         data.date_thru = data.date[1];
         delete data.date
         const result = await cls.create(parseNotes(data))
-        router.replace("/sponsor/match")
+        if (result) {
+            setLoading(false)
+            router.replace("/sponsor/match")
+        }
     }
     const onCancel = () => {
         router.replace("/sponsor/match")
