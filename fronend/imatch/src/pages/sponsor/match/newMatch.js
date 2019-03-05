@@ -83,8 +83,6 @@ const steps = [{
         })
     }
 }]
-
-
 export default (props) => {
     const onSubmit = async (data, setLoading) => {
         console.log(data);
