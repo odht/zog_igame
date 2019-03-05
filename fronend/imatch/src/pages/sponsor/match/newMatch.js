@@ -3,8 +3,7 @@
  * isNotMenu: true
  */
 import React, { useEffect, useState, useRef } from 'react';
-import {  } from 'antd'
-import odoo from '../../../odoo-rpc/odoo'
+import { Steps, Button, Divider, Form, Input, DatePicker, Upload, Icon } from 'antd'
 import router from 'umi/router';
 import StepContent from '@/component/steps/test'
 const steps = [{
@@ -47,12 +46,6 @@ const steps = [{
         type: "Input",
         name: "concet",
         rules: []
-    },
-        , {
-        label: "联系方式",
-        type: "Input",
-        name: "phone",
-        rules: []
     }, {
         label: "备注",
         type: "Input",
@@ -82,13 +75,9 @@ const steps = [{
         })
     }
 }]
-
-
 export default (props) => {
-    const onSubmit =async (data) => {
-        const cls=odoo.env('og.game');
-        const result = await cls.creat(parseNotes(data))
-        router.replace("/sponsor/match")
+    const onSubmit = (data) => {
+        
     }
     const onCancel = () => {
         router.replace("/sponsor/match")

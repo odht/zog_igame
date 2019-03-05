@@ -8,6 +8,9 @@ import Link from 'umi/link';
 import style from './index.less';
 import { Button } from 'antd';
 import { Table, Divider, Tag } from 'antd';
+import { Input } from 'antd';
+import router from 'umi/router'
+const Search = Input.Search;
 const columns = [{
   title: '标题',
   dataIndex: 'name',
@@ -68,15 +71,21 @@ const data = [{
   examine: '未通过',
   operation: '删除',
 }];
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-};
+function toCreate() {
+	router.push('/sponsor/news/news')
+}
+
 export default (props) => {
   return (<div>
+    <div className={style.Search}><Search
+      placeholder=""
+      enterButton="搜索"
+      // size="large"
+      onSearch={value => console.log(value)}
+    /> </div>
+       <div className={style.SearchButton}><Button type="delete" backgroundcolor="">重置</Button></div>
     <div className={style.newsButton}>
-      <Button type="primary">新建讯息</Button>
+      <Button type="primary" onClick={toCreate}>新闻发布</Button> <Button type="delete" backgroundcolor="">批量删除</Button>
     </div>
     <div className={style.hr}></div>
     <div className={style.newsTable}>

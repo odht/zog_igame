@@ -78,6 +78,7 @@ const TableData = (props) => {
 			<Table
 				columns={columns}
 				bordered
+				rowSelection={{}}
 				dataSource={dataSource}
 				style={{
 					marginTop: 24,
