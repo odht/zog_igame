@@ -7,8 +7,9 @@ import { makeBreadcrumb } from '@/utils/tools'
 const { Header, Content, Footer, Sider, } = Layout;
 export default connect()((props) => {
     const { route: { routes }, location: { pathname } } = props
-    const menu = () => {
-        return routes.map((item) => {
+    console.log(props);
+    const menu = (route) => {
+        return route.map((item) => {
             if (item.path && !item.isNotMenu) {
                 return (
                     <Menu.Item
@@ -35,7 +36,7 @@ export default connect()((props) => {
                         selectedKeys={[menuPathname]}
                         mode="inline"
                     >
-                        {menu()}
+                        {menu(routes)}
                     </Menu>
                 </Sider>
                 <Content >

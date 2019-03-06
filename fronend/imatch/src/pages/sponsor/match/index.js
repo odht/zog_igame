@@ -170,6 +170,7 @@ export default (props) => {
 
 	return (
 		<div>
+			{console.log(11111111111111)}
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start" }}>
 				<Input.Search
 					placeholder="输入比赛名称"
