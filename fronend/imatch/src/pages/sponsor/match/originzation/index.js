@@ -1,73 +1,60 @@
 /**
- * title: 新建比赛 - 智赛桥牌
- * isNotMenu: true
+ * title: 组织
+ * isNotMeun: true
  */
 import React, { useEffect, useState, useRef } from 'react';
 import { } from 'antd'
-import odoo from '../../../odoo-rpc/odoo'
 import router from 'umi/router';
 import StepContent from '@/component/steps'
 import { parseNotes } from '@/utils/tools'
+import odoo from '../../../../odoo-rpc/odoo';
 const steps = [{
-    title: '基本信息',
+    title: '创建组',
     dataIndex: [{
-        label: "比赛名称",
+        label: "组名称",
         type: "Input",
         name: "name",
-        rules: [{ required: true, message: '请输入比赛名称' }]
+        rules: [{ required: true, message: '请输入组名称' }]
     }, {
-        label: "比赛时间",
-        type: "RangePicker",
+        label: "类型",
+        type: "Radio",
+        values:['循环赛','积分编排赛','淘汰赛'],
         name: "date",
-        rules: []
-    }, {
-        label: "截止",
-        type: "DatePicker",
-        name: "endtime",
-        rules: []
-    }, {
-        label: "地点",
-        type: "Input",
-        name: "place",
-        rules: [{ required: true, message: '请输入地点' }]
-    },]
+        rules: [{ required: true, message: '选择一个类型' }]
+    }]
 }, {
-    title: '主办&联系人',
+    title: '赛制',
     dataIndex: [{
-        label: "主办单位",
-        type: "Input",
+        label: "IMP - VP",
+        type: "select",
         name: "host",
-        rules: [{ required: true, message: '请输入比赛名称' }]
+        values:['20-VP WBF','25-VP WBF','20-VP 北美'],
+        rules: [{ required: true, message: '选择一个赛制' }]
     }, {
-        label: "协办单位",
+        label: "轮空IMP",
         type: "Input",
         name: "unit",
-        rules: []
+        rules: [{ required: true, message: '必填' }]
     }, {
-        label: "联系人",
+        label: "轮空VP",
         type: "Input",
         name: "concet",
-        rules: []
-    }, {
-        label: "联系方式",
-        type: "Input",
-        name: "phone",
-        rules: []
-    }, {
-        label: "备注",
-        type: "Input",
-        name: "remark",
-        rules: []
+        rules: [{ required: true, message: '必填' }]
     }],
 }, {
-    title: '裁判&仲裁',
+    title: '牌桌/桌号',
     dataIndex: [{
-        label: "裁判",
+        label: "轮次",
         type: "Input",
         name: "referee",
         rules: []
     }, {
-        label: "仲裁",
+        label: "每轮时间（分钟）",
+        type: "Input",
+        name: "arbitration",
+        rules: []
+    }, {
+        label: "每轮牌数",
         type: "Input",
         name: "arbitration",
         rules: []

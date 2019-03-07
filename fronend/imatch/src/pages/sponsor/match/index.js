@@ -1,6 +1,7 @@
 /**
  * title: 赛事列表 - 智赛桥牌
  * icon: form
+ * index: 0
  */
 import React, { useEffect, useState } from 'react';
 import { Button, Divider, Radio, Table, Input, Popconfirm, Tag } from 'antd'
@@ -34,15 +35,15 @@ async function deleteGame(text, record, setState) {
 	}
 }
 function organization(text, record) {
-
+	router.push({
+		pathname: '/sponsor/match/originzation',
+	})
 }
 function managerGame(text, record) {
 	router.push({
 		pathname: '/sponsor/match/matchManager',
-		state: {
-			game: record
-		}
 	})
+	localStorage.game = record.id
 }
 async function getGameData(domain) {
 	const cls = odoo.env('og.game');

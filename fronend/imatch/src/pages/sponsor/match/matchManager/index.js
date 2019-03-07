@@ -4,12 +4,15 @@
  */
 import React, { useEffect, useState, useRef } from 'react';
 import Redirect from 'umi/redirect'
+import { connect } from 'dva'
 
-export default (props) => {
+export default connect()((props) => {
     console.log(props);
-    const x = ['基本信息', '规程', '参赛队', '项目', '结果', '新闻']
+    const { location: { state }, dispatch } = props;
+    useEffect(() => {
+        // dispatch()
+    }, [])
     return (
-        <Redirect to="/sponsor/match/matchManager/basicMessage" />
-        // <span>111</span>
+        <Redirect to={{ pathname: "/sponsor/match/matchManager/basicMessage", state: state }} />
     )
-}
+})
