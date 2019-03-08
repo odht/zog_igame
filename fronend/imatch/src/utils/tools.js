@@ -90,7 +90,13 @@ export function deepCopy(obj) {
 	return copy
 }
 export function makeBreadcrumb(routes, pathname) {
-	const breadcrumbNameMapArray = routes.filter((item) => item.path && item.path != '')
+	const breadcrumbNameMapArray = routes.filter((item) => item.path && item.path != '').reduce((pre, cur) => {
+		if (cur.routes) {
+			return [...pre, cur, ...cur.routes.filter((item) => item.path && item.path != '')]
+		} else {
+			return [...pre, cur]
+		}
+	}, [])
 	const breadcrumbNameMap = breadcrumbNameMapArray.reduce((pre, now) => {
 		pre[now.path] = now.title;
 		return pre
@@ -101,6 +107,7 @@ export function makeBreadcrumb(routes, pathname) {
 		return (
 			<Breadcrumb.Item key={url}>
 				<Link to={url}>
+
 					{breadcrumbNameMap[url].split(' ')[0]}
 				</Link>
 			</Breadcrumb.Item>
@@ -108,4 +115,29 @@ export function makeBreadcrumb(routes, pathname) {
 	});
 	const BreadcrumbItem = [].concat(extraBreadcrumbItems);
 	return BreadcrumbItem
+}
+export function parseNotes(data) {
+	if (data.host) {
+		const { host, unit, referee, arbitration, concet, phone, endtime } = data
+		const obj = {
+			host,
+			unit,
+			referee,
+			arbitration,
+			concet,
+			phone,
+			endtime,
+		}
+		data.notes = JSON.stringify(obj)
+		Object.keys(obj).every((item) => {
+			delete data[item]
+		})
+		return data
+	} else {
+		const jsonString = data.notes;
+		console.log(jsonString);
+		const note = JSON.parse(jsonString);
+		console.log(note);
+		return { ...data, ...note }
+	}
 }

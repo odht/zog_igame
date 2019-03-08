@@ -1,13 +1,14 @@
-import ODOO from './odoo-rpc'
-
+import ODOO from './odoojs/odoojs/odoo'
+import zog_igame from './odoojs/odoo.addons.zog_igame';
 const host = 'http://192.168.1.88:8069'
 // const host = 'http://192.168.1.8:8069'
 
 const db = 'TT'
+const modules = { zog_igame };
 // 需要的模型名
 const models = {
         'res.users': ["login", "password", "partner_id", 'team_player_ids'],
-        'og.game': ["name", "notes", "date_from", "date_thru", "phase_ids", "round_ids", "schedule_ids", "deal_ids", "team_ids", "player_ids", "match_ids", "match_type", "table_ids", "board_ids",],
+        'og.game': ["name", "notes", "date_from", "date_thru", "phase_ids", "round_ids", "schedule_ids", "deal_ids", "team_ids", "player_ids", "match_ids", "match_type", "table_ids", "board_ids","state"],
         'og.phase': ["name", "number", "sequence", "game_id", "org_type", "score_type", "score_uom", "round_ids", "team_ids"],
         'og.schedule': ["name", "number", "date_from", "date_thru", "deal_ids", "round_ids"],
         'og.deal': ["name", "number", "dealer", "vulnerable", "card_str", "card_ids", "schedule_id", "game_id", "schedule_ids", "game_ids", "board_ids", "match_ids", "match_line_ids"],
@@ -24,7 +25,7 @@ const models = {
         'og.board': ["name", "table_id", "match_id", "host_id", "guest_id", "round_id", "phase_id", "game_id", "deal_id", "number", "sequence", "dealer", "vulnerable", "card_str", "hands", "call_ids", "auction", "declarer", "contract", "openlead", "result", "ns_point", "ew_point", "ns_win", "ew_win", "card_ids", "tricks", "last_trick", "current_trick", "state", "player", "claimer", "claim_result", "host_imp", "guest_imp"],
 
 }
-const odoo = new ODOO({ host, db, models })
+const odoo = new ODOO({ host, db, modules, models })
 
 export default odoo
 

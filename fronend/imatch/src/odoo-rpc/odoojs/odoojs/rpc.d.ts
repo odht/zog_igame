@@ -1,0 +1,1 @@
+export { rpc } from './odoo'

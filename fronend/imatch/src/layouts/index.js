@@ -21,7 +21,7 @@ function Layout(props) {
     )
   } else if (pathname.indexOf('/sponsor') > -1) {
     return (
-      <HomeLayout {...props} sponsor={true}> {props.children} </HomeLayout>
+      <NoneLayout {...props} sponsor={true}> {props.children} </NoneLayout>
     )
   }
   else {

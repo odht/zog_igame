@@ -89,10 +89,10 @@ class JsonApi(http.Controller):
         return ret
 
     @http.route('/json/user/register',type='json', auth='none', cors='*', csrf=False )
-    def register(self,db,login,password,phone,email):
+    def register(self,db,role,login,password,phone,email):
         with registry(db).cursor() as cr:
             env = api.Environment(cr, SUPERUSER_ID, {})
-            return env['res.users'].register(login,password,phone,email)
+            return env['res.users'].register(role,login,password,phone,email)
 
     @http.route('/json/user/reset/password',type='json', auth='none', cors='*', csrf=False )
     def reset_psw(self,db,login,password):
@@ -101,6 +101,7 @@ class JsonApi(http.Controller):
             return env['res.users'].reset_new_password(login,password)
 
     def _login_return(self,status,type,authority, userinfo=None):
+
         res = {
             'status': status,
             'type':  type,
@@ -115,9 +116,9 @@ class JsonApi(http.Controller):
 
 
     @http.route('/json/user/login',type='json', auth='none', cors='*', csrf=False )
-    def login(self,db,login,password, type):
+    def login(self,db,login,password,role, type):
         #print('1231',db,login,password, type)
-        _logger.info('call login with %s, %s, %s, %s', db,login,password, type)
+        _logger.info('call login with %s, %s, %s, %s, %s', db,login,password,role, type)
 
         if type not in ['account', 'mobile']:
             return self._login_return('error', type, 'guest')
@@ -131,6 +132,17 @@ class JsonApi(http.Controller):
         if not uid:
             return self._login_return('error', type, 'guest')
 
+        user = http.request.env['res.users'].search([('login', '=', login)])
+        userRole = user.role
+
+        #print('uid-----------------',uid,role,login,userRole)
+
+        if userRole != role:
+            return self._login_return('error', type, 'guest')
+
+        #user111111 = http.request.env['res.users'].browse([uid]).read(['login'])
+
+
         session = http.request.session
         session.db = db
         session.uid = uid
@@ -141,10 +153,12 @@ class JsonApi(http.Controller):
         session._fix_lang(session.context)
         http.root.session_store.save(session)
 
+
         authority = 'admin'  #  from userinfo
         userinfo = {
                  'sid': session.sid,
                  'uid': uid,
+                 'role':userRole,
                  'name':str( uid ) + 'name'
                  }  # user info
 
