@@ -70,13 +70,14 @@ class UserBlock extends Component {
                             type: 'login_m/login',
                             payload: { login: values.login, password: values.password }
                         });
+                        if (!player){
+                            router.push("/sponsor/news")
+                        }
                     }
                 }
             );
         }
-        if (!player){
-            router.push("/sponsor/news")
-        }
+       
     }
     onTabChange = (key) => {
         console.log('------tab', key);

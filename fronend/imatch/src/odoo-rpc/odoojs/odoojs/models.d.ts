@@ -1,4 +1,4 @@
-import Odoo, { cls, clsStatic, rpcIns } from './index'
+import Odoo, { cls, clsStatic, rpcIns } from './odoo'
 declare var clss: cls
 declare var odoo: Odoo
 interface createOptions {

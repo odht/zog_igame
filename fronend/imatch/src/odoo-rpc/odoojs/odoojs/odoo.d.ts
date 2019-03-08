@@ -1,3 +1,12 @@
+import { async, longStackSupport, timeout } from "q";
+import Login from "@/components/Login";
+import { userInfo, type } from "os";
+import { callbackify } from "util";
+import { lookup } from "dns";
+import Search from "antd/lib/transfer/search";
+
+
+
 interface modules {
 
 }
@@ -303,7 +312,7 @@ export interface clsStatic {
      * 新建数据
      * @param vals 
      */
-    creat(vals: {}): cls | data
+    create(vals: {}): cls | data
     /**
      * 改数据
      * @param id 

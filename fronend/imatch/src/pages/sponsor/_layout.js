@@ -7,9 +7,10 @@ import { makeBreadcrumb } from '@/utils/tools'
 const { Header, Content, Footer, Sider, } = Layout;
 export default connect()((props) => {
     const { route: { routes }, location: { pathname } } = props
-    const menu = () => {
-        return routes.map((item) => {
-            if (item.path && item.path !== '/sponsor') {
+    console.log(props);
+    const menu = (route) => {
+        return route.map((item) => {
+            if (item.path && !item.isNotMenu) {
                 return (
                     <Menu.Item
                         key={item.path}
@@ -25,19 +26,20 @@ export default connect()((props) => {
             }
         }).reverse()
     }
+    const menuPathname = routes.filter((item) => item.path && !item.isNotMenu).find((item) => pathname.indexOf(item.path) > -1).path
     return (
         <>
             <Layout>
                 <Sider>
                     <Menu
                         style={{ width: 200, height: "80vh" }}
-                        selectedKeys={[pathname]}
+                        selectedKeys={[menuPathname]}
                         mode="inline"
                     >
-                        {menu()}
+                        {menu(routes)}
                     </Menu>
                 </Sider>
-                <Content>
+                <Content >
                     {/*面包屑 */}
                     <Breadcrumb
                         style={{
@@ -47,7 +49,13 @@ export default connect()((props) => {
                     >
                         {makeBreadcrumb(routes, pathname)}
                     </Breadcrumb>
-                    {props.children}
+                    <div
+                        style={{
+                            padding: 20
+                        }}
+                    >
+                        {props.children}
+                    </div>
                 </Content>
             </Layout>
         </>

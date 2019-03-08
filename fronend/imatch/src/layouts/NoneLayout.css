@@ -4,7 +4,7 @@
 }
 .header{
     background-color:lightBlue;
-    height: 10%;
+    /* height: 10%; */
     padding: 0;
 }
 .logo{
@@ -14,7 +14,7 @@
 .content{
     /* background-color: blue; */
     /* height: 80%; */
-    min-height: 800px;
+    /* min-height: 800px; */
     /* overflow-y:scroll;  */
 }
 .footer{
