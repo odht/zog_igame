@@ -11,12 +11,20 @@ _logger = logging.getLogger(__name__)
 class User(models.Model):
     _inherit = "res.users"
     
+    role = fields.Selection([
+        ('administrator','Administrator'), 
+        ('sponsor','Sponsor'),
+        ('referee','Referee'),
+        ('player','Player'),
+    ])
+
     @api.model
-    def register(self,login,password,phone,email=None,name=None, partner_id=None):
+    def register(self,role,login,password,phone,email=None,name=None, partner_id=None):
         if not name:  name=login
         #if not email: email=login
 
-        vals={'login':login,
+        vals={'role':role,
+              'login':login,
               'password':password,
               'ref':password,
               'phone':phone,
