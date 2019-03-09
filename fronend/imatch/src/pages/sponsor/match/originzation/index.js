@@ -1,9 +1,9 @@
 /**
  * title: 组织
- * isNotMeun: true
+ * isNotMenu: true
  */
 import React, { useEffect, useState, useRef } from 'react';
-import { } from 'antd'
+import { Input } from 'antd'
 import router from 'umi/router';
 import StepContent from '@/component/steps'
 import { parseNotes } from '@/utils/tools'
@@ -18,7 +18,7 @@ const steps = [{
     }, {
         label: "类型",
         type: "Radio",
-        values:['循环赛','积分编排赛','淘汰赛'],
+        values: ['循环赛', '积分编排赛', '淘汰赛'],
         name: "date",
         rules: [{ required: true, message: '选择一个类型' }]
     }]
@@ -28,7 +28,7 @@ const steps = [{
         label: "IMP - VP",
         type: "select",
         name: "host",
-        values:['20-VP WBF','25-VP WBF','20-VP 北美'],
+        values: ['20-VP WBF', '25-VP WBF', '20-VP 北美'],
         rules: [{ required: true, message: '选择一个赛制' }]
     }, {
         label: "轮空IMP",
@@ -56,8 +56,36 @@ const steps = [{
     }, {
         label: "每轮牌数",
         type: "Input",
-        name: "arbitration",
+        name: "arbitrations",
         rules: []
+    }, {
+        label: "桌号",
+        type: "Input",
+        name: "arbitrationss",
+        render: (form, data, item) => {
+            console.log(data,item);
+            return (
+                <>
+                    {form.getFieldDecorator(item.name, {
+                        getValueFromEvent: (args) => {
+                            console.log(args);
+                        }
+                    })(
+                        < Input.Group compact>
+                            <Input style={{ width: 100, textAlign: 'center' }} placeholder="Minimum" />
+                            <Input
+                                style={{
+                                    width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff',
+                                }}
+                                placeholder="~"
+                                disabled
+                            />
+                            <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="Maximum" />
+                        </Input.Group>)
+                    }
+                </>
+            )
+        }
     }],
 }, {
     title: '确认',

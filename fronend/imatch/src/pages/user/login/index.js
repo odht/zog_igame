@@ -68,16 +68,16 @@ class UserBlock extends Component {
                         });
                         this.props.dispatch({
                             type: 'login_m/login',
-                            payload: { login: values.login, password: values.password }
+                            payload: { login: values.login, password: values.password, role: "player" }
                         });
-                        if (!player){
+                        if (!player) {
                             router.push("/sponsor/news")
                         }
                     }
                 }
             );
         }
-       
+
     }
     onTabChange = (key) => {
         console.log('------tab', key);

@@ -202,7 +202,7 @@ class Odoo {
         const data = await this._rpc.login(params)
         if (!data.code) {
             Odoo._session[this._rpc.sid] = this
-            await this.init()
+            // await this.init()
             return this._rpc.sid
         }
         return null

@@ -1,6 +1,6 @@
 import logOut from '@/assets/logOut.png';
-import odoo from '@/odoo-rpc/odoo';
 import router from 'umi/router';
+import odoo from '../odoo-rpc/odoo';
 
 
 export default {
@@ -17,11 +17,9 @@ export default {
       *login ({payload}, {call, put}) {
         const session_id = yield odoo.login(payload);
         console.log('----- login-payload -----',payload, session_id);
-        
         if (session_id) {
           const me = yield odoo.me({ id: null, partner_id: { id: null, name: null } });
           const { partner_id: { id: partner_id }, id } = yield me.look({ id: null, partner_id: { id: null, name: null } });
-          
           yield put({
             type:'save',
             payload:session_id

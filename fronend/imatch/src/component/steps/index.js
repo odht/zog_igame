@@ -134,7 +134,7 @@ export default Form.create(option)((props) => {
                                         label={item.label}
                                         key={item.name}
                                     >
-                                        {item.render ? item.render(props.form, data) : getFieldDecorator(item.name, {
+                                        {item.render ? item.render(props.form, data,item) : getFieldDecorator(item.name, {
                                             rules: item.rules || [],
                                             initialValue: data[item.name]
                                         })(
