@@ -59,7 +59,7 @@ class Board(models.Model):
             auction = [ None for i in range( nn % 4) 
                       ] + [ [cd.name,cd.pos]+json.loads(cd.agreements) for cd in rec.call_ids]
             """
-            auction = [ [cd.name,cd.pos]+json.loads(cd.agreements) for cd in rec.call_ids]
+            auction = [ [cd.pos,cd.name]+json.loads(cd.agreements) for cd in rec.call_ids]
                       
             #rec.auction = json.dumps(auction)
             rec.auction = auction

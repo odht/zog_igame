@@ -69,10 +69,12 @@ class Game(models.Model):
     #TBD, no used now
     state = fields.Selection([ ('draft', 'Draft'), ('conformed', 'Confirmed'),
                                ('done', 'Locked'), ('cancel', 'Cancelled')], 
-        string='Status', readonly=True, index=True, copy=False, default='draft',
+        string='Status', index=True, copy=False, default='draft',
         help='TBD' )
 
     notes = fields.Text('Notes')
+    remarks = fields.Text('Remarks')
+    paymentStatus = fields.Boolean( default=False)
     
     phase_ids = fields.One2many('og.phase','game_id',string='Phases')
     schedule_ids = fields.One2many('og.schedule','game_id',string='Schedules')
