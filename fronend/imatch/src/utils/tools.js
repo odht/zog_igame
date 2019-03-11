@@ -1,4 +1,4 @@
-import { Breadcrumb } from 'antd'
+import { Breadcrumb, Menu, Icon } from 'antd'
 import Link from 'umi/link'
 export function lookup(ids = [], data = {}) {
 	/* get recordset by id or ids  */
@@ -90,7 +90,13 @@ export function deepCopy(obj) {
 	return copy
 }
 export function makeBreadcrumb(routes, pathname) {
-	const breadcrumbNameMapArray = routes.filter((item) => item.path && item.path != '')
+	const breadcrumbNameMapArray = routes.filter((item) => item.path && item.path != '').reduce((pre, cur) => {
+		if (cur.routes) {
+			return [...pre, cur, ...cur.routes.filter((item) => item.path && item.path != '')]
+		} else {
+			return [...pre, cur]
+		}
+	}, [])
 	const breadcrumbNameMap = breadcrumbNameMapArray.reduce((pre, now) => {
 		pre[now.path] = now.title;
 		return pre
@@ -101,6 +107,7 @@ export function makeBreadcrumb(routes, pathname) {
 		return (
 			<Breadcrumb.Item key={url}>
 				<Link to={url}>
+
 					{breadcrumbNameMap[url].split(' ')[0]}
 				</Link>
 			</Breadcrumb.Item>
@@ -108,6 +115,36 @@ export function makeBreadcrumb(routes, pathname) {
 	});
 	const BreadcrumbItem = [].concat(extraBreadcrumbItems);
 	return BreadcrumbItem
+}
+export function createMenu(routes) {
+	return routes.reduce((pre, item) => {
+		if (item.path && !item.isNotMenu && item.title) {
+			const x = (
+				<Menu.Item
+					key={item.path}
+				>
+					<Link to={item.path}>
+						{item.icon ? <Icon type={item.icon} /> : null}
+						{item.title.split(' ')[0]}
+					</Link>
+				</Menu.Item>
+			)
+			if (item.index >= 0) {
+				let middle
+				if (pre[Number(item.index)]) {
+					middle = pre[Number(item.index)]
+				}
+				pre[Number(item.index)] = x
+				pre.push(middle)
+			} else {
+				pre.push(x)
+			}
+			return pre
+
+		} else {
+			return pre
+		}
+	}, [])
 }
 export function parseNotes(data) {
 	if (data.host) {
@@ -128,9 +165,7 @@ export function parseNotes(data) {
 		return data
 	} else {
 		const jsonString = data.notes;
-		console.log(jsonString);
 		const note = JSON.parse(jsonString);
-		console.log(note);
 		return { ...data, ...note }
 	}
 }

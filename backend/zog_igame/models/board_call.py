@@ -118,13 +118,14 @@ class BoardCall(models.Model):
 
     @api.multi
     def create1(self,vals):
+
         vals1={'name':vals['name'], 'pos': vals['pos'],'board_id':vals['board_id'], 'number': vals['number']}
         res = self.create(vals1)
 
         vals2={'call_id':res.id, 'notes': vals['notes']}
 
         if vals['agreement']=='True':
-            self.agreement_ids.create(vals2)
+            res.agreement_ids.create(vals2)
 
 
     def write(self, vals):

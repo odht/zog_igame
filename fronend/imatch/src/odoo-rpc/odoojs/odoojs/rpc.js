@@ -5,7 +5,7 @@ import fetch from 'dva/fetch';
 const _fetch = (url, options, timeout) => {
   return Promise.race([
     fetch(url, options),
-    new Promise(function(resolve, reject) {
+    new Promise(function (resolve, reject) {
       setTimeout(() => reject(new Error('request timeout')), timeout);
     }),
   ]);
@@ -97,8 +97,8 @@ class RPC {
     const {
       host = '/api',
       db,
-      sid =null,
-      uid= null,
+      sid = null,
+      uid = null,
       timeout = 120,
       callbackerror // = () => false,
     } = options;
@@ -129,9 +129,14 @@ class RPC {
     }
     return data;
   }
-
+  async register(params) {
+    const url = `${this.host}/json/user/register`;
+    const { login, db, password, phone, email, role } = params;
+    const data = await this.json(url, { login, password, db: db || this.db, phone, email, role });
+    return data;
+  }
   async login(params) {
-    const { db, login, password } = params;
+    const { db, login, password, role } = params;
     const url = `${this.host}/json/user/login`;
 
     if (db) {
@@ -142,6 +147,7 @@ class RPC {
       login,
       password,
       db: this.db,
+      role: role,
       type: 'account',
     });
 
@@ -156,8 +162,8 @@ class RPC {
         } = data;
         this.sid = sid;
         this.uid = uid;
-        window.localStorage.setItem('sid',sid)
-        window.localStorage.setItem('uid',uid)
+        window.localStorage.setItem('sid', sid)
+        window.localStorage.setItem('uid', uid)
       } else {
         this.sid = null;
         this.uid = null;
@@ -195,7 +201,7 @@ class RPC {
     if (!this.sid) {
       //console.log('rpc call no sid:', params, this._callbackerror)
 
-      this.callbackerror(url, params, { message: 'no sid' } );
+      this.callbackerror(url, params, { message: 'no sid' });
       return { code: 1, error: { message: 'no sid' } };
     }
     const data = await this.json(url, { model, method, args, kwargs });

@@ -3,9 +3,11 @@
  * isNotMenu: true
  */
 import React, { useEffect, useState, useRef } from 'react';
-import { Steps, Button, Divider, Form, Input, DatePicker, Upload, Icon } from 'antd'
+import { } from 'antd'
+import odoo from '../../../odoo-rpc/odoo'
 import router from 'umi/router';
-import StepContent from '@/component/steps/test'
+import StepContent from '@/component/steps'
+import { parseNotes } from '@/utils/tools'
 const steps = [{
     title: '基本信息',
     dataIndex: [{
@@ -35,7 +37,7 @@ const steps = [{
         label: "主办单位",
         type: "Input",
         name: "host",
-        rules: []
+        rules: [{ required: true, message: '请输入比赛名称' }]
     }, {
         label: "协办单位",
         type: "Input",
@@ -45,6 +47,11 @@ const steps = [{
         label: "联系人",
         type: "Input",
         name: "concet",
+        rules: []
+    }, {
+        label: "联系方式",
+        type: "Input",
+        name: "phone",
         rules: []
     }, {
         label: "备注",
@@ -69,15 +76,26 @@ const steps = [{
     title: '确认',
     render(form, steps, data) {
         return steps.map((item) => item.dataIndex).filter((item) => item).reduce((pre, cur) => [...pre, ...cur], []).map((item) => {
+            console.log(item);
             return (
-                <p key={item.name}>{item.label + "：" + data[item.name]}</p>
+                <p key={item.name}><span style={{ fontWeight: "bolder" }}>{item.label + "："}</span> {data[item.name]}</p>
             )
         })
     }
 }]
 export default (props) => {
-    const onSubmit = (data) => {
-        
+    const onSubmit = async (data, setLoading) => {
+        console.log(data);
+        setLoading(true)
+        const cls = odoo.env('og.game');
+        data.date_from = data.date[0];
+        data.date_thru = data.date[1];
+        delete data.date
+        const result = await cls.create(parseNotes(data))
+        if (result) {
+            setLoading(false)
+            router.replace("/sponsor/match")
+        }
     }
     const onCancel = () => {
         router.replace("/sponsor/match")
