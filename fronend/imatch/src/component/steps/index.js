@@ -30,7 +30,7 @@ function itemType(item) {
     switch (item.type) {
         case "Input":
             return (
-                <Input></Input>
+                <Input style={{ maxWidth: 250 }}></Input>
             )
         case "RangePicker":
             return (
@@ -50,7 +50,7 @@ function itemType(item) {
         case "select":
             const valuess = item.values || []
             return (
-                <Select>
+                <Select style={{ maxWidth: 250 }}>
                     {valuess.map((items) => <Select.Option key={items} value={items}>{items}</Select.Option>)}
                 </Select>
             )
@@ -86,30 +86,63 @@ const option = {
         console.log(props, changed, all);
     }
 }
+
 export default Form.create(option)((props) => {
     const [current, setCurrent] = useState(0)
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(false)
     const { form: { getFieldDecorator, validateFields }, steps, lastStep = () => false, onCancel } = props;
     const pre = () => {
-        setCurrent(current && current - 1)
+        steps[current - 1].skip && steps[current - 1].skip(data) ?
+            setCurrent(current && current - 2) :
+            setCurrent(current && current - 1)
     }
     const handleSubmit = (e) => {
         const stepsLastIndex = steps.length - 1
+        const x = current === stepsLastIndex ? stepsLastIndex : current + 1
         e.preventDefault()
         validateFields((err, values) => {
             if (err) {
                 return
             }
             setData((preData) => {
+                steps[x].skip && steps[x].skip({ ...preData, ...values }) ?
+                    setCurrent(x + 1) :
+                    setCurrent(x)
                 return { ...preData, ...values }
             })
-            setCurrent(current === stepsLastIndex ? stepsLastIndex : current + 1)
+
             if (current === stepsLastIndex) {
                 lastStep(turnDate(steps, data), setLoading)
             }
         })
 
+    }
+    const renderItem = () => {
+        if (steps[current].render) {
+            return steps[current].render(props.form, steps, turnDate(steps, data))
+        } else {
+            return (
+                <>
+                    {steps[current].dataIndex.map((item) => {
+                        return (
+                            <Form.Item
+                                {...formItemLayout}
+                                label={item.label}
+                                key={item.name}
+                            >
+                                {item.render ? item.render(props.form, data, item) : getFieldDecorator(item.name, {
+                                    rules: item.rules || [],
+                                    initialValue: data[item.name]
+                                })(
+                                    itemType(item)
+                                )}
+                            </Form.Item>
+                        )
+                    })}
+                </>
+            )
+        }
     }
     console.log(data);
     return (
@@ -124,31 +157,14 @@ export default Form.create(option)((props) => {
                     {steps.map((item) => <Steps.Step key={item.title} title={item.title} />)}
                 </Steps>
                 {<Form onSubmit={handleSubmit}>
-                    <div style={{ minHeight: "300px", paddingTop: 24, paddingRight: "40%" }}>
-                        {steps[current].render ? steps[current].render(props.form, steps, turnDate(steps, data))
-                            : steps[current].dataIndex.map((item) => {
-                                return (
-                                    <Form.Item
-
-                                        {...formItemLayout}
-                                        label={item.label}
-                                        key={item.name}
-                                    >
-                                        {item.render ? item.render(props.form, data,item) : getFieldDecorator(item.name, {
-                                            rules: item.rules || [],
-                                            initialValue: data[item.name]
-                                        })(
-                                            itemType(item)
-                                        )}
-                                    </Form.Item>
-                                )
-                            })}
+                    <div style={{ minHeight: "300px", paddingTop: 24, }}>
+                        {renderItem()}
                     </div>
                     <Divider />
                     <Form.Item>
                         <div style={{ float: 'right' }}>
                             {current > 0 ? <Button onClick={pre} style={{ marginRight: 15 }}>上一步</Button> : null}
-                            <Button type="primary" htmlType="submit" style={{ marginRight: 15 }}>{current === 3 ? "提交" : "下一步"}</Button>
+                            <Button type="primary" htmlType="submit" style={{ marginRight: 15 }}>{current === steps.length - 1 ? "提交" : "下一步"}</Button>
                             <Button onClick={onCancel}>取消创建</Button>
                         </div>
                     </Form.Item>

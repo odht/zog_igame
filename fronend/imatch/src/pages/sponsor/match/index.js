@@ -38,6 +38,7 @@ function organization(text, record) {
 	router.push({
 		pathname: '/sponsor/match/originzation',
 	})
+	localStorage.game = record.id
 }
 function managerGame(text, record) {
 	router.push({
