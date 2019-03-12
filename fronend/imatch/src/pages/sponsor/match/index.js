@@ -54,35 +54,64 @@ async function getGameData(domain) {
 		date_thru: null,
 		notes: null,
 		state: null,
+		paymentStatus: null,
+		remarks: null,
 	}
-	const dataSource = await cls.search_read([['id', '>=', 0]], fields)
+	const dataSource = await cls.search_read(domain || [['id', '>=', 0]], fields)
 	return dataSource
 }
-const Checked = ({ setState }) => {
-	const checked = ['审核中', '通过', '未通过']
-	const money = ['已缴费', '未缴费']
-	const updateData = (e) => {
-		// do something
+const Checked = ({ setState, updateData }) => {
+	const [val1, setVal1] = useState(undefined)
+	const [val2, setVal2] = useState(undefined)
+	const checked = [{ value: "draft", text: '审核中' }, { value: "conformed", text: '通过' }, { value: "cancel", text: '未通过' }]
+	const money = [{ value: true, text: '已缴费' }, { value: false, text: '未缴费' }]
+	const filterData = (field, val) => {
+		setState((pre) => {
+			const filter = { ...pre.filter }
+			filter[field] = val
+			return { ...pre, filter: filter }
+		})
 	}
+
 	return (
 		<>
+			<Button
+				style={{ marginRight: 24 }}
+				onClick={() => {
+					setVal1(undefined)
+					setVal2(undefined)
+					setState((pre) => ({ ...pre, filter: {} }))
+					updateData()
+				}}
+			>
+				清空选择
+			</Button>
 			<span>审核状态：</span>
 			<RadioGroup
-				onChange={updateData}
+				value={val1}
+				onChange={(e) => {
+					setVal1(e.target.value)
+					filterData("state", e.target.value)
+				}}
 			>
-				{checked.map((item) => <Radio value={item} key={item}>{item}</Radio>)}
+				{checked.map((item) => <Radio value={item.value} key={item.value}>{item.text}</Radio>)}
 			</RadioGroup>
 			<span style={{ marginLeft: 50 }}>缴费状态：</span>
 			<RadioGroup
-				onChange={updateData}
+				value={val2}
+				onChange={(e) => {
+					setVal2(e.target.value)
+					filterData("paymentStatus", e.target.value)
+				}}
 			>
-				{money.map((item) => <Radio value={item} key={item}>{item}</Radio>)}
+				{money.map((item) => <Radio value={item.value} key={item.value}>{item.text}</Radio>)}
 			</RadioGroup>
+
 		</>
 	)
 }
 
-const TableData = ({ state: { dataSource, loading }, setState }) => {
+const TableData = ({ state: { dataSource, loading, filter }, setState }) => {
 
 	const columns = [{
 		title: "比赛名称",
@@ -102,7 +131,7 @@ const TableData = ({ state: { dataSource, loading }, setState }) => {
 		align: "center",
 	}, {
 		title: "状态",
-		dataIndex: "status",
+		dataIndex: "state",
 		align: "center",
 		render: (text, record) => {
 			return (
@@ -113,8 +142,15 @@ const TableData = ({ state: { dataSource, loading }, setState }) => {
 		}
 	}, {
 		title: "交费",
-		dataIndex: "isMoney",
+		dataIndex: "paymentStatus",
 		align: "center",
+		render: (text, record) => {
+			return (
+				<Tag color={record.paymentStatus === true ? "green" : "red"}>
+					{record.paymentStatus === true ? '是' : "否"}
+				</Tag>
+			)
+		}
 	}, {
 		title: '操作',
 		dataIndex: 'operation',
@@ -138,7 +174,7 @@ const TableData = ({ state: { dataSource, loading }, setState }) => {
 			bordered
 			rowSelection={{}}
 			rowKey={(row) => row.name}
-			dataSource={dataSource}
+			dataSource={dataSource.filter((item) => Object.keys(filter).every((each) => item[each] === filter[each]))}
 			style={{
 				marginTop: 24,
 				maxWidth: '90%',
@@ -150,7 +186,7 @@ const TableData = ({ state: { dataSource, loading }, setState }) => {
 }
 
 export default (props) => {
-	const [state, setState] = useState({ loading: true, dataSource: [] })
+	const [state, setState] = useState({ loading: true, dataSource: [], filter: {} })
 	const updateData = (domain) => {
 		setState((pre) => {
 			return { ...pre, loading: true }
@@ -172,7 +208,6 @@ export default (props) => {
 
 	return (
 		<div>
-			{console.log(11111111111111)}
 			<div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start" }}>
 				<Input.Search
 					placeholder="输入比赛名称"
@@ -183,7 +218,7 @@ export default (props) => {
 				<Button onClick={toCreate}>新建比赛</Button>
 			</div>
 			<Divider style={{ height: 1.5 }} />
-			<Checked setState={setState} />
+			<Checked setState={setState} updateData={updateData} />
 			<TableData state={state} setState={setState} />
 		</div>
 	)

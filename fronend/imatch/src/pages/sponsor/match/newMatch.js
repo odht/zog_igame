@@ -56,7 +56,7 @@ const steps = [{
     }, {
         label: "备注",
         type: "Input",
-        name: "remark",
+        name: "remarks",
         rules: []
     }],
 }, {
@@ -101,9 +101,10 @@ export default (props) => {
         router.replace("/sponsor/match")
     }
     return (
-        <>
-            <h3 style={{ marginBottom: 10 }}>新比赛</h3>
-            <StepContent steps={steps} lastStep={onSubmit} onCancel={onCancel} />
-        </>
+        <StepContent
+            steps={steps}
+            lastStep={onSubmit}
+            onCancel={onCancel}
+        />
     )
 }
