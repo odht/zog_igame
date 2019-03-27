@@ -110,5 +110,42 @@ class GameTeamRoundInfo(models.Model):
     @api.multi
     def _compute_rank(self):
         for rec in self:
+            # 取所同一phase，同一round的tri
+            tris = self.filtered(
+                lambda tri: (tri.phase_id == rec.phase_id) and (
+                             tri.round_id == rec.round_id ) )
+            # 按上一轮累计得分高低排序
+            tris_open = tris.sorted(key=lambda tri: tri.score_open , reverse=True)
+            # 按当前轮累计得分高低排序
+            tris_close = tris.sorted(key=lambda tri: tri.score_close , reverse=True)
+
+            #print('tris_open:::',tris)
+
+            s_o = s_c = -1
+            for i in range(len(tris)):
+                #import pdb;pdb.set_trace()
+                s1_o = tris_open[i].score_open
+                s1_c = tris_close[i].score_close
+
+                if ( s_o != s1_o ):
+                    tris_open[i].rank_open = i+1
+                else:
+                    tris_open[i].rank_open = tris_open[i-1].rank_open
+
+                if ( s_c != s1_c ):
+                    tris_close[i].rank_close = i+1
+                else:
+                    tris_close[i].rank_close = tris_close[i-1].rank_close
+
+                s_o = s1_o
+                s_c = s1_c
+
+                if ( rec.id == tris_open[i].id ):
+                    rec.rank_open = tris[i].rank_open
+                if ( rec.id == tris_close[i].id ):
+                    rec.rank_close = tris_close[i].rank_close
+
             pass
+
+
 

@@ -60,6 +60,7 @@ class Table(models.Model):
 
     ns_team_id = fields.Many2one('og.team', compute='_compute_team')
     ew_team_id = fields.Many2one('og.team', compute='_compute_team')
+    round_time = fields.Integer(related='phase_id.round_time')
 
     @api.multi
     def _compute_team(self):

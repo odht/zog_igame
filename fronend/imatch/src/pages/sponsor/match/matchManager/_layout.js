@@ -1,36 +1,22 @@
-/**
- * title: 赛事管理 - 智赛桥牌
- * isNotMenu: true
- */
 import React, { useEffect, useState, useRef } from 'react';
 import { Menu } from 'antd'
-import { connect } from 'dva';
-import odoo from '../../../../odoo-rpc/odoo'
-import router from 'umi/router';
-import StepContent from '@/component/steps/test'
-import { parseNotes } from '@/utils/tools'
-export default connect()((props) => {
-    console.log(props);
-    const x = ['基本信息', '规程', '参赛队', '项目', '结果', '新闻']
+import { parseNotes, createMenu } from '@/utils/tools'
+export default (props) => {
+    const { route: { routes }, location: { pathname } } = props
+    const menuPathname = routes.filter((item) => item.path && !item.isNotMenu).find((item) => pathname.indexOf(item.path) > -1)
     return (
         <>
             <Menu
                 // onClick={this.handleClick}
-                // selectedKeys={[this.state.current]}
+                selectedKeys={[menuPathname && menuPathname.path]}
                 mode="horizontal"
             >
-                {
-                    x.map((item) =>
-                        <Menu.Item key={item}>
-                            {item}
-                        </Menu.Item>
-                    )
-                }
+                {createMenu(routes)}
             </Menu>
-            <div style={{ marginTop: 15, padding: "0px 20px 0 20px", backgroundColor: "white" }}>
+            <div style={{ marginTop: 15, padding: 20, backgroundColor: "white" }}>
                 {props.children}
             </div>
 
         </>
     )
-})
+}

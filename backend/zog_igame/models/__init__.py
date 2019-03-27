@@ -18,3 +18,5 @@ from . import team_score
 from . import board1_bid
 from . import board2_play
 from . import channel
+
+from . import game0

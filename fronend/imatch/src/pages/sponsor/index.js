@@ -5,5 +5,5 @@
 import React from 'react';
 import Redirect from 'umi/redirect';
 export default (props)=>{
-    return <Redirect to="/sponsor/news" />
+    return <Redirect to="/sponsor/match" />
 }

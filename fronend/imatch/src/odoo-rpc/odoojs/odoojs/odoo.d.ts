@@ -36,17 +36,21 @@ interface errCallback {
 
 }
 interface loginParams {
-     /**
-     * 数据库名称
-     */
+    /**
+    * 数据库名称
+    */
     db?: string,
-     /**
-     * 登陆名称
-     */
+    /**
+    * 登陆名称
+    */
     login: string,
-     /**
-     * 登陆密码
-     */
+    /**
+    * 角色设置
+    */
+    role: "administrator" | "sponsor" | "referee" | "player",
+    /**
+    * 登陆密码
+    */
     password: string
 }
 type dataSource = Array<any>
@@ -80,6 +84,10 @@ export default class Odoo {
      * 所有模型
      */
     _models: models
+    /**
+     * 验证函数
+     */
+    me(fields: fields): cls
     /**
      * 所有模型的cls类
      */
@@ -139,10 +147,10 @@ export default class Odoo {
 }
 interface OdooStatic {
     _session: {}
-      /**
-     * 返回某个用户模型
-     * @param session_id 
-     */
+    /**
+   * 返回某个用户模型
+   * @param session_id 
+   */
     load(session_id: string): Odoo
 }
 export class cls {
@@ -312,7 +320,7 @@ export interface clsStatic {
      * 新建数据
      * @param vals 
      */
-    create(vals: {}): cls | data
+    creat(vals: {}): cls | data
     /**
      * 改数据
      * @param id 
@@ -339,6 +347,10 @@ interface rpcOptions extends Options {
     callbackerror?: () => void
 
 }
+interface registerParams extends loginParams {
+    email: string
+    phone: string
+}
 export class rpc {
     constructor(options: rpcOptions)
     host: string
@@ -349,6 +361,7 @@ export class rpc {
     callbackerror: () => void
     _callbackerror(url: string, params: callParams, error: error): void
     josn(url: string, params: callParams, timeout: number): data
+    register(params: registerParams): data
     login(params: loginParams): data
     logout(): data
     call(params: callParams): data
