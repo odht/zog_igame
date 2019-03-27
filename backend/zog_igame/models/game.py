@@ -118,6 +118,7 @@ class GamePhase(models.Model):
 
 
     round_ids = fields.One2many('og.round','phase_id',string='Rounds' )
+    round_time = fields.Integer(help=" Time for each round ")
 
 
 class Schedule(models.Model):
@@ -160,6 +161,8 @@ class GameRound(models.Model):
 
     date_from = fields.Datetime(related='schedule_id.date_from' )
     date_thru = fields.Datetime(related='schedule_id.date_thru' )
+
+    time = fields.Integer(related='phase_id.round_time')
 
     name = fields.Char()
     number = fields.Integer(help='the sorted number in the phase')
