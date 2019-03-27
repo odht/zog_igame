@@ -4,24 +4,23 @@ import { Link } from 'dva/router';
 import BtnTimer from '../../../component/BtnTimer';
 import styles from './index.less';
 import router from 'umi/router';
-import odoo from '@/odoo-rpc/odoo';
+import odoo from '../../../odoo-rpc/odoo';
 
 const { Option } = Select;
-
 
 class RegisterBlock extends Component {
 
     state = {
         confirmDirty: false,
-        btnTimerTitle:true,
-        timeCount:60,
-        btnDisable:false
+        btnTimerTitle: true,
+        timeCount: 60,
+        btnDisable: false
     };
 
     // 创建用户
     createUser = async (values) => {
-        const users = await odoo._rpc.register(values);
-        console.log('--- createUser ---',users,values);
+        const users = await odoo._rpc.register({ ...values, role: "player" });
+        console.log('--- createUser ---', users, values);
         if (users.code === 0) {
             router.push('/user/login');
         }
@@ -92,10 +91,10 @@ class RegisterBlock extends Component {
                         label="昵称"
                     >
                         {getFieldDecorator('login', {
-                            rules: [{ 
-                                required: true, 
-                                message: '请填写您的昵称 ^v^', 
-                                whitespace: true 
+                            rules: [{
+                                required: true,
+                                message: '请填写您的昵称 ^v^',
+                                whitespace: true
                             }],
                         })(
                             <Input style={{ width: '85%', maxWidth: '300px' }} />
@@ -114,10 +113,10 @@ class RegisterBlock extends Component {
                         )}
                     >
                         {getFieldDecorator('password', {
-                            rules: [{   
-                                required: true, 
+                            rules: [{
+                                required: true,
                                 message: '请填写您的密码 ^v^'
-                            },{
+                            }, {
                                 validator: this.validateToNextPassword,
                             }],
                         })(
@@ -129,17 +128,17 @@ class RegisterBlock extends Component {
                         label="确认密码"
                     >
                         {getFieldDecorator('confirm', {
-                            rules: [{ 
-                                required: true, 
+                            rules: [{
+                                required: true,
                                 message: '请再次确认您的密码 ^v^'
-                            },{
+                            }, {
                                 validator: this.compareToFirstPassword
                             }],
                         })(
-                            <Input 
-                                type="password" 
-                                onBlur={this.handleConfirmBlur} 
-                                style={{ width: '85%', maxWidth: '300px' }} 
+                            <Input
+                                type="password"
+                                onBlur={this.handleConfirmBlur}
+                                style={{ width: '85%', maxWidth: '300px' }}
                             />
                         )}
                     </Form.Item>
@@ -150,34 +149,34 @@ class RegisterBlock extends Component {
                     >
                         {getFieldDecorator('email', {
                             rules: [{
-                                type: 'email', 
+                                type: 'email',
                                 message: '邮箱格式错误，请重输 ^v^'
-                            },{
-                                required: true, 
-                                message:'请填写您的邮箱 ^v^'
+                            }, {
+                                required: true,
+                                message: '请填写您的邮箱 ^v^'
                             }],
                         })(
                             <Input style={{ width: '85%', maxWidth: '300px' }} />
                         )}
                     </Form.Item>
-            
+
                     <Form.Item
                         {...formItemLayout}
                         label="手机号"
                     >
                         {getFieldDecorator('phone', {
                             rules: [{
-                                    required: true,
-                                    message: '请输入您的手机号 ^v^',
-                                },
-                                {
-                                    pattern: /^\d{11}$/,
-                                    message: '手机号格式错误 ^v^',
-                                }],
+                                required: true,
+                                message: '请输入您的手机号 ^v^',
+                            },
+                            {
+                                pattern: /^\d{11}$/,
+                                message: '手机号格式错误 ^v^',
+                            }],
                         })(
-                            <Input 
-                                addonBefore={prefixSelector} 
-                                style={{ width: '85%', maxWidth: '300px' }} 
+                            <Input
+                                addonBefore={prefixSelector}
+                                style={{ width: '85%', maxWidth: '300px' }}
                             />
                         )}
                     </Form.Item>
@@ -187,24 +186,24 @@ class RegisterBlock extends Component {
                         extra="请填写从手机获取的短信验证码."
                     >
                         {getFieldDecorator('captcha', {
-                            rules: [{ 
-                                required: true, 
-                                message: '请填写验证码 ^v^', 
-                                whitespace: true 
+                            rules: [{
+                                required: true,
+                                message: '请填写验证码 ^v^',
+                                whitespace: true
                             }],
                         })(
                             <Input style={{ width: '55%', maxWidth: '220px' }} />
                         )}
                         <BtnTimer></BtnTimer>
-        
+
                     </Form.Item>
                     <Form.Item
                         style={{ textAlign: 'center' }}
                     >
                         {getFieldDecorator('agreement', {
                             valuePropName: 'checked',
-                            rules:[{
-                                required:true,
+                            rules: [{
+                                required: true,
                                 message: '您还没有阅读并同意我们的协议 ^v^'
                             }]
                         })(

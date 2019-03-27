@@ -1,16 +1,37 @@
 /**
  * title: 基本信息 - 智赛桥牌
- * isNotMenu: true
+ * index: 0
  */
 import React, { useEffect, useState, useRef } from 'react';
-import Redirect from 'umi/redirect'
+import { Button, Spin } from 'antd'
+import router from 'umi/router';
+import ListDecorator from '@/component/basicMessage';
+import odoo from '../../../../odoo-rpc/odoo';
+import { parseNotes } from '@/utils/tools'
+import { useData } from '@/utils/hooks'
 
+async function change() {
+    // do something
+}
 export default (props) => {
-    console.log(props);
-    const x = ['基本信息', '规程', '参赛队', '项目', '结果', '新闻']
+    if (!localStorage.game) {
+        router.replace('/sponsor/match')
+    }
+    const fields = {
+        name: null,
+        date_from: null,
+        date_thru: null,
+        notes: null,
+        state: null,
+    }
+    const [loading, data] = useData('og.game', [["id", '=', Number(localStorage.game)]], fields)
     return (
-        <>
-            <span>111</span>
-        </>
+        <Spin spinning={loading}>
+            <Button type="primary" style={{ marginBottom: 20 }} onClick={change}>修改</Button>
+            <ListDecorator
+                detailData={data.length > 0 ? parseNotes(data[0]) : data}
+            // announcement={announcement}
+            />
+        </Spin>
     )
 }
