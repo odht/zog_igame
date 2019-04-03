@@ -119,7 +119,8 @@ class GamePhase(models.Model):
 
     round_ids = fields.One2many('og.round','phase_id',string='Rounds' )
     round_time = fields.Integer(help=" Time for each round ")
-
+    bye_vp = fields.Integer(default=0)
+    bye_imp = fields.Integer(default=0)
 
 class Schedule(models.Model):
     """

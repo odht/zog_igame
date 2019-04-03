@@ -45,3 +45,29 @@ def circle_arrange(team_ids):
     
     arrange()
     return [openroom,closeroom]
+
+def swiss_arrange(teams,rounds):
+    while teams:
+        t1 = teams.pop(0)
+        for t2 in teams:
+            if (t1,t2) not in rounds:
+                rounds.append((t1,t2))
+                teams.remove(t2)
+                break
+            else:
+                if len(teams) == 1:
+                    last = rounds[-1]
+                    if (last[0],t1) not in rounds and (last[1],t2) not in rounds:
+                        rounds.pop(-1)
+                        rounds.append((last[0],t1))
+                        rounds.append((last[1],t2))
+                        teams.remove(t2)
+                        break
+                    else:
+                        rounds.append((t1,t2))
+                        teams.remove(t2)
+                        break
+    return rounds
+
+
+
