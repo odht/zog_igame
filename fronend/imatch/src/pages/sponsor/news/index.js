@@ -29,7 +29,14 @@ const columns = [{
 }, {
 	title: '审核',
 	dataIndex: 'examine',
-	align:"center",
+  align:"center",
+  render: (text, record) => {
+    return (
+      <Tag color={record.state === 'draft' ? "blue" : record.state === 'conformed' ? "green" : "red"}>
+        {record.state === 'draft' ? '审核中' : record.state === 'conformed' ? "已通过" : "未通过"}
+      </Tag>
+    )
+  }
 }, {
 	title: '操作',
 	dataIndex: 'operation',
@@ -141,7 +148,7 @@ class NewsTable extends React.Component {
 
         <div style={{ marginBottom: 16 }}>
         </div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} bordered  />
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data} bordered style={{backgroundColor:"white"}} />
       </div>
     );
   }
