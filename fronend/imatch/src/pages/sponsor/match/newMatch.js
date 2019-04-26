@@ -92,6 +92,7 @@ export default (props) => {
         data.date_thru = data.date[1];
         delete data.date
         const result = await cls.create(parseNotes(data))
+        console.log(result)
         if (result) {
             setLoading(false)
             router.replace("/sponsor/match")

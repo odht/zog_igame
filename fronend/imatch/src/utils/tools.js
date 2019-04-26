@@ -148,10 +148,11 @@ export function createMenu(routes) {
 }
 export function parseNotes(data) {
 	if (data.host) {
-		const { host, unit, referee, arbitration, concet, phone, endtime } = data
+		const { host, unit, sunit, referee, arbitration, concet, phone, endtime } = data
 		const obj = {
 			host,
 			unit,
+			sunit,
 			referee,
 			arbitration,
 			concet,
@@ -168,4 +169,21 @@ export function parseNotes(data) {
 		const note = JSON.parse(jsonString);
 		return { ...data, ...note }
 	}
+}
+export function timetrans(datastring, time) {
+	var date = datastring ? new Date(datastring) : new Date();
+
+	var Y = date.getFullYear() + '-';
+
+	var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+
+	var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+
+	var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+
+	var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+
+	var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+
+	return time ? Y + M + D + " " + h + m + s : Y + M + D
 }

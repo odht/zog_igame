@@ -22,7 +22,7 @@ class RegisterBlock extends Component {
         const users = await odoo._rpc.register({ ...values, role: "player" });
         console.log('--- createUser ---', users, values);
         if (users.code === 0) {
-            router.push('/user/login');
+            router.replace('/user/login');
         }
     }
 

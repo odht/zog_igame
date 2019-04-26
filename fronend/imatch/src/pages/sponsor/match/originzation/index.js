@@ -8,18 +8,19 @@ import router from 'umi/router';
 import StepContent from '@/component/steps'
 import { parseNotes } from '@/utils/tools'
 import odoo from '../../../../odoo-rpc/odoo';
+import { MyInput, DateArrange } from '@/component/FormItem';
 const steps = [{
     title: '创建组',
     dataIndex: [{
         label: "组名称",
         type: "Input",
-        name: "name",
+        name: "names",
         rules: [{ required: true, message: '请输入组名称' }]
     }, {
         label: "类型",
         type: "Radio",
         values: ['循环赛', '积分编排赛', '淘汰赛'],
-        name: "date",
+        name: "org_type",
         rules: [{ required: true, message: '选择一个类型' }]
     }]
 }, {
@@ -28,41 +29,41 @@ const steps = [{
     dataIndex: [{
         label: "IMP - VP",
         type: "select",
-        name: "host",
+        name: "nones",
         values: ['20-VP WBF', '25-VP WBF', '20-VP 北美'],
         rules: [{ required: true, message: '选择一个赛制' }]
     }, {
         label: "轮空IMP",
-        type: "Input",
-        name: "unit",
+        type: "InputNumber",
+        name: "bye_imp",
         rules: [{ required: true, message: '必填' }]
     }, {
         label: "轮空VP",
-        type: "Input",
-        name: "concet",
+        type: "InputNumber",
+        name: "bye_vp",
         rules: [{ required: true, message: '必填' }]
     }],
 }, {
     title: '牌桌/桌号',
     dataIndex: [{
         label: "轮次",
-        type: "Input",
-        name: "referee",
+        type: "InputNumber",
+        name: "round_num",
         rules: []
     }, {
         label: "每轮时间（分钟）",
-        type: "Input",
-        name: "arbitration",
+        type: "InputNumber",
+        name: "time",
         rules: []
     }, {
         label: "每轮牌数",
-        type: "Input",
-        name: "arbitrations",
+        type: "InputNumber",
+        name: "deal_num",
         rules: []
     }, {
         label: "桌号（开闭室计1桌）",
         type: "Input",
-        name: "arbitrationss",
+        name: "table_num",
         render: (form, data, item) => {
             console.log(form.getFieldProps('name'));
             return (
@@ -77,13 +78,32 @@ const steps = [{
             )
         }
     }],
+}, {
+    title: '日程表',
+    dataIndex: [{
+        label: "",
+        type: "Input",
+        name: "dates",
+        render: (form, data, item) => {
+            return (
+                <>
+                    {form.getFieldDecorator(item.name, {
+                        initialValue: data[item.name] || [],
+                        rules: [],
+                    })(
+                        <DateArrange rounds={data.round_num} interval={data.time} />
+                    )}
+                </>
+            )
+        }
+    }]
 },
 {
     title: '组内队',
     dataIndex: [{
         label: "",
         type: "Input",
-        name: "refereeww",
+        name: "team_ids",
         rules: [],
         render: (form, data, item) => {
             return (
@@ -132,43 +152,7 @@ const steps = [{
         })
     }
 }]
-class MyInput extends React.Component {
-    onChange = (index, e) => {
-        const val = e.target.value
-        let { onChange, value } = this.props;
-        console.log(value);
-        if (!value) {
-            value = '~'
-        }
-        const x = value.split('~')
-        x[index] = val;
-        if (index === 0) {
-            x.splice(1, 0, '~')
-        } else {
-            x[1] = '~'
-        }
-        console.log(x, index);
-        onChange(x.reduce((pre, cur) => {
-            return pre + cur
-        }, ''));
-    };
-    render() {
-        const { value = '~' } = this.props;
-        return (
-            < Input.Group compact>
-                <Input value={value.split('~')[0]} style={{ width: 100, textAlign: 'center' }} onChange={this.onChange.bind(this, 0)} placeholder="Minimum" />
-                <Input
-                    style={{
-                        width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff',
-                    }}
-                    placeholder="~"
-                    disabled
-                />
-                <Input value={value.split('~')[1]} onChange={this.onChange.bind(this, 2)} style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="Maximum" />
-            </Input.Group>
-        );
-    }
-}
+
 
 class Team extends Component {
     state = {
@@ -182,7 +166,7 @@ class Team extends Component {
     getData = async () => {
         const game_id = localStorage.game
         const cls = odoo.env('og.team');
-        const domain = [['id', '>=', '0'], ['game_id', '=', game_id]]
+        const domain = [['id', '>=', '0'], ['game_id', '=', Number(game_id)]]
         const fields = {
             name: null,
             number: null,
@@ -194,7 +178,6 @@ class Team extends Component {
         // console.log(targetKeys);
         this.setState({
             dataSource: dataSource,
-            targetKeys: targetKeys,
         })
     }
     handleChange = (targetKeys) => {
@@ -264,7 +247,29 @@ class Team extends Component {
 
 export default (props) => {
     const onSubmit = async (data, setLoading) => {
-        console.log(data);
+        const newData = { ...data }
+        const game_type = {
+            '积分编排赛': "swiss",
+            '循环赛': "circle",
+            '淘汰赛': "manual"
+        }
+        newData.name = data.names
+        newData.table_num = data.table_num ? data.table_num.split('~').map(item => Number(item)) : []
+        newData.org_type = game_type[data.org_type]
+        const cls = odoo.env('og.game');
+        let result
+        if (newData.org_type === "swiss") {
+            result = await cls.call("game_swiss", [Number(localStorage.game), newData])
+        }
+        if (newData.org_type === "circle") {
+            result = await cls.call("game_circle", [Number(localStorage.game), newData])
+        }
+        if (newData.org_type === "manual") {
+
+        }
+        if (result === 0) {
+            router.replace("/sponsor/match")
+        }
 
     }
     const onCancel = () => {

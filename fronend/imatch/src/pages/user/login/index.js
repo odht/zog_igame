@@ -68,10 +68,10 @@ class UserBlock extends Component {
                         });
                         this.props.dispatch({
                             type: 'login_m/login',
-                            payload: { login: values.login, password: values.password, role: "player" }
+                            payload: { login: values.login, password: values.password, role: player?"player":false }
                         });
                         if (!player) {
-                            router.push("/sponsor/news")
+                            router.push("/sponsor/match")
                         }
                     }
                 }

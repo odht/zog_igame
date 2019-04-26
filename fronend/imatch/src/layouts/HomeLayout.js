@@ -12,6 +12,7 @@ import { Link } from 'dva/router';
 import { connect } from 'dva';
 
 import Message from './Message';
+import router from 'umi/router';
 
 
 const { Header, Footer, Content } = Layout;
@@ -74,6 +75,7 @@ class HomeLayout extends Component {
             type: 'login_m/logout',
             payload: { inOutState: false }
         });
+        router.replace('/homePage')
     }
     UNSAFE_componentWillMount(props) {
         console.log('------WillMount----localStorage', localStorage.getItem('inOutState'));
@@ -124,15 +126,15 @@ class HomeLayout extends Component {
                 </Menu.Item>
             </Menu>
         );
+        console.log(this.props.loginForm.inOutState)
         const userAvatar = this.props.loginForm.inOutState === true ?
-
             <Dropdown className={styles.dropDown} placement="bottomLeft" overlay={menu} trigger={['click']}>
-                <a>
+                <span style={{ cursor: "pointer" }}>
                     <img className={styles.userPic} src={logIn} alt='登录状态' />
-                </a>
+                </span>
             </Dropdown>
             :
-            <Link to="user/login">
+            <Link to="/user/login">
                 <img className={styles.userPic} src={logOut} alt='登出状态' />
             </Link>
 

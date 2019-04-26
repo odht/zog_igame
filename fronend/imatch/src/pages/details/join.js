@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form, Input, Button, Select, Radio } from 'antd';
-import odoo from '@/odoo-rpc/odoo';
 import router from 'umi/router';
 import styles from './join.less';
+import odoo from '../../odoo-rpc/odoo';
 const Option = Select.Option;
 
 
@@ -17,7 +17,7 @@ const formItemLayout = {
   },
 };
 
-
+odoo
 @Form.create()
 class Join extends React.Component {
 
@@ -68,7 +68,7 @@ class Join extends React.Component {
   // 获取partner
   getPartner = async () => {
     const Users = odoo.env('res.users');
-    const users = await Users.search();
+    const users = await Users.search([['role','=','player']]);
     const userData = users.look({ partner_id: { id: null, name: null } });
     const attrUserDate = userData.map(item => { return { name: item.partner_id.name, id: item.partner_id.id } });
     this.setState({

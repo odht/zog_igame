@@ -46,6 +46,12 @@ function managerGame(text, record) {
 	})
 	localStorage.game = record.id
 }
+function arrangeGame(text, record) {
+	router.push({
+		pathname: '/sponsor/match/arrange',
+	})
+	localStorage.game = record.id
+}
 async function getGameData(domain) {
 	const cls = odoo.env('og.game');
 	const fields = {
@@ -160,6 +166,7 @@ const TableData = ({ state: { dataSource, loading, filter }, setState }) => {
 				<>
 					<a onClick={() => organization(text, record)}>组织</a>
 					<a onClick={() => managerGame(text, record)} style={{ marginLeft: 10 }}>管理</a>
+					<a onClick={() => arrangeGame(text, record)} style={{ marginLeft: 10 }}>编排</a>
 					<Popconfirm title="确认删除?" onConfirm={() => deleteGame(text, record, setState)}>
 						<a href="javascript:;" style={{ marginLeft: 10 }}>删除</a>
 					</Popconfirm>

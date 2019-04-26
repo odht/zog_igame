@@ -3,7 +3,7 @@
  * isNotMenu: true
  */
 import React, { useEffect, useState, useRef } from 'react';
-import { Steps, Button, Divider, Form, Input, DatePicker, Spin, Radio, Select } from 'antd'
+import { Steps, Button, Divider, Form, Input, DatePicker, Spin, Radio, Select, InputNumber } from 'antd'
 import moment from 'moment';
 import router from 'umi/router';
 
@@ -31,6 +31,10 @@ function itemType(item) {
         case "Input":
             return (
                 <Input style={{ maxWidth: 250 }}></Input>
+            )
+        case "InputNumber":
+            return (
+                <InputNumber style={{ maxWidth: 250 }} />
             )
         case "RangePicker":
             return (
@@ -83,7 +87,7 @@ function turnDate(steps, data) {
 }
 const option = {
     onFieldsChange: (props, changed, all) => {
-        console.log(props, changed, all);
+        ;
     }
 }
 
@@ -144,7 +148,6 @@ export default Form.create(option)((props) => {
             )
         }
     }
-    console.log(data);
     return (
         <div style={{
             width: "60%",

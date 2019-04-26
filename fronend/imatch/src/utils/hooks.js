@@ -8,13 +8,19 @@ async function getGameData(model, domain, fields) {
 export function useData(model, domain, fields) {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [num, setnum] = useState(0)
+    const update = () => {
+        setnum((pre) => {
+            return pre + 1
+        })
+    }
     useEffect(() => {
         getGameData(model, domain, fields).then((val) => {
             setData(val)
             setLoading(false)
         })
-    }, [])
-    return [loading, data]
+    }, [num])
+    return [loading, data, update]
 }
 // export function useMutex(init) {
 //     const [key, setKeys] = useState(init);
