@@ -1,0 +1,14 @@
+.tableBorder{
+    padding: 8px 0 8px 0;
+    height: 100%;
+}
+.tableCard{
+    border-radius: 4%;
+    background-color: rgb(88, 213, 251);
+    cursor: pointer;
+}
+.tableSplit{
+    border:none;
+    border-right:3px double rgb(21, 21, 46);
+    padding-right: 8px;
+}

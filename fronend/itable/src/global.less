@@ -1,0 +1,28 @@
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    width: 100% !important;
+}
+
+/*样式覆盖，需要放在#root中，优先级才会大于antd*/
+
+#root {
+    .ant-card-body {
+        padding: 14px;
+        zoom: 1;
+    }
+    .ant-card {
+        border-radius: 4%;
+    }
+    .ant-pagination {
+        text-align: center;
+    }
+    .ant-drawer-body {
+        padding: 0px !important;
+    }
+}
