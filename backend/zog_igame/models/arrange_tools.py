@@ -21,7 +21,7 @@ def circle_arrange(team_ids):
 
 
     def arrange():
-        t = teams.copy();
+        t = teams.copy()
         t1 = teams.pop(0)
 
         for i in range(turns):
@@ -50,14 +50,15 @@ def swiss_arrange(teams,rounds):
     while teams:
         t1 = teams.pop(0)
         for t2 in teams:
-            if (t1,t2) not in rounds:
+            if (t1,t2) not in rounds and (t2,t1) not in rounds:
                 rounds.append((t1,t2))
                 teams.remove(t2)
                 break
             else:
                 if len(teams) == 1:
                     last = rounds[-1]
-                    if (last[0],t1) not in rounds and (last[1],t2) not in rounds:
+                    if (last[0],t1) not in rounds and (t1,last[0]) not in rounds and (last[1],t2) not in rounds and (t2,last[1]) not in rounds:
+                    #if (last[0],t1) not in rounds and (last[1],t2) not in rounds:
                         rounds.pop(-1)
                         rounds.append((last[0],t1))
                         rounds.append((last[1],t2))
