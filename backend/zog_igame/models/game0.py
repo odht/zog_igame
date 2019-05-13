@@ -14,8 +14,11 @@ class Game(models.Model):
 
     @api.multi
     def game_circle(self,vals):
+        # table起始number
         table_num   = vals['table_num']
+        # 参赛队
         team_ids    = vals['team_ids']
+        # 参赛队数据，用来生成循环赛开闭室参数
         new_team_ids = team_ids.copy()
 
         if(len(team_ids)%2==1):
@@ -26,8 +29,10 @@ class Game(models.Model):
 
         round_num = vals['round_num']
 
+        # 循环赛明细数据
         data = circle_arrange(new_team_ids)
         open_table_data = data[0]
+        #print('open_table_data:::',open_table_data)
 
         if(round_num != len(open_table_data)):
             return(-3,'The number of rounds is incorrect')
@@ -35,13 +40,18 @@ class Game(models.Model):
         round_ids = self.create_phase(vals,round_num)
         for i in range(round_num):
             self.create_one_round(round_ids[i],table_num,open_table_data[i])
+
+        #print(fields.Date.today)
         return 0
 
 
     @api.multi
     def game_swiss(self,vals):
+        # table起始number
         table_num   = vals['table_num']
+        # 参赛队
         team_ids    = vals['team_ids']
+        # 参赛队数据，用来生成循环赛开闭室参数
         new_team_ids = team_ids.copy()
         if(len(team_ids)%2==1):
             new_team_ids.append('#')
@@ -65,17 +75,22 @@ class Game(models.Model):
     @api.multi
     def get_arrange_data(self,vals):
         table_num   = vals['table_num']
+        #print('table_num::::::::::::',table_num)
         currentRound = self.round_ids.search([('id', '=', vals['round_id'])])
         lastRound = self.round_ids.search([('number', '=', currentRound.number-1),
                                            ('phase_id','=',currentRound.phase_id.id)])
+        #infos1 = self.env['og.team.round.info'].search([ ('round_id','=',lastRound.id) ])
         infos = self.env['og.team.round.info'].search([ ('round_id','=',lastRound.id) ])
+        #infos = infos1.sorted( key=lambda info: info.rank_close, reverse=True)
         match_data = self._compute_arrange_data(vals)
         new_match_data = []
         for i in range(len(match_data)):
             match = match_data[i]
+            #new_match = []
             for team_id in match:
                 for info in infos:
                     if info.team_id.id == team_id:
+                         #new_match.append({
                          new_match_data.append({
                             'table_number'  :   i+int(table_num[0]),
                             'team'          :   str(info.team_id.number)+'  '+info.team_id.name,
@@ -83,6 +98,7 @@ class Game(models.Model):
                             'vp'            :   info.vp,
                             'score_manual'  :   info.score_manual
                             })
+            #new_match_data.append(new_match)
         return new_match_data
 
 
@@ -104,11 +120,17 @@ class Game(models.Model):
                                            ('phase_id','=',currentRound.phase_id.id)])
 
         infos1 = self.env['og.team.round.info'].search([ ('round_id','=',lastRound.id) ])
+        #infos = infos1.sorted( key=lambda info: info.rank_close, reverse=True)
         infos = infos1.sorted( key=lambda info: info.rank_close)
 
         teams =  [ i.team_id.id for i in infos  
                          if (i.team_id.id not in no_arrange_team_ids 
                          and i.rank_close in list(range(arrange_team_rank[0],arrange_team_rank[1]+1)) ) ]
+        '''
+        team111 =  [ [i.team_id.id,i.team_id.name,i.rank_close] for i in infos  
+                         if (i.team_id.id not in no_arrange_team_ids 
+                         and i.rank_close in list(range(arrange_team_rank[0],arrange_team_rank[1]+1)) ) ]
+        '''
         if len(teams)%2==1:
             teams.append('#')
 
@@ -132,9 +154,13 @@ class Game(models.Model):
         return match_data
 
     def create_phase(self,vals,round_num):
+        # 小组即phase的编号
         number      = len(self.phase_ids)+1
+        # 每个赛段的起始时间
         dates = vals['dates']
+        # 参赛队
         team_ids    = vals['team_ids']
+        # 新创建的分组参数
         phase_val = {
             'game_id'   :   self.id,
             'name'      :   vals['name'],
@@ -150,6 +176,7 @@ class Game(models.Model):
 
         round_ids = []
         for i in range(round_num):
+            # 赛程参数
             schedule_val = {
                 'game_id'   :   self.id,
                 'name'      :   'schedule'+str(i+1),
@@ -160,11 +187,16 @@ class Game(models.Model):
             schedule = self.schedule_ids.create(schedule_val)
             schedule_id = schedule.id
             deal_ids = []
+            # 创建deal
             for index in list(range(vals['deal_num'])):
                 deal = schedule.deal_ids.create({'number':index+1})
+                #print('createDeal:::',deal)
                 deal_ids.append(deal.id)
+            # 把创建的deal关联到schedule,自动完成了？
+                #schedule.write({'deal_ids':[(4,deal.id,0)]})
             schedule.write({'deal_ids':[(6,0,deal_ids)]})
 
+            # 轮次参数
             round_val = {
                 'name'          :   phase.name+'第'+str(i+1)+'轮',
                 'phase_id'      :   phase.id,
@@ -203,6 +235,7 @@ class Game(models.Model):
                     'team_id'   :   match_data[i][0]
                 }
                 HostTri = self.env['og.team.round.info'].create(host_tri_val)
+                    #print('HostTri:::',HostTri)
                 guest_tri_val = {
                     'name'      :   'tri'+str(i+1),
                     'round_id'  :   round_id,
@@ -246,7 +279,9 @@ class Table(models.Model):
     _inherit = "og.table"
 
     @api.multi
+    # vals:table_id,partner_id,team_id,pos(NSEW)
     def sit_down1(self,vals):
+        #domain = [['partner_id', '=', vals['partner_id']], ['team_id', '=', vals['team_id']]]
         domain = [('partner_id', '=', vals['partner_id']), ('team_id', '=', vals['team_id'])]
         pos = vals['pos']
         team_player = self.player_ids.search(domain)
@@ -262,9 +297,11 @@ class Table(models.Model):
         e_id = self.east_id.id
         w_id = self.west_id.id
 
+        # 判断牌手是否在某个队伍里
         if(not team_player):
             return (-1,'您还没有加入参赛队')
 
+        #import pdb;pdb.set_trace()
         if( ((pos in ['S','N']) and (team_id != ns_id)) or ((pos in ['E','W']) and (team_id != ew_id)) ):
             return (-3,'您选择了不正确的方位')
         res = self._check(pos,team_player)
@@ -273,12 +310,15 @@ class Table(models.Model):
             return res
 
         members = channel.sudo().channel_last_seen_partner_ids
+        # 如果牌手不在channel里，把他添加进去
         if(vals['partner_id'] not in [m.partner_id.id for m in members]):
             channel.sudo().write({
                 'channel_last_seen_partner_ids':[(0,0,{'partner_id':vals['partner_id']})]
             })
         if(res[0]==0):
             return res
+
+        # 座位上添加人（创建table_player）
         table_player_val = {
             'table_id'  :   self.id,
             'player_id' :   team_player.id,
@@ -295,6 +335,14 @@ class Table(models.Model):
             doing_board = self.doing_board_id
             info = doing_board._get_info()
             doing_board.sudo().message_post('join', [vals['pos'],'玩家上线啦'], info)
+            '''
+            for rec in self:
+                doing_board = self.doing_board_id
+                info = doing_board._get_info()
+                print(111111111111111111)
+                print(doing_board.message_post('join', [vals['pos'],'玩家上线啦'], info))
+            '''
+
         return ret
 
 
@@ -303,6 +351,7 @@ class Table(models.Model):
         contrary_tablePlayer_ids = self.match_id.table_ids.filtered(lambda t: t.id !=self.id ).player_ids
         if(team_player in contrary_tablePlayer_ids):
             return(-5,'您已经在相反的房间入座了')
+        #原本座位的id
         pos_team_plater_id = ''
         contrary_pos_team_plater_id = ''
         if(pos=='S'):
@@ -333,6 +382,10 @@ class Table(models.Model):
 
     @api.multi
     def leave1(self,vals):
+
+        # 从牌桌移除player，暂时不用此功能
+        #self.write({'table_player_ids':[(2,vals['player_id'],0)]})
+        #import pdb;pdb.set_trace()
         channel = self.channel_ids.mail_channel_id
         members = channel.sudo().channel_last_seen_partner_ids
         print('members::::::::::',members)
@@ -340,6 +393,8 @@ class Table(models.Model):
             print('member::::::',member)
             print(vals['partner_id']==member.partner_id.id)
             if(vals['partner_id']==member.partner_id.id):
+                # 将用户从消息频道里移除
+                print('成功离开')
                 res = channel.sudo().write({
                     'channel_last_seen_partner_ids' :   [(2,member.id,0)]
                 })
@@ -355,11 +410,18 @@ class Table(models.Model):
             doing_board = self.doing_board_id
             info = doing_board._get_info()
             print(doing_board.sudo().message_post('leave', [pos,'玩家下线啦'], info))
+            '''
+            for rec in self:
+                doing_board = self.doing_board_id
+                info = doing_board._get_info()
+                print(doing_board.message_post('leave', [pos,'玩家下线啦'], info))
+            '''
             
 
 class TablePlayer(models.Model):
     _inherit = "og.table.player"
 
+    # 在线状态
     online = fields.Boolean(compute = '_compute_online')
     @api.multi
     def _compute_online(self):
