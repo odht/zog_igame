@@ -1,6 +1,6 @@
 import ODOO from './odoojs/odoojs/odoo'
 import zog_igame from './odoojs/odoo.addons.zog_igame';
-const host = '139.198.21.140:8069'
+const host = 'http://139.198.21.140:8069'
 // const host = 'http://192.168.1.8:8069'
 
 const db = 'TT'
