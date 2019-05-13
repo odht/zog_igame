@@ -11,11 +11,23 @@ class Table(models.Model):
     _inherit = "og.table"
     channel_ids = fields.One2many('og.channel','table_id')
 
+
 class Board(models.Model):
     _inherit = "og.board"
     
     # TBD  re compute
     def _get_info(self):
+        table_player_ids = self.table_id.table_player_ids
+        datas = []
+        for table_player in table_player_ids:
+            data = {
+                'id':table_player.id,
+                'name':table_player.name,
+                'position':table_player.position,
+                'online':table_player.online
+            }
+            datas.append(data)
+
         return {
             'id': self.id,
             'number':self.number,
@@ -42,6 +54,7 @@ class Board(models.Model):
             'tricks': self.tricks,
             'player': self.player,
             'state': self.state,
+            'table_player_ids':datas,
         }
     
     def message_post(self, method, args, info):
@@ -51,10 +64,14 @@ class Board(models.Model):
             'args': args,
             'info': info
         }
+        print('message:::::::',message)
     
         for channel in self.table_id.channel_ids:
-            if channel.mail_channel_id.channel_type == 'og_game_board':
-                channel.message_post(subject = 'og.board', body = json.dumps(message)  )
+            #import pdb;pdb.set_trace()
+            print('channel::::::::::::',channel.sudo().mail_channel_id)
+            if channel.sudo().mail_channel_id.channel_type == 'og_game_board':
+                rec = channel.sudo().message_post(subject = 'og.board', body = json.dumps(message)  )
+                print(rec)
 
     @api.multi
     def bid(self, pos, call,agreement,notes):
