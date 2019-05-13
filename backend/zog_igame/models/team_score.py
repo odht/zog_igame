@@ -24,13 +24,21 @@ class GameTeamRoundInfo(models.Model):
 
     opp_team_id = fields.Many2one('og.team', related='match_team_id.opp_team_id')
 
+    '''
     imp     = fields.Integer(related='match_team_id.imp')
     imp_opp = fields.Integer(related='match_team_id.imp_opp')
     vp      = fields.Float(related='match_team_id.vp')
     vp_opp  = fields.Float(related='match_team_id.vp_opp')
     bam     = fields.Float(related='match_team_id.bam')
     bam_opp = fields.Float(related='match_team_id.bam_opp')
+    '''
 
+    imp     = fields.Integer( compute='_compute_VpAndImp' )
+    imp_opp = fields.Integer( compute='_compute_VpAndImp' )
+    vp      = fields.Float( compute='_compute_VpAndImp' )
+    vp_opp  = fields.Float( compute='_compute_VpAndImp' )
+    bam     = fields.Float( compute='_compute_VpAndImp' )
+    bam_opp = fields.Float( compute='_compute_VpAndImp' )
                                       
     match_id = fields.Many2one('og.match', string='Match',
         related='match_team_id.match_id', help='No used' )
@@ -47,8 +55,21 @@ class GameTeamRoundInfo(models.Model):
     
     score_open =  fields.Float( compute='_compute_balance' )
     score_close = fields.Float( compute='_compute_balance' )
-    rank_open  = fields.Integer(compute='_compute_rank' )
-    rank_close = fields.Integer(compute='_compute_rank' )
+    rank_open  = fields.Integer( compute='_compute_rank' )
+    rank_close = fields.Integer( compute='_compute_rank' )
+
+    @api.multi
+    def _compute_VpAndImp(self):
+        for rec in self:
+            rec.imp     = rec.match_team_id.imp
+            rec.imp_opp = rec.match_team_id.imp_opp
+            rec.vp      = rec.match_team_id.vp
+            rec.vp_opp  = rec.match_team_id.vp_opp
+            rec.bam     = rec.match_team_id.bam
+            rec.bam_opp = rec.match_team_id.bam_opp
+            if not rec.match_team_id:
+                rec.imp = rec.phase_id.bye_imp
+                rec.vp  = rec.phase_id.bye_vp 
     
     @api.multi
     def _compute_score(self):
