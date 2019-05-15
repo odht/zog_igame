@@ -77,7 +77,7 @@ const Player = (props) => {
     const gotoGame = () => {
         if (isUser) {
             //href.href = `http://192.168.1.147:3000/#/game?player_id=${localStorage.player_id}&partner_id=${localStorage.partner_id}&table_id=${table_id}&userName=${localStorage.userName}`
-            href.href = `http://192.168.1.147/#/game?player_id=${localStorage.player_id}&partner_id=${localStorage.partner_id}&table_id=${table_id}&userName=${localStorage.userName}`
+            href.href = `http://139.198.21.140:8082/igame/#/game?player_id=${localStorage.player_id}&partner_id=${localStorage.partner_id}&table_id=${table_id}&userName=${localStorage.userName}`
             href.click()
         }
 
