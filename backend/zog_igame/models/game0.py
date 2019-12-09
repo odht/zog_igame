@@ -160,9 +160,11 @@ class Game(models.Model):
             schedule = self.schedule_ids.create(schedule_val)
             schedule_id = schedule.id
             deal_ids = []
-            for index in list(range(vals['deal_num'])):
-                deal = schedule.deal_ids.create({'number':index+1})
-                deal_ids.append(deal.id)
+            #for index in list(range(vals['deal_num'])):
+            #    deal = schedule.deal_ids.create({'number':index+1})
+            #    deal_ids.append(deal.id)
+            #schedule.write({'deal_ids':[(6,0,deal_ids)]})
+            deal_ids = self.env['og.deal'].search([('number','like',str(i+1)+'__')]).ids
             schedule.write({'deal_ids':[(6,0,deal_ids)]})
 
             round_val = {
