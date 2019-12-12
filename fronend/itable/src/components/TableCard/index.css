@@ -1,0 +1,105 @@
+.flexwrap {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.boards {
+    border-radius: 6px;
+    background-image: url(@/assets/bg1.png);
+    display: inline-block;
+    margin: 10px;
+    width: 50px;
+    height: 50px; 
+    background-size: 50px;
+    line-height: 50px;
+    text-align:center;
+    color: white
+}
+
+.middleimg {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.flexColumn {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.flexRow {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.flexItemASpace {
+    flex-grow: 1
+}
+
+.tableBack {
+    position: relative;
+    background-image: url(/imgs/old/bg1.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.clearfix::before,
+.clearfix::after {
+    display: table;
+    content: " ";
+}
+
+.clearfix::after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+.border {
+    border-bottom: solid 3px white
+}
+.cricleRed{
+    
+}
+
+@media screen and (min-width:100px) {
+    .gutterRow {
+        min-width: 300px;
+        padding-bottom: 4px;
+        cursor: pointer;
+        border-radius: 4%;
+        flex-grow: 1;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .gutterRow {
+        min-width: 270px;
+        max-width: 350px;
+        padding-bottom: 4px;
+        cursor: pointer;
+        border-radius: 4%;
+       
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .gutterRow {
+        min-width: 300px;
+        max-width: 350px;
+        padding-bottom: 4px;
+        cursor: pointer;
+        border-radius: 4%;
+        flex-grow: 1;
+    }
+}

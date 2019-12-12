@@ -1,0 +1,54 @@
+.normal {
+    font-family: Georgia, sans-serif;
+    text-align: center;
+}
+
+.logoBox {
+    background-color: cadetblue;
+    text-align: left;
+    height: 100px;
+}
+
+ @media screen and (min-width: 100px){
+    .logo{
+       height: 70px;
+       margin-left: 4%;
+       margin-top: 15px;
+    }
+ }
+ 
+ @media screen and (min-width: 512px){
+    .logo{
+       height: 70px;
+       margin-left: 4%;
+       margin-top: 15px;
+    }
+ }
+
+@media screen and (min-width: 992px){
+   .logo{
+      height: 90px;
+      margin-left: 4%;
+      margin-top: 5px;
+   }
+}
+ 
+ .userCol{
+    position: relative;
+    text-align: right;
+ }
+ .dropDown{
+    position: absolute;
+    height:60px;
+    right: 20px; 
+    top:40px;
+    color: black;
+ }
+ .loginSpan{
+    display: inline-block;
+   position: absolute;
+   height:60px;
+   right: 20px; 
+   top:40px;
+   color: black;
+ }

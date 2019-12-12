@@ -1,0 +1,16 @@
+
+html, body, #root {
+  height: 100%;
+  background: rgba(240, 242, 245, 1)
+}
+
+body {
+  margin: 0;
+}
+:global(ul.ant-table-pagination.ant-pagination ){
+  /* position: relative;
+  left: -50%;
+  transform: translateX(50%) */
+  float: none;
+  text-align: center;
+}

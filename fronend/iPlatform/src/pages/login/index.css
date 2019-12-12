@@ -1,0 +1,22 @@
+
+.normal {
+  width: 368px;
+  margin: 0 auto;
+  padding-top: 10%;
+  text-align: center;
+}
+
+.loginBox{
+  width:350px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bolder;
+  letter-spacing: -1px;
+  /* background: darkslateblue; */
+  padding: 1.5em 0;
+  color: blue;
+  margin: 0;
+}
