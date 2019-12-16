@@ -5,7 +5,7 @@ import React, { PureComponent, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TableCard from '@/components/TableCard';
 import router from 'umi/router';
-import { Pagination, Spin, Tag, Popconfirm } from 'antd';
+import { Pagination, Spin, Tag, Popconfirm, Modal, Alert, Button, Card} from 'antd';
 import Odoo from '@/odoo'
 import { connect } from 'dva';
 import { PopData, turnData, ChangeIndexArrayInArry } from '@/utils';
@@ -32,7 +32,8 @@ interface GameListState {
         page: number,
         pageSize: number
     },
-    domain: Array<any>
+    domain: Array<any>,
+    tipCardVisible:string
 }
 const config = {
     top: "N",
@@ -51,10 +52,11 @@ const Player = (props) => {
     const hasPeople = () => {
         const { table_player_ids, room_type } = data.table_ids.find(item => item.room_type === type)
         const has = table_player_ids.length >= 0 && table_player_ids.findIndex(item => item.position === config[place]) > -1
+        // console.log('-------- hasssss -----',has);
         let player
         if (has) {
             player = table_player_ids.find(item => item.position === config[place])
-            console.log(player)
+            // console.log('-=-=-= player -=-=-=-',player)
         }
         return { has, player }
     }
@@ -72,7 +74,7 @@ const Player = (props) => {
                 localStorage.table_id = table_id
             }
         })
-
+        
     }
     const gotoGame = () => {
         if (isUser) {
@@ -82,11 +84,12 @@ const Player = (props) => {
         }
 
     }
+    // console.log('========HAS----------',has,player);
     return (
         <div style={{ width: 35, height: 35, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {has ?
                 <>
-                    <Popconfirm cancelText="取消" okText="确认" title="确定进入游戏？" onConfirm={gotoGame}>
+                    <Popconfirm cancelText="取消" okText="开始比赛" title="比赛开始时间一到，裁判宣布比赛开始，点击下方“开始比赛”按钮进行比赛。" onConfirm={gotoGame}>
                         <Tag style={{ margin: 0 }} color={isUser && player.online ? "red" : player.online ? "green" : ""}>{player.name}</Tag>
                     </Popconfirm>
                     <a target="_blank" href={"#"} ref={(href) => { setHref(href) }}></a>
@@ -99,6 +102,7 @@ const Player = (props) => {
         </div>
     )
 }
+
 class GameList extends PureComponent<GameListProps, GameListState> {
     state: GameListState = {
         dataSource: [],
@@ -110,7 +114,8 @@ class GameList extends PureComponent<GameListProps, GameListState> {
             page: 1,
             pageSize: 8
         },
-        domain: []
+        domain: [],
+        tipCardVisible:"visible"
     }
     static getDerivedStateFromProps(props, state) {
         if (!props.location.state || !props.location.state.round_id) {
@@ -266,6 +271,13 @@ class GameList extends PureComponent<GameListProps, GameListState> {
             <Player data={data} place={place} type={type} {...this.props} changeData={this.getData} />
         )
     }
+    cancelCardAction(){
+            // this.setState(
+            //     {
+            //         tipCardVisible:"hidden"
+            //     }
+            // )
+    }
     render() {
         const { dataSource, loading, totalIds, doing_table_id, domain } = this.state;
         const { location: { state: { game_id } } } = this.props;
@@ -274,6 +286,7 @@ class GameList extends PureComponent<GameListProps, GameListState> {
         // const url = '/igame/#/game/' + Number(doing_table_id);
         // const url='https://www.baidu.com/'
         console.log(this.state);
+        
         return (
             <>
                 {/* <Search
@@ -301,6 +314,43 @@ class GameList extends PureComponent<GameListProps, GameListState> {
                         : null
                     }
                 </Spin>
+
+                {/* <Card
+                    title="桌位方位对照"
+                    style={{
+                        width: 400,
+                        position: "fixed",
+                        bottom: "10px",
+                        right: "10px",
+                        visibility: this.state.tipCardVisible
+                    }}
+                    size="small"
+                    hoverable="true"
+                    extra={
+                        <Button
+                            block
+                            onClick={this.cancelCardAction.bind(this)}
+                        >
+                            关闭
+                        </Button>}
+
+                >
+                    <p>开闭室的桌位方位遵循：“上北，下南，左西，右东” 原则</p>
+                </Card> */}
+                <Alert
+                    style={{
+                        width: 400,
+                        position: "fixed",
+                        bottom: "10px",
+                        right: "10px"
+                    }}
+                    message="桌位方位对照"
+                    description="开闭室的桌位方位遵循：“上北，下南，左西，右东” 原则"
+                    closable = {true}
+                    type="info"
+                    showIcon
+                    onClose={this.cancelCardAction}
+                />
             </>
         )
     }
